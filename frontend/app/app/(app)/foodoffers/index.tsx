@@ -73,13 +73,14 @@ import {
   sortByFoodCategory,
   sortByFoodOfferCategory,
 } from '@/helper/sortingHelper';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import { BusinessHoursHelper } from '@/redux/actions/BusinessHours/BusinessHours';
 import PopupEventSheet from '@/components/PopupEventSheet/PopupEventSheet';
 import { getAppElementTranslation } from '@/helper/resourceHelper';
 import noFoodOffersFound from '@/assets/animations/noFoodOffersFound.json';
 import LottieView from 'lottie-react-native';
 import { replaceLottieColors } from '@/helper/animationHelper';
+import { myContrastColor } from '@/helper/colorHelper';
 import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import CustomMarkdown from '@/components/CustomMarkdown/CustomMarkdown';
@@ -129,6 +130,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
     drawerPosition,
     appSettings,
     primaryColor,
+    selectedTheme: mode,
   } = useSelector((state: RootState) => state.settings);
   const {
     ownFoodFeedbacks,
@@ -146,9 +148,11 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const { appElements } = useSelector((state: RootState) => state.appElements);
   const { selectedCanteen, selectedCanteenFoodOffers, canteenFeedbackLabels } =
     useSelector((state: RootState) => state.canteenReducer);
+  const [prefetchedFoodOffers, setPrefetchedFoodOffers] = useState<Record<string, Foodoffers[]>>({});
   const foods_area_color = appSettings?.foods_area_color
     ? appSettings?.foods_area_color
     : primaryColor;
+  const contrastColor = myContrastColor(foods_area_color, theme, mode === 'dark');
 
   // Set Page Title
   useSetPageTitle(selectedCanteen?.alias || TranslationKeys.food_offers);
@@ -456,11 +460,35 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const fetchFoods = async () => {
     try {
       setLoading(true);
-      const foodData = await fetchFoodOffersByCanteen(
-        selectedCanteen?.id,
-        selectedDate
-      );
-      const foodOffers = foodData?.data || [];
+      let foodOffers = prefetchedFoodOffers[selectedDate];
+
+      if (!foodOffers) {
+        const foodData = await fetchFoodOffersByCanteen(
+          selectedCanteen?.id,
+          selectedDate
+        );
+        foodOffers = foodData?.data || [];
+      }
+
+      setPrefetchedFoodOffers((prev) => ({
+        ...prev,
+        [selectedDate]: foodOffers,
+      }));
+
+      // Prefetch next two days
+      for (let i = 1; i <= 2; i++) {
+        const date = addDays(new Date(selectedDate), i)
+          .toISOString()
+          .split('T')[0];
+        if (!prefetchedFoodOffers[date]) {
+          fetchFoodOffersByCanteen(selectedCanteen?.id, date)
+            .then((res) => {
+              const offers = res?.data || [];
+              setPrefetchedFoodOffers((p) => ({ ...p, [date]: offers }));
+            })
+            .catch((e) => console.error('Error prefetching Food Offers:', e));
+        }
+      }
 
       updateSort(sortBy, foodOffers);
 
@@ -521,6 +549,24 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
     [canteenFeedbackLabels, selectedDate]
   );
   const canteenFeedbackLabelsExist = canteenFeedbackLabels?.length > 0;
+
+  const nextAvailableDate = useMemo(() => {
+    for (let i = 1; i <= 2; i++) {
+      const date = addDays(new Date(selectedDate), i)
+        .toISOString()
+        .split('T')[0];
+      const offers = prefetchedFoodOffers[date];
+      if (offers && offers.length > 0) {
+        return date;
+      }
+    }
+    return null;
+  }, [prefetchedFoodOffers, selectedDate]);
+
+  const getWeekdayKey = (date: string) => {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return days[new Date(date).getDay()];
+  };
 
   const SheetComponent =
     selectedSheet && selectedSheet !== 'menu'
@@ -935,6 +981,31 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
                     )}
                   </Text>
                   <View style={styles.animationContainer}>{renderLottie}</View>
+                  {nextAvailableDate && (
+                    <TouchableOpacity
+                      onPress={() =>
+                        dispatch({
+                          type: SET_SELECTED_DATE,
+                          payload: nextAvailableDate,
+                        })
+                      }
+                      style={[
+                        styles.jumpButton,
+                        { backgroundColor: foods_area_color },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.jumpButtonText,
+                          { color: contrastColor },
+                        ]}
+                      >
+                        {`${translate(TranslationKeys.show_offers_on)} ${translate(
+                          TranslationKeys[getWeekdayKey(nextAvailableDate)]
+                        )}`}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               )}
             </View>

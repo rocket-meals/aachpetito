@@ -76,4 +76,15 @@ export default StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Poppins_400Regular',
   },
+  jumpButton: {
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  jumpButtonText: {
+    fontSize: 16,
+    fontFamily: 'Poppins_500Medium',
+  },
 });
