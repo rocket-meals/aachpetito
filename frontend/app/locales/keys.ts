@@ -94,6 +94,7 @@ export enum TranslationKeys {
   without_account_limitations = 'without_account_limitations',
   not_useable = 'not_useable',
   no_foodoffers_found_for_selection = 'no_foodoffers_found_for_selection',
+  show_offers_on = 'show_offers_on',
   error = 'error',
   description = 'description',
   information = 'information',

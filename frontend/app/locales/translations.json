@@ -1009,6 +1009,16 @@
     "tr": "Teklif bulunamadı veya yemekhane kapalı.",
     "zh": "未找到优惠或食堂已关闭。"
   },
+  "show_offers_on": {
+    "de": "Zeige Angebote am",
+    "en": "Show offers on",
+    "ar": "اعرض العروض في",
+    "es": "Mostrar ofertas el",
+    "fr": "Afficher les offres le",
+    "ru": "Показать предложения на",
+    "tr": "Teklifleri g\u00f6ster",
+    "zh": "\u663e\u793a\u4f18\u60e0 \u5728"
+  },
   "error": {
     "de": "Fehler",
     "en": "Error",
