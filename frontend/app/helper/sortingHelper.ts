@@ -251,127 +251,30 @@ export function sortMarkingsByGroup(markings: Markings[], markingGroups: Marking
 }
 
 export function intelligentSort(
-  foodOffers,
-  ownFeedbacks,
-  profileMarkings,
-  languageCode,
-  foodCategories: FoodsCategories[] = [],
-  foodOfferCategories: FoodoffersCategories[] = []
+    foodOffers: Foodoffers[],
+    ownFeedbacks: any[],
+    profileMarkings: any[],
+    languageCode: string,
+    foodCategories: FoodsCategories[] = [],
+    foodOfferCategories: FoodoffersCategories[] = []
 ) {
-  return foodOffers.sort((a, b) => {
-    // 1. Sort by Eating Habits
-    const calculateSortValue = (foodOffer) => {
-      let sortValue = 0;
-      const likeSortWeight = 1;
-      const dislikeSortWeight = likeSortWeight * 2;
+  // 1) Alphabetisch (am wenigsten wichtig)
+  sortByFoodName(foodOffers, languageCode);
 
-      if (foodOffer?.markings) {
-        foodOffer.markings.forEach((marking) => {
-          const profileMarking = profileMarkings?.find(
-            (mark) => mark.markings_id === marking.markings_id
-          );
+  // 2) Public Rating + Amount
+  sortByPublicFavorite(foodOffers);
 
-          if (profileMarking) {
-            if (profileMarking.like === true) {
-              sortValue += likeSortWeight;
-            } else if (profileMarking.like === false) {
-              sortValue -= dislikeSortWeight;
-            }
-          }
-        });
-      }
-      return sortValue;
-    };
+  // 3) Food Offer Categories
+  sortByFoodOfferCategory(foodOffers, foodOfferCategories);
 
-    const aSortValue = calculateSortValue(a);
-    const bSortValue = calculateSortValue(b);
+  // 4) Food Categories
+  sortByFoodCategory(foodOffers, foodCategories);
 
-    if (aSortValue !== bSortValue) {
-      return bSortValue - aSortValue; // Descending order
-    }
+  // 5) Own Feedbacks
+  sortByOwnFavorite(foodOffers, ownFeedbacks);
 
-    // 2. Sort by Own Ratings
-    const feedbackMap = new Map(
-      ownFeedbacks.map((feedback) => [feedback.food, feedback.rating])
-    );
+  // 6) Eating Habits (am wichtigsten)
+  sortByEatingHabits(foodOffers, profileMarkings);
 
-    const getCategory = (rating) => {
-      if (isRatingNegative(rating)) return 3; // Lowest priority
-      if (rating === null || rating === undefined) return 2; // Unknown priority
-      if (isRatingPositive(rating)) return 1; // Highest priority
-      return 0; // Fallback, if needed
-    };
-
-    const aRating = feedbackMap.get(a?.food?.id) ?? null;
-    const bRating = feedbackMap.get(b?.food?.id) ?? null;
-
-    const aCategory = getCategory(aRating);
-    const bCategory = getCategory(bRating);
-
-    if (aCategory !== bCategory) {
-      return aCategory - bCategory; // Ascending order
-    }
-
-    // 3. Sort by food categories
-    const foodCatMap = new Map(
-      foodCategories.map((cat) => [cat.id, normalizeSort(cat.sort)])
-    );
-    const aFoodCat =
-      typeof (a.food as any)?.food_category === 'object'
-        ? (a.food as any)?.food_category?.id
-        : (a.food as any)?.food_category;
-    const bFoodCat =
-      typeof (b.food as any)?.food_category === 'object'
-        ? (b.food as any)?.food_category?.id
-        : (b.food as any)?.food_category;
-
-    const aFoodCatSort = foodCatMap.has(aFoodCat as string)
-      ? (foodCatMap.get(aFoodCat as string) as number)
-      : Infinity;
-    const bFoodCatSort = foodCatMap.has(bFoodCat as string)
-      ? (foodCatMap.get(bFoodCat as string) as number)
-      : Infinity;
-
-    if (aFoodCatSort !== bFoodCatSort) {
-      return aFoodCatSort - bFoodCatSort;
-    }
-
-    // 4. Sort by foodoffer categories
-    const offerCatMap = new Map(
-      foodOfferCategories.map((cat) => [cat.id, normalizeSort(cat.sort)])
-    );
-    const aOfferCat =
-      typeof a.foodoffer_category === 'object'
-        ? (a.foodoffer_category as any)?.id
-        : a.foodoffer_category;
-    const bOfferCat =
-      typeof b.foodoffer_category === 'object'
-        ? (b.foodoffer_category as any)?.id
-        : b.foodoffer_category;
-
-    const aOfferSort = offerCatMap.has(aOfferCat as string)
-      ? (offerCatMap.get(aOfferCat as string) as number)
-      : Infinity;
-    const bOfferSort = offerCatMap.has(bOfferCat as string)
-      ? (offerCatMap.get(bOfferCat as string) as number)
-      : Infinity;
-
-    if (aOfferSort !== bOfferSort) {
-      return aOfferSort - bOfferSort;
-    }
-
-    // 5. Sort by Public Ratings
-    const publicRatingA = a.food?.rating_average || 0;
-    const publicRatingB = b.food?.rating_average || 0;
-
-    if (publicRatingA !== publicRatingB) {
-      return publicRatingB - publicRatingA; // Descending order
-    }
-
-    // 6. Sort Alphabetically
-    const nameA = getFoodName(a.food, languageCode);
-    const nameB = getFoodName(b.food, languageCode);
-
-    return nameA.localeCompare(nameB);
-  });
+  return foodOffers;
 }
