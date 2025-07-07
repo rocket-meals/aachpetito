@@ -12,7 +12,19 @@
     "hidden": false,
     "interface": "list-o2m",
     "note": null,
-    "options": null,
+    "options": {
+      "enableLink": true,
+      "enableSearchFilter": true,
+      "fields": [
+        "comment",
+        "rating",
+        "canteen.alias",
+        "foodoffer.date"
+      ],
+      "layout": "table",
+      "sort": "date_updated",
+      "sortDirection": "-"
+    },
     "readonly": false,
     "required": false,
     "sort": 18,

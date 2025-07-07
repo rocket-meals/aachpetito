@@ -5,14 +5,23 @@
   "meta": {
     "collection": "markings",
     "conditions": null,
-    "display": null,
-    "display_options": null,
+    "display": "related-values",
+    "display_options": {
+      "template": "{{restricted_by_markings_id.alias}}({{restricted_by_markings_id.short_code}}, {{restricted_by_markings_id.external_identifier}})"
+    },
     "field": "excluded_by_markings",
     "group": null,
     "hidden": false,
     "interface": "list-m2m",
     "note": "Diese Kennzeichnung wird nicht angewendet, sollten bei einer Speise eine der folgenden Kennzeichnungen vorhanden sein",
-    "options": null,
+    "options": {
+      "fields": [
+        "restricted_by_markings_id.alias",
+        "restricted_by_markings_id.short_code",
+        "restricted_by_markings_id.external_identifier"
+      ],
+      "layout": "table"
+    },
     "readonly": false,
     "required": false,
     "sort": 22,

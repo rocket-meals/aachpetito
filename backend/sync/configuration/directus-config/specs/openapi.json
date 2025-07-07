@@ -47913,21 +47913,6 @@
               }
             ]
           },
-          "feedbacks": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "string",
-                  "format": "uuid"
-                },
-                {
-                  "$ref": "#/components/schemas/ItemsFoodsFeedbacks"
-                }
-              ]
-            }
-          },
           "markings": {
             "nullable": true,
             "type": "array",
@@ -47952,6 +47937,21 @@
                 },
                 {
                   "$ref": "#/components/schemas/ItemsFoodsTranslations"
+                }
+              ]
+            }
+          },
+          "feedbacks": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "$ref": "#/components/schemas/ItemsFoodsFeedbacks"
                 }
               ]
             }
@@ -50299,6 +50299,20 @@
             "type": "string",
             "format": "uuid"
           },
+          "translations": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/components/schemas/ItemsMarkingsTranslations"
+                }
+              ]
+            }
+          },
           "excluded_by_markings": {
             "nullable": true,
             "description": "Diese Kennzeichnung wird nicht angewendet, sollten bei einer Speise eine der folgenden Kennzeichnungen vorhanden sein",
@@ -50310,20 +50324,6 @@
                 },
                 {
                   "$ref": "#/components/schemas/ItemsMarkingsExclusions"
-                }
-              ]
-            }
-          },
-          "translations": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "$ref": "#/components/schemas/ItemsMarkingsTranslations"
                 }
               ]
             }

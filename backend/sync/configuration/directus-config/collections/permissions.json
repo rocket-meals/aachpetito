@@ -37,19 +37,23 @@
   },
   {
     "fields": [
+      "id",
+      "positive",
       "title",
       "content",
+      "profile",
       "contact_email",
-      "negative",
-      "display_height",
-      "display_width",
-      "display_pixelratio",
-      "display_scale",
+      "response",
+      "priority",
+      "response_read_by_user",
       "device_platform",
-      "display_fontscale",
       "device_brand",
       "device_system_version",
-      "positive"
+      "display_pixelratio",
+      "display_scale",
+      "display_fontscale",
+      "display_height",
+      "display_width"
     ],
     "validation": null,
     "presets": null,
@@ -58,6 +62,18 @@
     "collection": "app_feedbacks",
     "policy": "_sync_default_public_policy",
     "_syncId": "2e612206-7ac2-4328-b012-caa6f24cdee1"
+  },
+  {
+    "fields": [
+      "*"
+    ],
+    "validation": null,
+    "presets": null,
+    "permissions": null,
+    "action": "share",
+    "collection": "app_feedbacks",
+    "policy": "_sync_default_public_policy",
+    "_syncId": "c35bae29-4829-4ffa-abb9-282105896ec1"
   },
   {
     "fields": [
@@ -1187,7 +1203,11 @@
       "display_fontscale",
       "display_scale",
       "display_pixelratio",
-      "id"
+      "id",
+      "user_created",
+      "date_created",
+      "user_updated",
+      "date_updated"
     ],
     "validation": {
       "_and": [
