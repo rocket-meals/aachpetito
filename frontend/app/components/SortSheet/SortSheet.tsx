@@ -128,7 +128,8 @@ const SortSheet: React.FC<SortSheetProps> = ({ closeSheet }) => {
       case 'food_category':
         copiedFoodOffers = sortByFoodCategory(
           copiedFoodOffers,
-          foodCategories
+          foodCategories,
+            languageCode
         );
         break;
       case 'foodoffer_category':

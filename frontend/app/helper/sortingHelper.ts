@@ -49,7 +49,21 @@ export function sortByFoodName(foodOffers: Foodoffers[], languageCode: string) {
 
 export function sortByFoodCategory(
   foodOffers: Foodoffers[],
-  categories: FoodsCategories[]
+  categories: FoodsCategories[],
+    languageCode: string
+) {
+  // 1) Alphabetisch (am wenigsten wichtig)
+    sortByFoodName(foodOffers, languageCode);
+
+    // 2) Food Categories
+    sortByFoodCategoryOnly(foodOffers, categories);
+
+    return foodOffers;
+}
+
+function sortByFoodCategoryOnly(
+    foodOffers: Foodoffers[],
+    categories: FoodsCategories[]
 ) {
   const sortMap = new Map<string, number>();
   categories.forEach((cat) => {
@@ -60,27 +74,41 @@ export function sortByFoodCategory(
 
   return foodOffers.sort((a, b) => {
     const aId =
-      typeof (a.food as any)?.food_category === 'object'
-        ? (a.food as any)?.food_category?.id
-        : (a.food as any)?.food_category;
+        typeof (a.food as any)?.food_category === 'object'
+            ? (a.food as any)?.food_category?.id
+            : (a.food as any)?.food_category;
     const bId =
-      typeof (b.food as any)?.food_category === 'object'
-        ? (b.food as any)?.food_category?.id
-        : (b.food as any)?.food_category;
+        typeof (b.food as any)?.food_category === 'object'
+            ? (b.food as any)?.food_category?.id
+            : (b.food as any)?.food_category;
 
     const aSort = sortMap.has(aId as string)
-      ? (sortMap.get(aId as string) as number)
-      : Infinity;
+        ? (sortMap.get(aId as string) as number)
+        : Infinity;
     const bSort = sortMap.has(bId as string)
-      ? (sortMap.get(bId as string) as number)
-      : Infinity;
+        ? (sortMap.get(bId as string) as number)
+        : Infinity;
     return aSort - bSort;
   });
 }
 
 export function sortByFoodOfferCategory(
   foodOffers: Foodoffers[],
-  categories: FoodoffersCategories[]
+  categories: FoodoffersCategories[],
+    languageCode: string
+) {
+    // 1) Alphabetisch (am wenigsten wichtig)
+    sortByFoodName(foodOffers, languageCode);
+
+    // 2) Food Offer Categories
+    sortByFoodOfferCategoryOnly(foodOffers, categories);
+
+    return foodOffers;
+}
+
+function sortByFoodOfferCategoryOnly(
+    foodOffers: Foodoffers[],
+    categories: FoodoffersCategories[]
 ) {
   const sortMap = new Map<string, number>();
   categories.forEach((cat) => {
@@ -91,20 +119,20 @@ export function sortByFoodOfferCategory(
 
   return foodOffers.sort((a, b) => {
     const aId =
-      typeof a.foodoffer_category === 'object'
-        ? (a.foodoffer_category as any)?.id
-        : a.foodoffer_category;
+        typeof a.foodoffer_category === 'object'
+            ? (a.foodoffer_category as any)?.id
+            : a.foodoffer_category;
     const bId =
-      typeof b.foodoffer_category === 'object'
-        ? (b.foodoffer_category as any)?.id
-        : b.foodoffer_category;
+        typeof b.foodoffer_category === 'object'
+            ? (b.foodoffer_category as any)?.id
+            : b.foodoffer_category;
 
     const aSort = sortMap.has(aId as string)
-      ? (sortMap.get(aId as string) as number)
-      : Infinity;
+        ? (sortMap.get(aId as string) as number)
+        : Infinity;
     const bSort = sortMap.has(bId as string)
-      ? (sortMap.get(bId as string) as number)
-      : Infinity;
+        ? (sortMap.get(bId as string) as number)
+        : Infinity;
     return aSort - bSort;
   });
 }
@@ -265,10 +293,10 @@ export function intelligentSort(
   sortByPublicFavorite(foodOffers);
 
   // 3) Food Offer Categories
-  sortByFoodOfferCategory(foodOffers, foodOfferCategories);
+  sortByFoodOfferCategoryOnly(foodOffers, foodOfferCategories);
 
   // 4) Food Categories
-  sortByFoodCategory(foodOffers, foodCategories);
+  sortByFoodCategoryOnly(foodOffers, foodCategories);
 
   // 5) Own Feedbacks
   sortByOwnFavorite(foodOffers, ownFeedbacks);

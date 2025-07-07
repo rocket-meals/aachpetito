@@ -406,7 +406,8 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
       case 'food_category':
         copiedFoodOffers = sortByFoodCategory(
           copiedFoodOffers,
-          foodCategories
+          foodCategories,
+            languageCode
         );
         break;
       case 'foodoffer_category':
