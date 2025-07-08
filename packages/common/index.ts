@@ -3,4 +3,3 @@ export * from "./src/DateHelper";
 export * from "./src/NumberHelper";
 export * as DatabaseTypes from './src/databaseTypes/types';
 export * from "./src/databaseTypes/CollectionNames";
-export * from "./src/databaseTypes/CollectionHelper";

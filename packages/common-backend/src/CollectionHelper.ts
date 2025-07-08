@@ -1,8 +1,13 @@
-import { Project, TypeAliasDeclaration } from "ts-morph";
-import { resolve } from "path";
-import { CollectionNames } from "./CollectionNames";
+import {Project} from "ts-morph";
+import {resolve} from "path";
+import {CollectionNames} from "repo-depkit-common";
+import {DatabaseTypes} from "repo-depkit-common";
 
-const pathToDatabaseTypes = resolve(__dirname, "./types.ts");
+const pathToCommon = require.resolve("repo-depkit-common");
+console.log(pathToCommon);
+
+const pathToDatabaseTypes = resolve(pathToCommon, "src", "databaseTypes", "types.ts");
+console.log(pathToDatabaseTypes);
 
 // Initialize a ts-morph project
 const project = new Project();

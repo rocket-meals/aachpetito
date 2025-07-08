@@ -109,7 +109,7 @@ export const getFoodAttributesTranslation = (
   return translation?.name || '';
 };
 
-export const getFoodCategoryName = (
+const getFoodCategoryName = (
   categories: FoodsCategories[],
   category: string | FoodsCategories | null | undefined,
   languageCode: string
@@ -127,7 +127,7 @@ export const getFoodCategoryName = (
   return translation?.name || '';
 };
 
-export const getFoodOfferCategoryName = (
+const getFoodOfferCategoryName = (
   categories: FoodoffersCategories[],
   category: string | FoodoffersCategories | null | undefined,
   languageCode: string

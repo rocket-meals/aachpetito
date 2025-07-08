@@ -1,4 +1,4 @@
-import {CollectionHelper} from "repo-depkit-common";
+import {CollectionHelper} from "repo-depkit-common-backend";
 
 import {CollectionNames} from "../../helpers/CollectionNames";
 import {FIELD_VALUE_KEY_PREFIX, FormAnswersValueFieldKeys} from "../FormImportTypes";
