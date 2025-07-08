@@ -61,7 +61,7 @@ export const studiFutterConfig: CustomerConfig = {
 };
 
 export function getCustomerConfig(): CustomerConfig {
-    return studiFutterConfig;
+    return devConfig;
 }
 
 export function getFinalConfig(config?: any){
