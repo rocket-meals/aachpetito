@@ -38,6 +38,6 @@ jobs:
 
       - name: 🧪 Build with previewApk profile
         run: eas build --platform android --non-interactive --profile previewApk
-        working-directory: ./frontend/app
+        working-directory: ./apps/frontend/app
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

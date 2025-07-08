@@ -38,12 +38,12 @@ jobs:
 
       - name: 🛠️ Build iOS App
         run: eas build --platform ios --non-interactive
-        working-directory: ./frontend/app
+        working-directory: ./apps/frontend/app
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📤 Submit iOS Build to App Store
         run: eas submit --platform ios --non-interactive --latest
-        working-directory: ./frontend/app
+        working-directory: ./apps/frontend/app
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

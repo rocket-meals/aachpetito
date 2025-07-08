@@ -12,7 +12,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle
+        working-directory: apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle
 
     steps:
       - name: 🏗 Setup repo

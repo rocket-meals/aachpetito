@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
     paths:
-      - 'frontend/app/**'
+      - 'apps/frontend/app/**'
       - '.github/workflows/**'
 
 jobs:
@@ -38,12 +38,12 @@ jobs:
 
       - name: 🛠️ Build Android App
         run: eas build --platform android --non-interactive
-        working-directory: ./frontend/app
+        working-directory: ./apps/frontend/app
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📤 Submit Android Build to Play Store
         run: eas submit --platform android --non-interactive --latest
-        working-directory: ./frontend/app
+        working-directory: ./apps/frontend/app
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

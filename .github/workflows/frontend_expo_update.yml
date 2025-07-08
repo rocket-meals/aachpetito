@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
     paths:
-      - 'frontend/app/**'
+      - 'apps/frontend/app/**'
       - '.github/workflows/**'
 
 jobs:
@@ -22,6 +22,6 @@ jobs:
 
       - name: 🚀 Publish update
         run: eas update --auto --platform all --non-interactive --channel production
-        working-directory: ./frontend/app
+        working-directory: ./apps/frontend/app
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
