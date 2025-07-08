@@ -13,7 +13,7 @@ import {
   NewsTranslations,
   WikisTranslations,
 } from '@/constants/types';
-import { StringHelper } from './stringHelper';
+import { StringHelper } from 'repo-depkit-common';
 
 export type TranslationEntry = {
   languages_code: string;

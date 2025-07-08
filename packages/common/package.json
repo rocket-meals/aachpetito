@@ -6,5 +6,9 @@
   "private": true,
   "devDependencies": {
     "typescript": "*"
+  },
+  "dependencies": {
+    "path": "^0.12.7",
+    "ts-morph": "^26.0.0"
   }
 }

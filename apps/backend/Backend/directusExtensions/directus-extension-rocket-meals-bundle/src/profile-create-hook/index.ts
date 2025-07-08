@@ -1,7 +1,6 @@
 import { defineHook } from '@directus/extensions-sdk';
 import {EventHelper} from '../helpers/EventHelper';
 import {DatabaseInitializedCheck} from "../helpers/DatabaseInitializedCheck";
-import {DirectusUsers, Profiles} from "../databaseTypes/types";
 import {MyDatabaseHelper} from "../helpers/MyDatabaseHelper";
 import {CollectionNames} from "../helpers/CollectionNames";
 

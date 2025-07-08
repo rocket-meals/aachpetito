@@ -1,4 +1,3 @@
-import {CanteenFoodFeedbackReportSchedulesReportRecipients} from "../databaseTypes/types";
 
 /**
  * Helper for Account things

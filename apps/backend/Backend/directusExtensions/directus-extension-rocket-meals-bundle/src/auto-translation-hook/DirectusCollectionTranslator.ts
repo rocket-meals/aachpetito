@@ -1,6 +1,6 @@
 import {Translator} from "./Translator";
 import {TranslatorSettings} from "./TranslatorSettings";
-import {Languages} from "../databaseTypes/types";
+import {DatabaseTypes} from "repo-depkit-common"
 import {MyDatabaseHelper} from "../helpers/MyDatabaseHelper";
 import {SchemaOverview} from "@directus/types";
 import {CollectionNames} from "../helpers/CollectionNames";
@@ -226,7 +226,7 @@ export class DirectusCollectionTranslator {
                 }
                 //console.log("sourceTranslationLanguageCode: ", sourceTranslationLanguageCode);
 
-                let languagesService = myDatabaseHelper.getItemsServiceHelper<Languages>(DirectusCollectionTranslator.COLLECTION_LANGUAGES);
+                let languagesService = myDatabaseHelper.getItemsServiceHelper<DatabaseTypes.Languages>(DirectusCollectionTranslator.COLLECTION_LANGUAGES);
                 let languages = await languagesService.readByQuery({});
                 if (languages.length > 0 && !!FIELD_LANGUAGES_ID_OR_CODE) {
                     let translationsToCreate = [];

@@ -3,9 +3,9 @@ import * as Crypto from 'expo-crypto';
 import { Platform } from 'react-native';
 import { DirectusUsers } from './types';
 import Server from './ServerUrl';
-import { NumberHelper } from '@/helper/numberHelper';
-import { StringHelper } from '@/helper/stringHelper';
+import { NumberHelper } from 'repo-depkit-common';
 import { ServerAPI } from '@/redux/actions';
+import {StringHelper} from 'repo-depkit-common';
 
 export const generateCodeVerifier = async () => {
   const bytesMinAmount = 32;

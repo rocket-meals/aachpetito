@@ -1,6 +1,6 @@
 import { ServerAPI } from '@/redux/actions/Auth/Auth'; // API client
 import { CollectionHelper } from '@/helper/collectionHelper'; // Reusing the CollectionHelper
-import { DateHelper } from '@/helper/dateHelper';
+import { DateHelper } from 'repo-depkit-common';
 import { UtilizationsEntries } from '@/constants/types';
 
 export class UtilizationEntryHelper extends CollectionHelper<UtilizationsEntries> {

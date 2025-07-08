@@ -21,7 +21,7 @@ import {
 import { FoodsFeedbacks } from '@/constants/types';
 import { FoodFeedbackHelper } from '@/redux/actions/FoodFeedbacks/FoodFeedbacks';
 import useToast from '@/hooks/useToast';
-import { DateHelper } from '@/helper/dateHelper';
+import { DateHelper } from 'repo-depkit-common';
 import {
   DELETE_FOOD_FEEDBACK_LOCAL,
   UPDATE_FOOD_FEEDBACK_LOCAL,

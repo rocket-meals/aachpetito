@@ -9,7 +9,7 @@ import {
     WorkflowRunJobInterface,
     WorkflowRunLogger
 } from "../workflows-runs-hook/WorkflowRunJobInterface";
-import {WorkflowsRuns} from "../databaseTypes/types";
+import {DatabaseTypes} from "repo-depkit-common"
 import {WorkflowScheduleHelper, WorkflowScheduler} from "../workflows-runs-hook";
 import {WORKFLOW_RUN_STATE} from "../helpers/itemServiceHelpers/WorkflowsRunEnum";
 
@@ -27,7 +27,7 @@ class CashRegisterWorkflow extends SingleWorkflowRun {
         return "cashregister-parse";
     }
 
-    async runJob(workflowRun: WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<WorkflowsRuns>> {
+    async runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
         await logger.appendLog("Starting cashregister parsing");
 
         const parseSchedule = new ParseSchedule(workflowRun, myDatabaseHelper, logger, this.usedParser);

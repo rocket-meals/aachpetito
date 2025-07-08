@@ -1,9 +1,6 @@
 import {PrimaryKey} from "@directus/types";
-import {Languages} from "../databaseTypes/types";
-import {ApiContext} from "./ApiContext";
-import {ItemsServiceCreator} from "./ItemsServiceCreator";
-import {EventContext} from "@directus/extensions/node_modules/@directus/types/dist/events";
-import {MyTimers} from "./MyTimer";
+import {DatabaseTypes} from "repo-depkit-common";
+
 import {MyDatabaseHelper} from "./MyDatabaseHelper";
 import {CollectionNames} from "./CollectionNames";
 
@@ -14,7 +11,7 @@ const FIELD_LANGUAGE_ID = "code"; // TODO Import from directus-extension-auto-tr
 export type ExistingTranslation = {
     be_source_for_translations?: boolean | null;
     id: PrimaryKey,
-    languages_code?: string | Languages | null;
+    languages_code?: string | DatabaseTypes.Languages | null;
     let_be_translated?: boolean | null;
     [key: string]: any,
 }
