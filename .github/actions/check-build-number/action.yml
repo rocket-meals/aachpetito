@@ -5,7 +5,7 @@ inputs:
   working-directory:
     required: false
     description: 'Das Verzeichnis, in dem sich die app.config.ts befindet'
-    default: frontend/app
+    default: apps/frontend/app
 
 runs:
   using: "composite"

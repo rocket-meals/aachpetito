@@ -27,4 +27,8 @@ runs:
     - name: 📦 Install dependencies
       run: yarn install --frozen-lockfile
       shell: bash
-      working-directory: ./frontend/app
+
+    - name: 📦 Install dependencies
+      run: yarn install --frozen-lockfile
+      shell: bash
+      working-directory: ./apps/frontend/app

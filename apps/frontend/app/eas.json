@@ -1,0 +1,39 @@
+{
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "previewApk": {
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "production"
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "preview3": {
+      "developmentClient": true
+    },
+    "preview4": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": false,
+      "channel": "production"
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "nils@baumgartner-software.de",
+        "ascAppId": "6483930801",
+        "appleTeamId": "6U99CRVHVR"
+      }
+    }
+  }
+}
