@@ -37,11 +37,7 @@ import {
   SET_SELECTED_DATE,
   UPDATE_PROFILE,
 } from '@/redux/Types/types';
-import {
-  Businesshours,
-  CanteensFeedbacksLabels,
-  Foodoffers,
-} from '@/constants/types';
+import { DatabaseTypes } from 'repo-depkit-common';
 import {
   Entypo,
   FontAwesome6,
@@ -149,7 +145,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const { appElements } = useSelector((state: RootState) => state.appElements);
   const { selectedCanteen, selectedCanteenFoodOffers, canteenFeedbackLabels } =
     useSelector((state: RootState) => state.canteenReducer);
-  const [prefetchedFoodOffers, setPrefetchedFoodOffers] = useState<Record<string, Foodoffers[]>>({});
+  const [prefetchedFoodOffers, setPrefetchedFoodOffers] = useState<Record<string, DatabaseTypes.Foodoffers[]>>({});
   const foods_area_color = appSettings?.foods_area_color
     ? appSettings?.foods_area_color
     : primaryColor;
@@ -319,7 +315,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
     try {
       const businessHours = (await businessHoursHelper.fetchBusinessHours(
         {}
-      )) as Businesshours[];
+      )) as DatabaseTypes.Businesshours[];
       dispatch({ type: SET_BUSINESS_HOURS, payload: businessHours });
     } catch (error) {
       console.error('Error fetching business hours:', error);
@@ -383,7 +379,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
     return format(day, 'dd.MM.yyyy'); // Return the date if it's not Today, Yesterday, or Tomorrow
   };
 
-  const updateSort = (id: FoodSortOption, foodOffers: Foodoffers[]) => {
+  const updateSort = (id: FoodSortOption, foodOffers: DatabaseTypes.Foodoffers[]) => {
     // Copy food offers to avoid mutation
     let copiedFoodOffers = [...foodOffers];
 
@@ -510,7 +506,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
       setFeedbackLabelsLoading(true);
       // Fetch Canteen Feedback Labels
       const canteenFeedbackLabels =
-        (await canteenFeedbackLabelHelper.fetchCanteenFeedbackLabels()) as CanteensFeedbacksLabels[];
+        (await canteenFeedbackLabelHelper.fetchCanteenFeedbackLabels()) as DatabaseTypes.CanteensFeedbacksLabels[];
       dispatch({
         type: SET_CANTEEN_FEEDBACK_LABELS,
         payload: canteenFeedbackLabels,
@@ -540,7 +536,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const memoizedCanteenFeedbackLabels = useMemo(
     () =>
       canteenFeedbackLabels?.map(
-        (label: CanteensFeedbacksLabels, index: number) => (
+        (label: DatabaseTypes.CanteensFeedbacksLabels, index: number) => (
           <CanteenFeedbackLabels
             key={label?.id || `feedback-label-${index}`}
             label={label}
@@ -962,7 +958,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
                 </View>
               ) : selectedCanteenFoodOffers &&
                 selectedCanteenFoodOffers?.length > 0 ? (
-                selectedCanteenFoodOffers?.map((item: Foodoffers) => (
+                selectedCanteenFoodOffers?.map((item: DatabaseTypes.Foodoffers) => (
                   <FoodItem
                     canteen={selectedCanteen}
                     item={item}

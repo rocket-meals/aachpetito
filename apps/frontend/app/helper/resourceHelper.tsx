@@ -1,18 +1,6 @@
 import React from 'react';
 import { MaterialCommunityIcons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import {
-  BuildingsTranslations,
-  Foodoffers,
-  Foods,
-  FoodsCategories,
-  FoodoffersCategories,
-  FormCategoriesTranslations,
-  FormFieldsTranslations,
-  FormsTranslations,
-  MarkingsTranslations,
-  NewsTranslations,
-  WikisTranslations,
-} from '@/constants/types';
+import { DatabaseTypes } from 'repo-depkit-common';
 import { StringHelper } from 'repo-depkit-common';
 
 export type TranslationEntry = {
@@ -110,8 +98,8 @@ export const getFoodAttributesTranslation = (
 };
 
 const getFoodCategoryName = (
-  categories: FoodsCategories[],
-  category: string | FoodsCategories | null | undefined,
+  categories: DatabaseTypes.FoodsCategories[],
+  category: string | DatabaseTypes.FoodsCategories | null | undefined,
   languageCode: string
 ): string => {
   if (!category) return '';
@@ -128,8 +116,8 @@ const getFoodCategoryName = (
 };
 
 const getFoodOfferCategoryName = (
-  categories: FoodoffersCategories[],
-  category: string | FoodoffersCategories | null | undefined,
+  categories: DatabaseTypes.FoodoffersCategories[],
+  category: string | DatabaseTypes.FoodoffersCategories | null | undefined,
   languageCode: string
 ): string => {
   if (!category) return '';
@@ -188,7 +176,7 @@ const getDescriptionFromTranslation = (
   return translation?.description || '';
 };
 
-const extractFoodDetails = (food: Foodoffers) => {
+const extractFoodDetails = (food: DatabaseTypes.Foodoffers) => {
   const {
     fat_g,
     protein_g,
@@ -298,7 +286,7 @@ export function isRatingNegative(rating: number | null | undefined): boolean {
 }
 
 export function getFoodName(
-  food: string | Foods | null | undefined,
+  food: string | DatabaseTypes.Foods | null | undefined,
   languageCode: string
 ) {
   if (typeof food === 'object' && food !== null) {
