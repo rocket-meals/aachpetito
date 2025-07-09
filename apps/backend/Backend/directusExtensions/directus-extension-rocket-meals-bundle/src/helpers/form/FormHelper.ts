@@ -14,7 +14,7 @@ import {DirectusFilesAssetHelper} from "../DirectusFilesAssetHelper";
 import {MarkdownHelper} from "../html/MarkdownHelper";
 import {MyDatabaseTestableHelperInterface} from "../MyDatabaseHelperInterface";
 import {TranslationBackendKeys, TranslationsBackend} from "../TranslationsBackend";
-import {DateHelper, DateHelperTimezone} from "../DateHelper";
+import {DateHelper, DateHelperTimezone} from "repo-depkit-common";
 import {EnvVariableHelper} from "../EnvVariableHelper";
 import {HashHelper} from "../HashHelper";
 import {DatabaseTypes} from "repo-depkit-common"

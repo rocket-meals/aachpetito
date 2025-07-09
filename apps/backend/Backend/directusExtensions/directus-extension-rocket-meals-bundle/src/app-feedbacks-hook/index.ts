@@ -2,7 +2,7 @@ import {defineHook} from '@directus/extensions-sdk';
 import {DatabaseInitializedCheck} from "../helpers/DatabaseInitializedCheck";
 import {CollectionNames} from "../helpers/CollectionNames";
 import {MyDatabaseHelper} from "../helpers/MyDatabaseHelper";
-import {DateHelper} from "../helpers/DateHelper";
+import {DateHelper} from "repo-depkit-common";
 import {EnvVariableHelper} from "../helpers/EnvVariableHelper";
 import {HtmlTemplatesEnum} from "../helpers/html/HtmlGenerator";
 

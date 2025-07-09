@@ -1,7 +1,7 @@
 import {MyDatabaseHelper} from "../helpers/MyDatabaseHelper";
 
 import {DatabaseTypes} from "repo-depkit-common";
-import {DateHelper} from "../helpers/DateHelper";
+import {DateHelper} from "repo-depkit-common";
 import {WorkflowRunLogger} from "../workflows-runs-hook/WorkflowRunJobInterface";
 import {WORKFLOW_RUN_STATE} from "../helpers/itemServiceHelpers/WorkflowsRunEnum";
 
