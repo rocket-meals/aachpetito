@@ -2,7 +2,7 @@ import {CollectionNames} from "./../CollectionNames";
 import {DatabaseTypes} from "repo-depkit-common"
 import {CashregistersTransactionsForParser} from "../../cashregister-hook/CashregisterTransactionParserInterface";
 import {ItemsServiceHelper} from "../ItemsServiceHelper";
-import {DateHelper} from "../DateHelper";
+import {DateHelper} from "repo-depkit-common";
 import {MyDatabaseHelperInterface} from "../MyDatabaseHelperInterface";
 
 export class CashregisterHelper {

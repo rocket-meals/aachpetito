@@ -1,7 +1,7 @@
 // small jest test
 import {describe, it} from '@jest/globals';
 import {DatabaseTypes} from "repo-depkit-common";
-import {DateHelper} from "../../helpers/DateHelper";
+import {DateHelper} from "repo-depkit-common";
 import {ReportSchedule} from "../ReportSchedule";
 
 describe("TestFoodFeedbackReportScheduleNextReportDateDue Test", () => {

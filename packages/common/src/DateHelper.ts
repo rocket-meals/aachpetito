@@ -1,13 +1,34 @@
 import {StringHelper} from "repo-depkit-common";
+import moment from "moment-timezone";
 
 export enum Weekday {
-    MONDAY = 'Monday',
-    TUESDAY = 'Tuesday',
-    WEDNESDAY = 'Wednesday',
-    THURSDAY = 'Thursday',
-    FRIDAY = 'Friday',
-    SATURDAY = 'Saturday',
-    SUNDAY = 'Sunday'
+    MONDAY = "MONDAY",
+    TUESDAY = "TUESDAY",
+    WEDNESDAY = "WEDNESDAY",
+    THURSDAY = "THURSDAY",
+    FRIDAY = "FRIDAY",
+    SATURDAY = "SATURDAY",
+    SUNDAY = "SUNDAY"
+}
+
+export type FoodofferDateType = {
+    year: number,
+    month: number,
+    day: number
+}
+
+export type MySimpleDate = {
+    year: number,
+    month: number,
+    day: number,
+    hours: number,
+    minutes: number,
+    seconds: number,
+    milliseconds: number
+}
+
+export enum DateHelperTimezone {
+    GERMANY = "Europe/Berlin"
 }
 
 
@@ -538,5 +559,122 @@ export class DateHelper {
 
     static isDateBetween(start: Date, check: Date, end: Date){
         return start <= check && check <= end;
+    }
+
+    // ---- extracted from backend helpers ----
+
+    static getWeekdayList(): Weekday[] {
+        return [
+            Weekday.MONDAY,
+            Weekday.TUESDAY,
+            Weekday.WEDNESDAY,
+            Weekday.THURSDAY,
+            Weekday.FRIDAY,
+            Weekday.SATURDAY,
+            Weekday.SUNDAY
+        ];
+    }
+
+    static getWeekdayListFromDate(date: Date): Weekday[] {
+        const weekdayList = DateHelper.getWeekdayList();
+        const weekday = DateHelper.getWeekdayFromDate(date);
+        const index = weekdayList.indexOf(weekday);
+        const firstPart = weekdayList.slice(index);
+        const secondPart = weekdayList.slice(0, index);
+        return firstPart.concat(secondPart);
+    }
+
+    static getWeekdayFromDate(date: Date): Weekday {
+        const weekday = date.getDay();
+        switch (weekday) {
+            case 0:
+                return Weekday.SUNDAY;
+            case 1:
+                return Weekday.MONDAY;
+            case 2:
+                return Weekday.TUESDAY;
+            case 3:
+                return Weekday.WEDNESDAY;
+            case 4:
+                return Weekday.THURSDAY;
+            case 5:
+                return Weekday.FRIDAY;
+            case 6:
+                return Weekday.SATURDAY;
+            default:
+                throw new Error(`Invalid weekday: ${weekday}`);
+        }
+    }
+
+    static getHumanReadableDate(date: Date, includeWeekdayName: boolean): string {
+        const numericString = date.toLocaleDateString('de-DE', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+        const weekdayName = date.toLocaleDateString('de-DE', {weekday: 'long'});
+        let finalString = numericString;
+        if (includeWeekdayName) {
+            finalString += ` (${weekdayName})`;
+        }
+        return finalString;
+    }
+
+    static getHumanReadableTime(date: Date): string {
+        return date.toLocaleTimeString('de-DE', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+    }
+
+    static getHumanReadableDateAndTime(date: Date): string {
+        return `${DateHelper.getHumanReadableDate(date, false)} ${DateHelper.getHumanReadableTime(date)}`;
+    }
+
+    static getFoodofferDateTypeFromDate(date: Date): FoodofferDateType {
+        return {
+            year: date.getFullYear(),
+            month: date.getMonth() + 1,
+            day: date.getDate()
+        };
+    }
+
+    static foodofferDateTypeToString(date: Date | FoodofferDateType){
+        if (date instanceof Date) {
+            return DateHelper.getDirectusDateOnlyString(date);
+        }
+        const year = date.year;
+        const month = String(date.month).padStart(2, '0');
+        const day = String(date.day).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    static parseDD_MM_YYYY(dateString: string): Date {
+        const parts = dateString.split('.');
+        if (parts.length !== 3) {
+            throw new Error(`Invalid date string: ${dateString}`);
+        }
+        if(parts[0]==undefined || parts[1]==undefined || parts[2]==undefined){
+            throw new Error(`Invalid date string: ${dateString}`);
+        }
+        const day = parseInt(parts[0]);
+        const month = parseInt(parts[1]);
+        const year = parseInt(parts[2]);
+        return new Date(year, month - 1, day);
+    }
+
+    static formatDDMMYYYYToDateWithTimeZone(value_raw: string, timezone: DateHelperTimezone){
+        let date_with_timezone = moment.tz(value_raw, "DD.MM.YYYY", timezone);
+        return date_with_timezone.toDate();
+    }
+
+    static formatDateToTimeZoneReadable(date: Date, timezone: DateHelperTimezone): string {
+        const dateWithTimezone = moment.tz(date, timezone);
+        return dateWithTimezone.format("DD.MM.YYYY HH:mm:ss");
+    }
+
+    static getDate(mySimpleDate: MySimpleDate): Date {
+        return new Date(mySimpleDate.year, mySimpleDate.month-1, mySimpleDate.day, mySimpleDate.hours, mySimpleDate.minutes, mySimpleDate.seconds, mySimpleDate.milliseconds);
     }
 }

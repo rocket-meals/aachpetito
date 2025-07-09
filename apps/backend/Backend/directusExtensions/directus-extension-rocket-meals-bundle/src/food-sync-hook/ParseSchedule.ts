@@ -9,7 +9,7 @@ import {
 } from "./FoodParserInterface";
 import {TranslationHelper} from "../helpers/TranslationHelper";
 import {MarkingParserInterface, MarkingsTypeForParser} from "./MarkingParserInterface";
-import {DateHelper} from "../helpers/DateHelper";
+import {DateHelper} from "repo-depkit-common";
 import {ListHelper} from "../helpers/ListHelper";
 import {DatabaseTypes} from "repo-depkit-common";
 import {MyDatabaseHelper} from "../helpers/MyDatabaseHelper";

@@ -6,7 +6,7 @@ import {ApiContext} from "../helpers/ApiContext";
 import {DatabaseTypes} from "repo-depkit-common";
 
 import {MyDatabaseHelper} from "../helpers/MyDatabaseHelper";
-import {DateHelper, Weekday} from "../helpers/DateHelper";
+import {DateHelper, Weekday} from "repo-depkit-common";
 import {PrimaryKey} from "@directus/types";
 import {EventContext} from "@directus/extensions/node_modules/@directus/types/dist/events";
 import {DictHelper} from "../helpers/DictHelper";

@@ -1,6 +1,6 @@
 import {DatabaseTypes} from "repo-depkit-common"
 
-import {DateHelper} from "../helpers/DateHelper";
+import {DateHelper} from "repo-depkit-common";
 import {ApiContext} from "../helpers/ApiContext";
 import {FieldFilter, Filter} from "@directus/types/dist/filter";
 import {AssetHelperDirectusBackend, AssetHelperTransformOptions} from "../helpers/AssetHelperDirectusBackend";
