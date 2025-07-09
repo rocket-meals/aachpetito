@@ -26,7 +26,6 @@ import * as DeviceInfo from 'expo-device';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { AppFeedback } from '@/redux/actions/AppFeedback/AppFeedback';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { FeedbackResponse } from './types';
 import useToast from '@/hooks/useToast';
 import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
