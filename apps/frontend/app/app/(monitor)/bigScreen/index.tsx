@@ -28,7 +28,7 @@ import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { RootState } from '@/redux/reducer';
 import { FoodCategoriesHelper } from '@/redux/actions/FoodCategories/FoodCategories';
-import { FoodoffersCategories, FoodsCategories } from '@/constants/types';
+import { DatabaseTypes } from 'repo-depkit-common';
 import {
   SET_FOOD_CATEGORIES,
   SET_FOOD_OFFERS_CATEGORIES,
@@ -96,7 +96,7 @@ const Index = () => {
     try {
       const result = (await foodCategoriesHelper.fetchFoodCategories(
         {}
-      )) as FoodsCategories[];
+      )) as DatabaseTypes.FoodsCategories[];
       if (result) {
         dispatch({ type: SET_FOOD_CATEGORIES, payload: result });
       }
@@ -110,7 +110,7 @@ const Index = () => {
       const result =
         (await foodOffersCategoriesHelper.fetchFoodOffersCategories(
           {}
-        )) as FoodoffersCategories[];
+        )) as DatabaseTypes.FoodoffersCategories[];
       if (result) {
         dispatch({ type: SET_FOOD_OFFERS_CATEGORIES, payload: result });
       }
