@@ -2,7 +2,6 @@ import {
   Animated,
   Dimensions,
   Easing,
-  Image,
   ScrollView,
   Text,
   View,
@@ -24,6 +23,7 @@ import { useLocalSearchParams } from 'expo-router';
 import NetInfo from '@react-native-community/netinfo';
 import { iconLibraries } from '@/components/Drawer/CustomDrawerContent';
 import MarkingIcon from '@/components/MarkingIcon';
+import CompanyImage from '@/components/CompanyImage';
 import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { RootState } from '@/redux/reducer';
@@ -72,9 +72,6 @@ const Index = () => {
   const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { canteens } = useSelector((state: RootState) => state.canteenReducer);
   const [selectedCanteen, setSelectedCanteen] = useState<any>(null);
-  const companyImage =
-    appSettings?.company_image &&
-    getImageUrl(String(appSettings?.company_image))?.split('?')[0];
   const foods_area_color = appSettings?.foods_area_color
     ? appSettings?.foods_area_color
     : projectColor;
@@ -384,7 +381,7 @@ const Index = () => {
         >
           <View style={styles.headerCol1}>
             <View style={styles.logoContainer}>
-              <Image source={{ uri: companyImage }} style={logoStyle} />
+              <CompanyImage appSettings={appSettings} style={logoStyle} />
             </View>
             <View style={styles.labelText}>
               <View style={styles.row}>
