@@ -133,11 +133,6 @@
                                 "name": "proof-key-code-exchange-endpoint",
                                 "source": "src/proof-key-code-exchange-endpoint/index.ts"
                         },
-                        {
-                                "type": "endpoint",
-                                "name": "rss-feed-endpoint",
-                                "source": "src/rss-feed-endpoint/index.ts"
-                        },
 			{
 				"type": "hook",
 				"name": "users-avatar-delete-hook",

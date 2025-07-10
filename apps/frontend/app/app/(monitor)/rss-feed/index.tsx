@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Linking, Image } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import styles from './styles';
-import Server from '@/constants/ServerUrl';
+
 
 const parseFeed = (xml: string) => {
-  const items: { title: string; link: string; content: string }[] = [];
+  const items: { title: string; link: string; content: string; image: string }[] = [];
   const itemRegex = /<item>([\s\S]*?)<\/item>/g;
   let match;
   while ((match = itemRegex.exec(xml))) {
@@ -18,10 +18,20 @@ const parseFeed = (xml: string) => {
     const descMatch =
       itemXml.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/) ||
       itemXml.match(/<description>(.*?)<\/description>/);
+    const contentEncodedMatch =
+      itemXml.match(/<content:encoded><!\[CDATA\[(.*?)\]\]><\/content:encoded>/) ||
+      itemXml.match(/<content:encoded>([\s\S]*?)<\/content:encoded>/);
+    const enclosureMatch = itemXml.match(/<enclosure[^>]*url=['"](.*?)['"]/);
+    const htmlContent =
+      (contentEncodedMatch ? contentEncodedMatch[1] : '') ||
+      (descMatch ? descMatch[1] : '');
+    const imageMatch = htmlContent.match(/<img[^>]*src=['"]([^'"]+)['"]/);
+
     items.push({
       title: titleMatch ? titleMatch[1] : '',
       link: linkMatch ? linkMatch[1] : '',
       content: descMatch ? descMatch[1] : '',
+      image: enclosureMatch ? enclosureMatch[1] : imageMatch ? imageMatch[1] : '',
     });
   }
   return items;
@@ -43,8 +53,7 @@ const RssFeedScreen = () => {
         const urlList = Array.isArray(urls) ? urls : String(urls).split(',');
         const allItems: any[] = [];
         for (const url of urlList) {
-          const encoded = encodeURIComponent(url.trim());
-          const res = await fetch(`${Server.ServerUrl}/rss-feed?url=${encoded}`);
+          const res = await fetch(url.trim());
           const text = await res.text();
           allItems.push(...parseFeed(text));
         }
@@ -94,6 +103,9 @@ const RssFeedScreen = () => {
     >
       <TouchableOpacity onPress={() => currentItem.link && Linking.openURL(currentItem.link)}>
         <Text style={[styles.title, { color: theme.screen.text }]}>{currentItem.title}</Text>
+        {currentItem.image && (
+          <Image source={{ uri: currentItem.image }} style={styles.image} resizeMode='cover' />
+        )}
         {currentItem.content && (
           <Text style={[styles.body, { color: theme.screen.text }]}>{currentItem.content}</Text>
         )}

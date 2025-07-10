@@ -21,4 +21,10 @@ export default StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     textAlign: 'center',
   },
+  image: {
+    width: '100%',
+    height: 200,
+    marginBottom: 10,
+    borderRadius: 8,
+  },
 });
