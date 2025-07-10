@@ -4,11 +4,7 @@ import {defineHook} from "@directus/extensions-sdk";
 import {EnvVariableHelper, SyncForCustomerEnum} from "../helpers/EnvVariableHelper";
 import {CashregisterTransactionParserInterface} from "./CashregisterTransactionParserInterface";
 import {MyDatabaseHelper} from "../helpers/MyDatabaseHelper";
-import {
-    ResultHandleWorkflowRunsWantToRun, SingleWorkflowRun,
-    WorkflowRunJobInterface,
-    WorkflowRunLogger
-} from "../workflows-runs-hook/WorkflowRunJobInterface";
+import {SingleWorkflowRun, WorkflowRunLogger} from "../workflows-runs-hook/WorkflowRunJobInterface";
 import {DatabaseTypes} from "repo-depkit-common"
 import {CronObject, WorkflowScheduleHelper, WorkflowScheduler} from "../workflows-runs-hook";
 import {WORKFLOW_RUN_STATE} from "../helpers/itemServiceHelpers/WorkflowsRunEnum";

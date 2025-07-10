@@ -15,7 +15,7 @@ export interface MyDatabaseTestableHelperInterface {
 export class MyDatabaseTestableHelper implements MyDatabaseTestableHelperInterface {
     private cachedServerInfo: ServerInfo | undefined = undefined;
     private cachedClient: any | undefined = undefined;
-    public useOfflineServerInfo: boolean = false;
+    public useOfflineServerInfo: boolean = true;
 
     getServerUrl(): string {
         return 'https://test.rocket-meals.de/rocket-meals/api';

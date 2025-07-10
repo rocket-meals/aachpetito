@@ -93,6 +93,8 @@ export class ShareServiceHelper implements ShareDirectusFileMethod {
             // @ts-ignore
             roles: [role_admin_id],
             admin: true,
+            app: true,
+            ip: null
         }
 
         let database = this?.eventContext?.database || this.apiContext.database;

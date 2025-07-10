@@ -10,8 +10,7 @@ import {AppSettingsHelper} from "./itemServiceHelpers/AppSettingsHelper";
 import {AutoTranslationSettingsHelper} from "./itemServiceHelpers/AutoTranslationSettingsHelper";
 import {WorkflowsRunHelper} from "./itemServiceHelpers/WorkflowsRunHelper";
 import {FilesServiceHelper} from "./FilesServiceHelper";
-import {EventContext as ExtentContextDirectusTypes, SchemaOverview} from "@directus/types";
-import {EventContext as EventContextForFlows} from "@directus/extensions/node_modules/@directus/types/dist/events";
+import {EventContext, SchemaOverview} from "@directus/types";
 import {ShareServiceHelper} from "./ShareServiceHelper";
 import {MyDatabaseHelperInterface} from "./MyDatabaseHelperInterface";
 import {EnvVariableHelper} from "./EnvVariableHelper";
@@ -19,16 +18,18 @@ import ms from "ms";
 import jwt from 'jsonwebtoken';
 import {NanoidHelper} from "./NanoidHelper";
 
+export type MyEventContext = EventContext;
+
 export class MyDatabaseHelper implements MyDatabaseHelperInterface {
 
     public apiContext: ApiContext;
-    public eventContext: ExtentContextDirectusTypes | undefined;
+    public eventContext: MyEventContext | undefined;
     public useLocalServerMode: boolean = false;
 
-    constructor(apiContext: ApiContext, eventContext?: EventContextForFlows | ExtentContextDirectusTypes) {
+    constructor(apiContext: ApiContext, eventContext?: MyEventContext) {
         this.apiContext = apiContext;
         // if available we should use eventContext - https://github.com/directus/directus/discussions/11051
-        this.eventContext = eventContext as any as ExtentContextDirectusTypes; // stupid typescript error, because of the import
+        this.eventContext = eventContext; // stupid typescript error, because of the import
         // its better to use the eventContext, because of reusing the database connection instead of creating a new one
     }
 
@@ -36,7 +37,7 @@ export class MyDatabaseHelper implements MyDatabaseHelperInterface {
      * Should be used for downloading files, as traefik does not support the public external url
      */
     public cloneWithInternalServerMode(): MyDatabaseHelper {
-        let newInstance = new MyDatabaseHelper(this.apiContext, this.eventContext as any as EventContextForFlows);
+        let newInstance = new MyDatabaseHelper(this.apiContext, this.eventContext);
         newInstance.useLocalServerMode = true;
         return newInstance;
     }

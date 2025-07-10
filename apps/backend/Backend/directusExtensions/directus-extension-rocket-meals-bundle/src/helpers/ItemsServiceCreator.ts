@@ -1,21 +1,19 @@
 import type {
     Accountability,
+    EventContext,
     Item as DirectusItem,
     PermissionsAction,
     PrimaryKey,
     Query,
+    BusboyFileStream,
     SchemaOverview
 } from '@directus/types';
 import type {Knex} from 'knex';
 import {ApiContext} from "./ApiContext";
-import {EventContext as EventContextForFlows} from "@directus/extensions/node_modules/@directus/types/dist/events";
-import {BusboyFileStream} from "@directus/extensions/node_modules/@directus/types/dist/files";
 import {Readable} from "node:stream";
-import {EventContext as EventContextForServices} from "@directus/types";
 import {DatabaseTypes} from "repo-depkit-common";
-import {EnvVariableHelper} from "./EnvVariableHelper";
 
-export type MyEventContext = EventContextForFlows | EventContextForServices;
+export type MyEventContext = EventContext;
 
 export type FileServiceReadable = Readable;
 export type FileServiceBusboyFileStream = BusboyFileStream;
