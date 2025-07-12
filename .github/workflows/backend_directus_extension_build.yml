@@ -1,3 +1,4 @@
+# jobs must be a top-level key to avoid "jobs is not a valid event name" errors
 name: Backend Directus Extension Build
 
 on:
@@ -48,3 +49,4 @@ jobs:
         with:
           path: apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/dist
           name: backend-dist
+
