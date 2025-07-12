@@ -6,9 +6,9 @@ on:
     paths:
       - 'apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/**'
 
-  jobs:
-    build:
-      runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
