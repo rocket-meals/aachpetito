@@ -6,6 +6,7 @@ on:
     branches: [master]
     paths:
       - 'apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
