@@ -6,12 +6,9 @@ on:
     paths:
       - 'apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/**'
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle
+  jobs:
+    build:
+      runs-on: ubuntu-latest
     steps:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
@@ -24,12 +21,12 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
       - name: 🚀 Build the extension
-        run: yarn run build
+        run: yarn app-backend-build
 
       - name: 🔍 Check if dist has changed
         id: check_changes
         run: |
-          if [[ -n $(git status --porcelain ./dist) ]]; then
+          if [[ -n $(git status --porcelain apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/dist) ]]; then
             echo "dist_changed=true" >> $GITHUB_ENV
           else
             echo "dist_changed=false" >> $GITHUB_ENV
@@ -41,7 +38,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git pull --rebase
-          git add -f ./dist
+          git add -f apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/dist
           git commit -m "Update dist after backend build"
           git push
 
@@ -49,5 +46,5 @@ jobs:
         if: env.dist_changed == 'true'
         uses: actions/upload-artifact@v4
         with:
-          path: ./dist
+          path: apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/dist
           name: backend-dist
