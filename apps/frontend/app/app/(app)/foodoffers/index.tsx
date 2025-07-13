@@ -661,12 +661,17 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
                 </Tooltip>
 
                 {/* Canteen Heading */}
-                <Text style={{ ...styles.heading, color: theme.header.text }}>
-                  {excerpt(
-                    String(selectedCanteen?.alias),
-                    screenWidth > 800 ? 30 : 10
-                  ) || 'Food Offers'}
-                </Text>
+                <TouchableOpacity
+                  onPress={() => openSheet('canteen')}
+                  activeOpacity={0.7}
+                >
+                  <Text style={{ ...styles.heading, color: theme.header.text }}>
+                    {excerpt(
+                      String(selectedCanteen?.alias),
+                      screenWidth > 800 ? 30 : 10
+                    ) || 'Food Offers'}
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View
                 style={{
