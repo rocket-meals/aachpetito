@@ -6,9 +6,10 @@ import sharp from "sharp";
 import {AppLinks, AppScreens, APP_ROUTES} from "repo-depkit-common";
 
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
 // Define command-line arguments using yargs
-const argv = yargs
+const argv = yargs(hideBin(process.argv))
     .option('repositoryOwner', {
         alias: 'o',
         description: 'The owner of the repository',
@@ -122,6 +123,7 @@ async function createScreenshotUncompressed(url: string, device: Device, fileNam
     await page.goto(url);
     await page.waitForNetworkIdle();
     await new Promise(resolve => setTimeout(resolve, 2000)); // Pause for 2 seconds to allow animations to finish and images to load
+    // @ts-ignore
     await page.screenshot({ path: fileName });
     console.log(`Saved screenshot: ${fileName}`);
 
