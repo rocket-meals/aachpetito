@@ -27,38 +27,38 @@ const CustomStackHeader: React.FC<CustomStackHeaderProps> = ({ label }) => {
   const handleGoback = () => {
     if (pathname.includes(`/${AppScreens.FOOD_OFFERS}/details`)) {
       router.navigate(`/${AppScreens.FOOD_OFFERS}`);
-    } else if (pathname.includes('/housing/details')) {
-      router.navigate('/housing');
-    } else if (pathname.includes('/statistics')) {
-      router.navigate('/management');
-    } else if (pathname.includes('/support-ticket')) {
-      router.navigate('/support-FAQ');
-    } else if (pathname.includes('/feedback-support')) {
-      router.navigate('/support-FAQ');
-    } else if (pathname.includes('/support-FAQ')) {
-      router.navigate('/settings');
-    } else if (pathname.includes('/delete-user')) {
+    } else if (pathname.includes(`/${AppScreens.HOUSING}/details`)) {
+      router.navigate(`/${AppScreens.HOUSING}`);
+    } else if (pathname.includes(`/${AppScreens.STATISTICS}`)) {
+      router.navigate(`/${AppScreens.MANAGEMENT}`);
+    } else if (pathname.includes(`/${AppScreens.SUPPORT_TICKET}`)) {
+      router.navigate(`/${AppScreens.SUPPORT_FAQ}`);
+    } else if (pathname.includes(`/${AppScreens.FEEDBACK_SUPPORT}`)) {
+      router.navigate(`/${AppScreens.SUPPORT_FAQ}`);
+    } else if (pathname.includes(`/${AppScreens.SUPPORT_FAQ}`)) {
+      router.navigate(`/${AppScreens.SETTINGS}`);
+    } else if (pathname.includes(`/${AppScreens.HOUSING_DELETE_USER}`)) {
       if (loggedIn) {
-        router.navigate('/settings');
+        router.navigate(`/${AppScreens.SETTINGS}`);
       } else {
-        router.navigate('/login');
+        router.navigate(`/${AppScreens.LOGIN}`);
       }
-    } else if (pathname.includes('/campus/details')) {
-      router.navigate('/campus');
-    } else if (pathname.includes('/list-week-screen')) {
-      router.navigate('/foodPlanWeek');
-    } else if (pathname.includes('/foodPlanWeek')) {
-      router.navigate('/management');
-    } else if (pathname.includes('/forms')) {
-      router.navigate('/form-categories');
-    } else if (pathname.includes('/form-categories')) {
-      router.navigate('/management');
+    } else if (pathname.includes(`/${AppScreens.CAMPUS}/details`)) {
+      router.navigate(`/${AppScreens.CAMPUS}`);
+    } else if (pathname.includes(`/${AppScreens.LIST_WEEK_SCREEN}`)) {
+      router.navigate(`/${AppScreens.FOOD_PLAN_WEEK}`);
+    } else if (pathname.includes(`/${AppScreens.FOOD_PLAN_WEEK}`)) {
+      router.navigate(`/${AppScreens.MANAGEMENT}`);
+    } else if (pathname.includes(`/${AppScreens.FORMS}`)) {
+      router.navigate(`/${AppScreens.FORM_CATEGORIES}`);
+    } else if (pathname.includes(`/${AppScreens.FORM_CATEGORIES}`)) {
+      router.navigate(`/${AppScreens.MANAGEMENT}`);
     } else if (router.canGoBack()) {
       router.back();
     } else if (loggedIn) {
       router.navigate(`/${AppScreens.FOOD_OFFERS}`);
     } else {
-      router.navigate('/login');
+      router.navigate(`/${AppScreens.LOGIN}`);
     }
   };
 
