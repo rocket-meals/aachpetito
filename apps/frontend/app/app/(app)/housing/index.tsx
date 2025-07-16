@@ -605,6 +605,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
             handleComponent={null}
             enablePanDownToClose
             onClose={closeDistanceSheet}
+            title={translate(TranslationKeys.sort_option_distance)}
           >
             <DistanceInfoSheet
               closeSheet={closeDistanceSheet}
