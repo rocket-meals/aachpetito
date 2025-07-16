@@ -9,7 +9,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import * as Updates from 'expo-updates';
-import BaseModal from '../BaseModal';
+import BaseBottomSheet from '../BaseBottomSheet';
+import type BottomSheet from '@gorhom/bottom-sheet';
+import popupStyles from '../PopupEventSheet/styles';
 import usePlatformHelper from '@/helper/platformHelper';
 import { useLanguage } from '@/hooks/useLanguage';
 import { TranslationKeys } from '@/locales/keys';
@@ -29,6 +31,7 @@ const ExpoUpdateChecker: React.FC<ExpoUpdateCheckerProps> = ({ children }) => {
   const { primaryColor } = useSelector((state: RootState) => state.settings);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const bottomSheetRef = useRef<BottomSheet>(null);
   const [updating, setUpdating] = useState(false);
 
   const checkForUpdates = async () => {
@@ -37,6 +40,7 @@ const ExpoUpdateChecker: React.FC<ExpoUpdateCheckerProps> = ({ children }) => {
       const update = await Updates.checkForUpdateAsync();
       if (update.isAvailable) {
         setModalVisible(true);
+        setTimeout(() => bottomSheetRef.current?.expand(), 0);
       }
     } catch (e) {
       console.error('Error while checking updates', e);
@@ -72,28 +76,36 @@ const ExpoUpdateChecker: React.FC<ExpoUpdateCheckerProps> = ({ children }) => {
   return (
     <>
       {children}
-      <BaseModal
-        isVisible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        title={translate(TranslationKeys.update_available)}
-      >
-        <View style={modalStyles.contentContainer}>
-          <Text style={{ color: theme.screen.text, textAlign: 'center' }}>
-            {translate(TranslationKeys.update_available_message)}
-          </Text>
-          <View style={modalStyles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
+      {modalVisible && (
+        <BaseBottomSheet
+          ref={bottomSheetRef}
+          index={-1}
+          backgroundStyle={{ backgroundColor: theme.sheet.sheetBg }}
+          enablePanDownToClose={false}
+          handleComponent={null}
+          onClose={() => setModalVisible(false)}
+          title={translate(TranslationKeys.update_available)}
+        >
+          <View style={[popupStyles.popupContainer, { marginTop: 0 }]}>
+            <Text style={{ color: theme.screen.text, textAlign: 'center' }}>
+              {translate(TranslationKeys.update_available_message)}
+            </Text>
+            <View style={modalStyles.buttonContainer}>
+              <TouchableOpacity
+              onPress={() => {
+                bottomSheetRef.current?.close();
+                setModalVisible(false);
+              }}
               style={[modalStyles.cancelButton, { borderColor: primaryColor }]}
-            >
+              >
               <Text style={[modalStyles.buttonText, { color: theme.screen.text }]}>
                 {translate(TranslationKeys.cancel)}
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+              </TouchableOpacity>
+              <TouchableOpacity
               onPress={applyUpdate}
               style={[modalStyles.saveButton, { backgroundColor: primaryColor }]}
-            >
+              >
               {updating ? (
                 <ActivityIndicator color={theme.activeText} />
               ) : (
@@ -101,10 +113,11 @@ const ExpoUpdateChecker: React.FC<ExpoUpdateCheckerProps> = ({ children }) => {
                   {translate(TranslationKeys.to_update)}
                 </Text>
               )}
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </BaseModal>
+        </BaseBottomSheet>
+      )}
     </>
   );
 };
