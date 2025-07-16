@@ -2823,6 +2823,26 @@
     "tr": "Güncelle",
     "zh": "更新"
   },
+  "update_available": {
+    "de": "Update verf\u00fcgbar",
+    "en": "Update available",
+    "ar": "\u062a\u062d\u062f\u064a\u062b \u0645\u062a\u0627\u062d",
+    "es": "Actualizaci\u00f3n disponible",
+    "fr": "Mise \u00e0 jour disponible",
+    "ru": "\u0414\u043e\u0441\u0442\u0443\u043f\u043d\u043e \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435",
+    "tr": "G\u00fcncelleme mevcut",
+    "zh": "\u53ef\u7528\u7684\u66f4\u65b0"
+  },
+  "update_available_message": {
+    "de": "Eine neue Version ist verf\u00fcgbar. Jetzt aktualisieren?",
+    "en": "A new version is available. Update now?",
+    "ar": "\u0625\u0635\u062f\u0627\u0631 \u062c\u062f\u064a\u062f \u0645\u062a\u0627\u062d. \u0647\u0644 \u062a\u0631\u063a\u0628 \u0641\u064a \u0627\u0644\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0622\u0646?",
+    "es": "Hay una nueva versi\u00f3n disponible. \u00bfActualizar ahora?",
+    "fr": "Une nouvelle version est disponible. Mettre \u00e0 jour maintenant\u00a0?",
+    "ru": "\u0414\u043e\u0441\u0442\u0443\u043f\u043d\u0430 \u043d\u043e\u0432\u0430\u044f \u0432\u0435\u0440\u0441\u0438\u044f. \u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c\u0441\u044f?",
+    "tr": "Yeni bir s\u00fcr\u00fcm mevcut. \u015eimdi g\u00fcncelle?",
+    "zh": "\u6709\u65b0\u7248\u672c\u3002\u73b0\u5728\u66f4\u65b0\u5417?"
+  },
   "send": {
     "de": "Senden",
     "en": "Send",

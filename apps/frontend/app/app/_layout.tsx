@@ -36,6 +36,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { config } from '@gluestack-ui/config';
 import ExpoUpdateLoader from '@/components/ExpoUpdateLoader/ExpoUpdateLoader';
+import ExpoUpdateChecker from '@/components/ExpoUpdateChecker/ExpoUpdateChecker';
 
 ServerAPI.createAuthentificationStorage(
   async () => {
@@ -102,17 +103,19 @@ export default function Layout() {
             <RootSiblingParent>
               <ThemeProvider>
                 <ServerStatusLoader>
-                  <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    style={{ flex: 1, backgroundColor: theme.screen.iconBg }}
-                  >
-                    <SafeAreaView
+                  <ExpoUpdateChecker>
+                    <KeyboardAvoidingView
+                      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                       style={{ flex: 1, backgroundColor: theme.screen.iconBg }}
-                      edges={['top', 'bottom']}
                     >
-                      <Slot />
-                    </SafeAreaView>
-                  </KeyboardAvoidingView>
+                      <SafeAreaView
+                        style={{ flex: 1, backgroundColor: theme.screen.iconBg }}
+                        edges={['top', 'bottom']}
+                      >
+                        <Slot />
+                      </SafeAreaView>
+                    </KeyboardAvoidingView>
+                  </ExpoUpdateChecker>
                 </ServerStatusLoader>
               </ThemeProvider>
             </RootSiblingParent>
