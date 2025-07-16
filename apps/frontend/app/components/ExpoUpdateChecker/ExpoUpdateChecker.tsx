@@ -78,6 +78,7 @@ const ExpoUpdateChecker: React.FC<ExpoUpdateCheckerProps> = ({ children }) => {
         enablePanDownToClose
         onClose={() => setModalVisible(false)}
         backgroundStyle={{ backgroundColor: theme.sheet.sheetBg }}
+        title={translate(TranslationKeys.update_available)}
       >
         <BottomSheetView style={sheetStyles.contentContainer}>
           <Text style={{ color: theme.screen.text, textAlign: 'center' }}>
