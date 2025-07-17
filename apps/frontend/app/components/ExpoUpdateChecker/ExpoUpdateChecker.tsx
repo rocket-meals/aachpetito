@@ -109,6 +109,8 @@ const ExpoUpdateChecker: React.FC<ExpoUpdateCheckerProps> = ({ children }) => {
           isVisible={modalVisible}
           style={modalStyles.modalContainer}
           backdropOpacity={0}
+          swipeDirection="down"
+          onSwipeComplete={() => setModalVisible(false)}
         >
           <TouchableOpacity
             style={modalStyles.backdrop}
@@ -191,8 +193,9 @@ const modalStyles = StyleSheet.create({
   },
   handleRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
   },
   closeButton: {
     width: 45,
@@ -200,6 +203,8 @@ const modalStyles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    right: 0,
   },
   handle: {
     width: '30%',
