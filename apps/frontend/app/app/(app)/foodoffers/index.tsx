@@ -8,7 +8,6 @@ import {
   RefreshControl,
   View,
   Platform,
-  Animated,
 } from 'react-native';
 import React, {
   useCallback,
@@ -83,11 +82,7 @@ import LottieView from 'lottie-react-native';
 import { replaceLottieColors } from '@/helper/animationHelper';
 import { myContrastColor } from '@/helper/colorHelper';
 import { TranslationKeys } from '@/locales/keys';
-import {
-  PanGestureHandler,
-  State,
-} from 'react-native-gesture-handler';
-import usePlatformHelper from '@/helper/platformHelper';
+
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import CustomMarkdown from '@/components/CustomMarkdown/CustomMarkdown';
 import { RootState } from '@/redux/reducer';
@@ -101,60 +96,6 @@ export const SHEET_COMPONENTS = {
   forecast: ForecastSheet,
   imageManagement: ImageManagementSheet,
   eatingHabits: EatingHabitsSheet,
-};
-
-interface DaySwipeScrollViewProps extends ScrollViewProps {
-  onSwipeLeft: () => void;
-  onSwipeRight: () => void;
-}
-
-const DaySwipeScrollView: React.FC<DaySwipeScrollViewProps> = ({
-  onSwipeLeft,
-  onSwipeRight,
-  children,
-  ...rest
-}) => {
-  const { isSmartPhone } = usePlatformHelper();
-
-  const translateX = useRef(new Animated.Value(0)).current;
-
-  if (!isSmartPhone()) {
-    return <ScrollView {...rest}>{children}</ScrollView>;
-  }
-
-  const handleGestureEvent = Animated.event(
-    [{ nativeEvent: { translationX: translateX } }],
-    { useNativeDriver: true }
-  );
-
-  const handleStateChange = (ev: any) => {
-    if (ev.nativeEvent.state === State.END) {
-      const dragX = ev.nativeEvent.translationX;
-      if (dragX < -80) {
-        onSwipeLeft();
-      } else if (dragX > 80) {
-        onSwipeRight();
-      }
-      Animated.timing(translateX, {
-        toValue: 0,
-        duration: 150,
-        useNativeDriver: true,
-      }).start();
-    }
-  };
-
-  return (
-    <PanGestureHandler
-      onGestureEvent={handleGestureEvent}
-      onHandlerStateChange={handleStateChange}
-      activeOffsetX={[-10, 10]}
-      failOffsetY={[-10, 10]}
-    >
-      <Animated.View style={{ transform: [{ translateX }] }}>
-        <ScrollView {...rest}>{children}</ScrollView>
-      </Animated.View>
-    </PanGestureHandler>
-  );
 };
 
 
@@ -1015,9 +956,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
               </View>
             </View>
           </View>
-          <DaySwipeScrollView
-            onSwipeLeft={() => handleDateChange('next')}
-            onSwipeRight={() => handleDateChange('prev')}
+          <ScrollView
             style={{
               ...styles.container,
               backgroundColor: theme.screen.background,
@@ -1133,7 +1072,7 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
                 {memoizedCanteenFeedbackLabels}
               </View>
             )}
-          </DaySwipeScrollView>
+          </ScrollView>
         </View>
         {isActive && !kioskMode && popupEvents.length > 0 && (
           selectedSheet === 'menu' ? (
