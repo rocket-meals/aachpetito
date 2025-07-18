@@ -30,8 +30,18 @@ const BaseBottomModal: React.FC<BaseBottomModalProps> = ({ visible, onClose, tit
     scrollOffset.current = event.nativeEvent.contentOffset.y;
   };
 
-  const handleScrollTo = (p: number) => {
-    scrollViewRef.current?.scrollTo({ y: p, animated: false });
+  const handleScrollTo = (
+    p: {
+      x?: number;
+      y?: number;
+      animated?: boolean;
+    } | number
+  ) => {
+    if (typeof p === 'number') {
+      scrollViewRef.current?.scrollTo({ y: p, animated: false });
+    } else {
+      scrollViewRef.current?.scrollTo(p);
+    }
   };
 
   return (
