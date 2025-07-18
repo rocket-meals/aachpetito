@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, StyleSheet, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
 import { AntDesign } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
@@ -34,7 +34,13 @@ const BaseBottomModal: React.FC<BaseBottomModalProps> = ({ visible, onClose, tit
           <View style={[styles.handle, { backgroundColor: theme.sheet.closeBg }]} />
         </View>
         {title && <Text style={[styles.title, { color: theme.sheet.text }]}>{title}</Text>}
-        <View style={styles.contentContainer}>{children}</View>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+          nestedScrollEnabled
+        >
+          {children}
+        </ScrollView>
       </View>
     </Modal>
   );
@@ -82,10 +88,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Poppins_700Bold',
   },
+  scrollView: {
+    flex: 1,
+    width: '100%',
+  },
   contentContainer: {
     gap: 20,
     alignItems: 'center',
     padding: 20,
-    flex: 1,
   },
 });
