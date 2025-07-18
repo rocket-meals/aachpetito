@@ -1,5 +1,14 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Dimensions, StyleSheet, ScrollView } from 'react-native';
+import React, { useRef } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  StyleSheet,
+  ScrollView,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import { AntDesign } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
@@ -14,6 +23,17 @@ export interface BaseBottomModalProps {
 const BaseBottomModal: React.FC<BaseBottomModalProps> = ({ visible, onClose, title, children }) => {
   const { theme } = useTheme();
 
+  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollOffset = useRef(0);
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    scrollOffset.current = event.nativeEvent.contentOffset.y;
+  };
+
+  const handleScrollTo = (p: number) => {
+    scrollViewRef.current?.scrollTo({ y: p, animated: false });
+  };
+
   return (
     <Modal
       isVisible={visible}
@@ -23,6 +43,9 @@ const BaseBottomModal: React.FC<BaseBottomModalProps> = ({ visible, onClose, tit
       swipeDirection="down"
       onSwipeComplete={onClose}
       propagateSwipe
+      scrollTo={handleScrollTo}
+      scrollOffset={scrollOffset.current}
+      scrollOffsetMax={Dimensions.get('window').height}
     >
       <View style={[styles.sheet, { backgroundColor: theme.sheet.sheetBg }]}>
         <TouchableOpacity
@@ -36,9 +59,12 @@ const BaseBottomModal: React.FC<BaseBottomModalProps> = ({ visible, onClose, tit
         </View>
         {title && <Text style={[styles.title, { color: theme.sheet.text }]}>{title}</Text>}
         <ScrollView
+          ref={scrollViewRef}
           style={styles.scrollView}
           contentContainerStyle={styles.contentContainer}
           nestedScrollEnabled
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
         >
           {children}
         </ScrollView>
