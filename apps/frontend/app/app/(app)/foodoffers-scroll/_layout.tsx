@@ -8,6 +8,7 @@ export default function FoodOfferLayout() {
   return (
     <Stack
       screenOptions={{
+        headerShown: false,
         headerStyle: { backgroundColor: theme.header.background },
         headerTintColor: theme.header.text,
       }}
@@ -16,7 +17,6 @@ export default function FoodOfferLayout() {
         name='index'
         options={{
           title: 'Food Offers',
-          headerShown: false,
         }}
       />
     </Stack>
