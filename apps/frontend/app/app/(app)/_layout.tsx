@@ -728,14 +728,6 @@ export default function Layout() {
         />
 
         <Drawer.Screen
-          name='foodoffers-scroll/index'
-          options={{
-            title: translate(TranslationKeys.foodoffers_scroll),
-            headerShown: false,
-          }}
-        />
-
-        <Drawer.Screen
           name='chats'
           options={{
             title: translate(TranslationKeys.chats),
