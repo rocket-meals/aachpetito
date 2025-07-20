@@ -17,6 +17,7 @@ export default function FoodOfferLayout() {
         name='index'
         options={{
           title: 'Food Offers',
+          headerShown: false,
         }}
       />
     </Stack>
