@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -60,7 +60,6 @@ const FoodOffersScroll = () => {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [sheetOpen, setSheetOpen] = useState(false);
   // This screen only supports scrolling forward in time
   // so we don't maintain loading state for previous days
   const navigation = useNavigation<DrawerNavigationProp<any>>();
@@ -141,13 +140,11 @@ const FoodOffersScroll = () => {
   };
 
   const openMenuSheet = useCallback(() => {
-    setSheetOpen(true);
-    setTimeout(() => bottomSheetRef.current?.expand(), 150);
+    bottomSheetRef.current?.expand();
   }, []);
 
   const closeSheet = useCallback(() => {
     bottomSheetRef.current?.close();
-    setSheetOpen(false);
   }, []);
 
   const getDayLabel = (date: string) => {
@@ -235,56 +232,60 @@ const FoodOffersScroll = () => {
     );
   }
 
-  const listHeader = (
-    <View style={[styles.header, { backgroundColor: theme.header.background }]}>
-      <View style={styles.row}>
-        <View style={styles.col1}>
-          <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-            <Ionicons name='menu' size={24} color={theme.header.text} />
-          </TouchableOpacity>
-          <TouchableOpacity>
+  const listHeader = useMemo(
+    () => (
+      <View style={[styles.header, { backgroundColor: theme.header.background }]}>
+        <View style={styles.row}>
+          <View style={styles.col1}>
+            <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+              <Ionicons name='menu' size={24} color={theme.header.text} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={{ ...styles.heading, color: theme.header.text }}>
+                {selectedCanteen?.alias || translate(TranslationKeys.food_offers)}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ ...styles.col2, gap: 10 }}>
+            <TouchableOpacity onPress={() => router.navigate('/price-group')}>
+              <FontAwesome6 name='euro-sign' size={24} color={theme.header.text} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={{ ...styles.col2, gap: 10 }}>
+            <TouchableOpacity onPress={() => handleDateChange('prev')}>
+              <Entypo name='chevron-left' size={24} color={theme.header.text} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <MaterialIcons name='calendar-month' size={24} color={theme.header.text} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleDateChange('next')}>
+              <Entypo name='chevron-right' size={24} color={theme.header.text} />
+            </TouchableOpacity>
             <Text style={{ ...styles.heading, color: theme.header.text }}>
-              {selectedCanteen?.alias || translate(TranslationKeys.food_offers)}
+              {selectedDate ? translate(getDayLabel(selectedDate)) : ''}
             </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ ...styles.col2, gap: 10 }}>
-          <TouchableOpacity onPress={() => router.navigate('/price-group')}>
-            <FontAwesome6 name='euro-sign' size={24} color={theme.header.text} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={{ ...styles.col2, gap: 10 }}>
-          <TouchableOpacity onPress={() => handleDateChange('prev')}>
-            <Entypo name='chevron-left' size={24} color={theme.header.text} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <MaterialIcons name='calendar-month' size={24} color={theme.header.text} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDateChange('next')}>
-            <Entypo name='chevron-right' size={24} color={theme.header.text} />
-          </TouchableOpacity>
-          <Text style={{ ...styles.heading, color: theme.header.text }}>
-            {selectedDate ? translate(getDayLabel(selectedDate)) : ''}
-          </Text>
-        </View>
-        <View style={{ ...styles.col2, gap: 10 }}>
-          <TouchableOpacity>
-            <FontAwesome6 name='people-group' size={24} color={theme.header.text} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <MaterialCommunityIcons name='clock-time-eight' size={24} color={theme.header.text} />
-          </TouchableOpacity>
+          </View>
+          <View style={{ ...styles.col2, gap: 10 }}>
+            <TouchableOpacity>
+              <FontAwesome6 name='people-group' size={24} color={theme.header.text} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <MaterialCommunityIcons name='clock-time-eight' size={24} color={theme.header.text} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    ),
+    [navigation, theme.header.background, theme.header.text, selectedCanteen, router, selectedDate, translate]
   );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.screen.iconBg }}>
       {listHeader}
       <FlatList
+        key={selectedDate}
         data={days}
         keyExtractor={(item) => item.date}
         renderItem={renderDay}
@@ -296,9 +297,7 @@ const FoodOffersScroll = () => {
         style={{ flex: 1 }}
         contentContainerStyle={{ backgroundColor: theme.screen.background }}
       />
-      {sheetOpen && (
-        <MarkingBottomSheet ref={bottomSheetRef} onClose={closeSheet} />
-      )}
+      <MarkingBottomSheet ref={bottomSheetRef} onClose={closeSheet} />
     </SafeAreaView>
   );
 };
