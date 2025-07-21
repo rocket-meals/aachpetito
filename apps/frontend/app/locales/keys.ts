@@ -243,6 +243,7 @@ export enum TranslationKeys {
   show_more_information = 'show_more_information',
   course_timetable = 'course_timetable',
   experimentell = "experimentell",
+  debug_logout = 'debug_logout',
   vertical_image_scroll = 'vertical_image_scroll',
   foodoffers_scroll = 'foodoffers_scroll',
   chats = 'chats',

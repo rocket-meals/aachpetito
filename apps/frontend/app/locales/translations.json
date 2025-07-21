@@ -2443,6 +2443,16 @@
     "tr": "Experimentell",
     "zh": "Experimentell"
   },
+  "debug_logout": {
+    "de": "Debug Logout",
+    "en": "Debug Logout",
+    "ar": "Debug Logout",
+    "es": "Debug Logout",
+    "fr": "Debug Logout",
+    "ru": "Debug Logout",
+    "tr": "Debug Logout",
+    "zh": "Debug Logout"
+  },
   "vertical_image_scroll": {
     "de": "Vertikaler Bildlauf",
     "en": "Vertical Image Scroll",
