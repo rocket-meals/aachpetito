@@ -6,6 +6,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import styles from './styles';
+import { getImageUrl } from '@/constants/HelperFunctions';
 import RedirectButton from '@/components/RedirectButton';
 import QRCode from 'qrcode';
 
@@ -51,6 +52,14 @@ const AppDownload = () => {
     }
   };
 
+  const projectLogo =
+    serverInfo?.info?.project?.project_logo &&
+    getImageUrl(serverInfo.info.project.project_logo);
+
+  const iconSource = projectLogo
+    ? { uri: projectLogo }
+    : require('../../../../assets/images/icon.png');
+
   return (
     <ScrollView
       style={{ ...styles.container, backgroundColor: theme.screen.background }}
@@ -60,12 +69,15 @@ const AppDownload = () => {
       }}
     >
       <View style={styles.content}>
-        <Image source={require('../../../../assets/images/icon.png')} style={styles.icon} />
+        <Image source={iconSource} style={styles.icon} />
         <Text style={{ ...styles.heading, color: theme.screen.text }}>{projectName}</Text>
         <View style={styles.qrRow}>
           {iosQr ? (
             <View style={styles.qrCol}>
-              <Image source={{ uri: iosQr }} style={styles.qr} />
+              <View style={styles.qrDebugWrapper}>
+                <Image source={{ uri: iosQr }} style={styles.qr} />
+              </View>
+              <Text selectable style={styles.uriText}>{iosQr}</Text>
               <RedirectButton
                 label='iOS'
                 onClick={() => appSettings?.app_stores_url_to_apple && openInBrowser(appSettings.app_stores_url_to_apple)}
@@ -74,7 +86,10 @@ const AppDownload = () => {
           ) : null}
           {androidQr ? (
             <View style={styles.qrCol}>
-              <Image source={{ uri: androidQr }} style={styles.qr} />
+              <View style={styles.qrDebugWrapper}>
+                <Image source={{ uri: androidQr }} style={styles.qr} />
+              </View>
+              <Text selectable style={styles.uriText}>{androidQr}</Text>
               <RedirectButton
                 label='Android'
                 onClick={() => appSettings?.app_stores_url_to_google && openInBrowser(appSettings.app_stores_url_to_google)}

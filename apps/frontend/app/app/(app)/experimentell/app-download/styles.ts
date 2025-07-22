@@ -37,4 +37,12 @@ export default StyleSheet.create({
     width: 150,
     height: 150,
   },
+  qrDebugWrapper: {
+    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+    padding: 5,
+  },
+  uriText: {
+    fontSize: 10,
+    color: 'gray',
+  },
 });
