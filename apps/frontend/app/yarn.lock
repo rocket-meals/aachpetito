@@ -12560,6 +12560,7 @@ __metadata:
   languageName: node
   linkType: hard
 
+
 "react-native-reanimated@npm:~3.16.1":
   version: 3.16.7
   resolution: "react-native-reanimated@npm:3.16.7"
@@ -14483,6 +14484,7 @@ __metadata:
   checksum: 10c0/019d33d81adff3f9f1bfcff18125fb2d3c65564f437d9be539270ee74b994986abb8260c7c2ce90e8f30162178b09dbbce33c6389273afac4f36069c48521f57
   languageName: node
   linkType: hard
+
 
 "thenify-all@npm:^1.0.0":
   version: 1.6.0
