@@ -58,8 +58,11 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 5,
     paddingHorizontal: 18,
     height: 43,
+    borderBottomLeftRadius: 18,
+    borderBottomRightRadius: 18,
   },
   qrButtonText: {
     fontSize: 16,

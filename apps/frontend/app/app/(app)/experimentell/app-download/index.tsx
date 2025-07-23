@@ -33,6 +33,8 @@ const AppDownload = () => {
   const [projectName, setProjectName] = useState('');
   const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
 
+  const projectColor = serverInfo?.info?.project?.project_color || primaryColor;
+
   useEffect(() => {
     const sub = Dimensions.addEventListener('change', ({ window }) => {
       setScreenWidth(window.width);
@@ -70,7 +72,7 @@ const AppDownload = () => {
     ? { uri: projectLogo }
     : require('../../../../assets/images/icon.png');
 
-  const contrastColor = myContrastColor(primaryColor, theme, selectedTheme === 'dark');
+  const contrastColor = myContrastColor(projectColor, theme, selectedTheme === 'dark');
 
   const gapBetweenCards = 10;
   const paddingHorizontal = 20;
@@ -94,7 +96,7 @@ const AppDownload = () => {
         imageContainerStyle={[styles.qrImageContainer, { height: qrSize }]}
         contentStyle={{ paddingBottom: 0 }}
         topRadius={0}
-        borderColor={primaryColor}
+        borderColor={projectColor}
         imageChildren={
           <QrCode
             value={url}
@@ -106,13 +108,14 @@ const AppDownload = () => {
         }
         bottomContent={
           <TouchableOpacity
-            style={[styles.qrButton, { backgroundColor: primaryColor }]}
+            style={[styles.qrButton, { backgroundColor: projectColor }]}
           >
             <Text style={[styles.qrButtonText, { color: contrastColor }]}>{label}</Text>
             <FontAwesome6
               name='arrow-up-right-from-square'
               size={20}
               color={contrastColor}
+              style={{ marginLeft: 5 }}
             />
           </TouchableOpacity>
         }
