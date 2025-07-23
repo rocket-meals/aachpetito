@@ -53,4 +53,16 @@ export default StyleSheet.create({
     color: 'gray',
     textAlign: 'center',
   },
+  qrButton: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 18,
+    height: 43,
+  },
+  qrButtonText: {
+    fontSize: 16,
+    fontFamily: 'Poppins_400Regular',
+  },
 });
