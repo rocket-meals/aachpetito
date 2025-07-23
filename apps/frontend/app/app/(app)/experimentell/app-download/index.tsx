@@ -3,6 +3,7 @@ import {
   Image,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
   Platform,
   Linking,
@@ -15,7 +16,6 @@ import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import styles from './styles';
 import { getImageUrl } from '@/constants/HelperFunctions';
-import ProjectButton from '@/components/ProjectButton';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { myContrastColor } from '@/helper/colorHelper';
 import QrCode from '@/components/QrCode';
@@ -103,26 +103,28 @@ const AppDownload = () => {
                   margin={2}
                 />
               </View>
-              <ProjectButton
-                text='iOS'
+              <TouchableOpacity
+                style={[
+                  styles.qrButton,
+                  { backgroundColor: primaryColor },
+                ]}
                 onPress={() =>
                   appSettings?.app_stores_url_to_apple &&
                   openInBrowser(appSettings.app_stores_url_to_apple)
                 }
-                style={{ width: '100%', marginVertical: 10 }}
-                iconRight={
-                  <FontAwesome6
-                    name='arrow-up-right-from-square'
-                    size={20}
-                    color={contrastColor}
-                  />
-                }
-              />
+              >
+                <Text style={[styles.qrButtonText, { color: contrastColor }]}>iOS</Text>
+                <FontAwesome6
+                  name='arrow-up-right-from-square'
+                  size={20}
+                  color={contrastColor}
+                />
+              </TouchableOpacity>
             </View>
           ) : null}
           {appSettings?.app_stores_url_to_google ? (
             <View style={[styles.qrCol, { width: qrSize, backgroundColor: theme.card.background }]}> 
-              <View style={[styles.qrImageContainer, { height: qrSize }]}> 
+              <View style={[styles.qrImageContainer, { height: qrSize }]}>
                 <QrCode
                   value={appSettings.app_stores_url_to_google}
                   size={qrSize}
@@ -131,21 +133,23 @@ const AppDownload = () => {
                   margin={2}
                 />
               </View>
-              <ProjectButton
-                text='Android'
+              <TouchableOpacity
+                style={[
+                  styles.qrButton,
+                  { backgroundColor: primaryColor },
+                ]}
                 onPress={() =>
                   appSettings?.app_stores_url_to_google &&
                   openInBrowser(appSettings.app_stores_url_to_google)
                 }
-                style={{ width: '100%', marginVertical: 10 }}
-                iconRight={
-                  <FontAwesome6
-                    name='arrow-up-right-from-square'
-                    size={20}
-                    color={contrastColor}
-                  />
-                }
-              />
+              >
+                <Text style={[styles.qrButtonText, { color: contrastColor }]}>Android</Text>
+                <FontAwesome6
+                  name='arrow-up-right-from-square'
+                  size={20}
+                  color={contrastColor}
+                />
+              </TouchableOpacity>
             </View>
           ) : null}
         </View>
