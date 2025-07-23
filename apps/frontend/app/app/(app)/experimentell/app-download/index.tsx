@@ -133,7 +133,16 @@ const AppDownload = () => {
                 {appSettings.app_stores_url_to_apple}
               </Text>
               <View style={styles.qrDebugWrapper}>
-                {iosQr ? <SvgXml xml={iosQr} width={qrSize} height={qrSize} /> : null}
+                {iosQr ? (
+                  Platform.OS === 'web' ? (
+                    <div
+                      style={{ width: qrSize, height: qrSize }}
+                      dangerouslySetInnerHTML={{ __html: iosQr }}
+                    />
+                  ) : (
+                    <SvgXml xml={iosQr} width={qrSize} height={qrSize} />
+                  )
+                ) : null}
               </View>
               {iosQr ? (
                 <Text selectable style={styles.uriText}>{iosQr}</Text>
@@ -153,7 +162,16 @@ const AppDownload = () => {
                 {appSettings.app_stores_url_to_google}
               </Text>
               <View style={styles.qrDebugWrapper}>
-                {androidQr ? <SvgXml xml={androidQr} width={qrSize} height={qrSize} /> : null}
+                {androidQr ? (
+                  Platform.OS === 'web' ? (
+                    <div
+                      style={{ width: qrSize, height: qrSize }}
+                      dangerouslySetInnerHTML={{ __html: androidQr }}
+                    />
+                  ) : (
+                    <SvgXml xml={androidQr} width={qrSize} height={qrSize} />
+                  )
+                ) : null}
               </View>
               {androidQr ? (
                 <Text selectable style={styles.uriText}>{androidQr}</Text>
