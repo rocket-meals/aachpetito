@@ -71,7 +71,14 @@ const AppDownload = () => {
 
   const contrastColor = myContrastColor(primaryColor, theme, selectedTheme === 'dark');
 
-  const qrSize = CardDimensionHelper.getCardDimension(screenWidth);
+  const gapBetweenCards = 10;
+  const paddingHorizontal = 20;
+  const availableWidth = screenWidth - paddingHorizontal * 2;
+  const maxQrSize = (availableWidth - gapBetweenCards) / 2;
+  const qrSize = Math.min(
+    CardDimensionHelper.getCardDimension(screenWidth),
+    maxQrSize,
+  );
 
   return (
     <ScrollView

@@ -27,6 +27,7 @@ export default StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
     marginTop: 20,
