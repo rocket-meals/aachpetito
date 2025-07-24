@@ -31,7 +31,7 @@ const DownloadItem: React.FC<DownloadItemProps> = ({
       imageChildren={
         qrValue ? (
           <View style={styles.qrContainer} pointerEvents='none'>
-            <QrCode value={qrValue} size={110} image={imageSource} />
+            <QrCode value={qrValue} size={120} image={imageSource} />
           </View>
         ) : undefined
       }
