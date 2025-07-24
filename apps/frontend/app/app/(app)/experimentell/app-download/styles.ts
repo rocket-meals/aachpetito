@@ -18,15 +18,4 @@ export default StyleSheet.create({
     resizeMode: 'contain',
     marginBottom: 10,
   },
-  downloadRow: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    marginTop: 20,
-  },
-  downloadItem: {
-    
-  },
 });
