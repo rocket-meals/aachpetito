@@ -29,6 +29,9 @@ const AppDownload = () => {
     ? { uri: projectLogo }
     : require('../../../../assets/images/icon.png');
 
+  const iosUrl = appSettings?.app_stores_url_to_apple;
+  const androidUrl = appSettings?.app_stores_url_to_google;
+
   const handleOpenAppleStore = () => {
     if (appSettings?.app_stores_url_to_apple) {
       CommonSystemActionHelper.openExternalURL(
@@ -62,11 +65,13 @@ const AppDownload = () => {
         <View style={styles.itemsContainer}>
           <DownloadItem
             label='iOS'
+            qrValue={iosUrl}
             imageSource={appleStoreIcon}
             onPress={handleOpenAppleStore}
           />
           <DownloadItem
             label='Android'
+            qrValue={androidUrl}
             imageSource={googlePlayIcon}
             onPress={handleOpenGooglePlay}
           />
