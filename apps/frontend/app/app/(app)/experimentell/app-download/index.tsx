@@ -12,7 +12,8 @@ import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import CardWithText from '@/components/CardWithText/CardWithText';
 import CardDimensionHelper from '@/helper/CardDimensionHelper';
-import QrCode from '@/components/QrCode';
+import GooglePlayLogo from '@/assets/icons/google-play.png';
+import AppleStoreLogo from '@/assets/icons/apple-store.png';
 import { getImageUrl } from '@/constants/HelperFunctions';
 import styles from './styles';
 
@@ -69,10 +70,22 @@ const AppDownload = () => {
         <Image source={iconSource} style={styles.icon} />
         <Text style={{ ...styles.heading, color: theme.screen.text }}>{projectName}</Text>
         <View style={styles.cardsContainer}>
-          <CardWithText topRadius={0} containerStyle={{ width: cardSize, backgroundColor: theme.card.background }} imageContainerStyle={{ height: cardSize }} contentStyle={styles.cardContent} imageChildren={<QrCode value={appSettings?.app_stores_url_to_google || ""} size={cardSize * 0.9} />}>
+          <CardWithText
+            topRadius={0}
+            containerStyle={{ width: cardSize, backgroundColor: theme.card.background }}
+            imageContainerStyle={{ height: cardSize }}
+            contentStyle={styles.cardContent}
+            imageSource={GooglePlayLogo}
+          >
             <Text style={{ ...styles.cardTitle, color: theme.screen.text }}>Google Play</Text>
           </CardWithText>
-          <CardWithText topRadius={0} containerStyle={{ width: cardSize, backgroundColor: theme.card.background }} imageContainerStyle={{ height: cardSize }} contentStyle={styles.cardContent} imageChildren={<QrCode value={appSettings?.app_stores_url_to_apple || ""} size={cardSize * 0.9} />}>
+          <CardWithText
+            topRadius={0}
+            containerStyle={{ width: cardSize, backgroundColor: theme.card.background }}
+            imageContainerStyle={{ height: cardSize }}
+            contentStyle={styles.cardContent}
+            imageSource={AppleStoreLogo}
+          >
             <Text style={{ ...styles.cardTitle, color: theme.screen.text }}>Apple Store</Text>
           </CardWithText>
         </View>
