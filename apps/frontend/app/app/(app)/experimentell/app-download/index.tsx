@@ -1,21 +1,17 @@
 import React from 'react';
-import { Image, ScrollView, View, Linking, useWindowDimensions } from 'react-native';
+import { Image, ScrollView, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/reducer';
 import { useTheme } from '@/hooks/useTheme';
 import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { getImageUrl } from '@/constants/HelperFunctions';
-import DownloadItem from '@/components/DownloadItem';
 import styles from './styles';
 
 const AppDownload = () => {
   useSetPageTitle(TranslationKeys.app_download);
   const { theme } = useTheme();
-  const { width: screenWidth } = useWindowDimensions();
-  const { serverInfo, appSettings } = useSelector(
-    (state: RootState) => state.settings
-  );
+  const { serverInfo } = useSelector((state: RootState) => state.settings);
 
 
 
@@ -27,8 +23,6 @@ const AppDownload = () => {
     ? { uri: projectLogo }
     : require('../../../../assets/images/icon.png');
 
-  const iosLink = appSettings?.app_stores_url_to_apple;
-  const androidLink = appSettings?.app_stores_url_to_google;
 
 
   return (
@@ -41,28 +35,6 @@ const AppDownload = () => {
     >
       <View style={styles.content}>
         <Image source={iconSource} style={styles.icon} />
-        <View
-          style={{
-            ...styles.downloadRow,
-            gap: screenWidth > 550 ? 10 : 10,
-            justifyContent: 'center',
-          }}
-        >
-          <DownloadItem
-            label='iOS'
-            imageSource={require('../../../../assets/icons/apple-store.png')}
-            containerStyle={styles.downloadItem}
-            qrValue={iosLink}
-            onPress={() => iosLink && Linking.openURL(iosLink)}
-          />
-          <DownloadItem
-            label='Android'
-            imageSource={require('../../../../assets/icons/google-play.png')}
-            containerStyle={styles.downloadItem}
-            qrValue={androidLink}
-            onPress={() => androidLink && Linking.openURL(androidLink)}
-          />
-        </View>
       </View>
     </ScrollView>
   );
