@@ -424,6 +424,7 @@ const Settings = () => {
               />
             }
             handleFunction={() => openLanguageModal()}
+            groupPosition='bottom'
           />
           <Text style={{ ...styles.groupHeading, color: theme.screen.text }}>
             {translate(TranslationKeys.group_canteen_usage)}
