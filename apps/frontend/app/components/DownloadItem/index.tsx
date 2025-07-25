@@ -44,7 +44,7 @@ const DownloadItem: React.FC<DownloadItemProps> = ({
                 value={qrValue}
                 size={size}
                 image={imageSource}
-                innerSize={30}
+                innerSize={25}
               />
             </View>
           ) : undefined
