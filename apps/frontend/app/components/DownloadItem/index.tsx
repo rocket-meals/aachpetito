@@ -24,8 +24,7 @@ const DownloadItem: React.FC<DownloadItemProps> = ({
   const size =
     (amountColumnsForcard === 0
       ? CardDimensionHelper.getCardDimension(screenWidth)
-      : CardDimensionHelper.getCardWidth(screenWidth, amountColumnsForcard)) -
-    5;
+      : CardDimensionHelper.getCardWidth(screenWidth, amountColumnsForcard));
   return (
     <CardWithText
       onPress={onPress}
