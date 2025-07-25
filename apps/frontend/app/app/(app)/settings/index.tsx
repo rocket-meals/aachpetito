@@ -469,7 +469,8 @@ const Settings = () => {
             handleFunction={() => router.navigate('/notification')}
           />
           {/* color Scheme */}
-          <SettingList iconBgColor={primaryColor}
+          <SettingList
+            iconBgColor={primaryColor}
             leftIcon={
               <MaterialCommunityIcons
                 name='theme-light-dark'
@@ -493,10 +494,12 @@ const Settings = () => {
               />
             }
             handleFunction={() => openColorSchemeSheet()}
+            groupPosition='top'
           />
 
 
-          <SettingList iconBgColor={primaryColor}
+          <SettingList
+            iconBgColor={primaryColor}
             leftIcon={
               <Entypo name='menu' size={24} color={theme.screen.icon} />
             }
@@ -516,9 +519,11 @@ const Settings = () => {
               />
             }
             handleFunction={() => openDrawerSheet()}
+            groupPosition='middle'
           />
 
-          <SettingList iconBgColor={primaryColor}
+          <SettingList
+            iconBgColor={primaryColor}
             leftIcon={
               <FontAwesome5
                 name='columns'
@@ -540,8 +545,10 @@ const Settings = () => {
               />
             }
             handleFunction={() => openAmountColumnModal()}
+            groupPosition='middle'
           />
-          <SettingList iconBgColor={primaryColor}
+          <SettingList
+            iconBgColor={primaryColor}
             leftIcon={
               <Feather name='calendar' size={24} color={theme.screen.icon} />
             }
@@ -554,7 +561,8 @@ const Settings = () => {
                 color={theme.screen.icon}
               />
             }
-          handleFunction={() => openFirstDayModal()}
+            handleFunction={() => openFirstDayModal()}
+            groupPosition='bottom'
           />
           <SettingList iconBgColor={primaryColor}
             leftIcon={<Ionicons name='cloud-download-outline' size={24} color={theme.screen.icon} />}
