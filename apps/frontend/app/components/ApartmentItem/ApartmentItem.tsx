@@ -16,6 +16,7 @@ import { TranslationKeys } from '@/locales/keys';
 import { RootState } from '@/redux/reducer';
 import CardWithText from '../CardWithText/CardWithText';
 import CardDimensionHelper from '@/helper/CardDimensionHelper';
+import AvailableFromModal from '../AvailableFromModal';
 
 const ApartmentItem: React.FC<BuildingItemProps> = ({
   apartment,
@@ -37,6 +38,7 @@ const ApartmentItem: React.FC<BuildingItemProps> = ({
   const [screenWidth, setScreenWidth] = useState(
     Dimensions.get('window').width
   );
+  const [showFreeModal, setShowFreeModal] = useState(false);
   const housing_area_color = appSettings?.housing_area_color
     ? appSettings?.housing_area_color
     : projectColor;
@@ -77,6 +79,7 @@ const ApartmentItem: React.FC<BuildingItemProps> = ({
   }, [amountColumnsForcard, screenWidth]);
 
   return (
+    <>
     <Tooltip
       placement='top'
       trigger={(triggerProps) => (
@@ -119,12 +122,31 @@ const ApartmentItem: React.FC<BuildingItemProps> = ({
           }}
           borderColor={housing_area_color}
           imageChildren={
-            <View style={styles.imageActionContainer}>
-              {isManagement ? (
-                <Tooltip
-                  placement='top'
-                  trigger={(triggerProps) => (
-                    <TouchableOpacity
+            <>
+              {apartment?.available_from && (
+                <TouchableOpacity
+                  style={{
+                    ...styles.freeBadge,
+                    backgroundColor: housing_area_color,
+                  }}
+                  onPress={() => setShowFreeModal(true)}
+                >
+                  <MaterialCommunityIcons
+                    name='door-open'
+                    size={20}
+                    color={contrastColor}
+                  />
+                  <Text style={{ ...styles.freeBadgeText, color: contrastColor }}>
+                    {translate(TranslationKeys.free_rooms)}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              <View style={styles.imageActionContainer}>
+                {isManagement ? (
+                  <Tooltip
+                    placement='top'
+                    trigger={(triggerProps) => (
+                      <TouchableOpacity
                       {...triggerProps}
                       style={styles.editImageButton}
                       onPress={() => {
@@ -167,7 +189,8 @@ const ApartmentItem: React.FC<BuildingItemProps> = ({
                   {getDistanceUnit(apartment?.distance)}
                 </Text>
               </TouchableOpacity>
-            </View>
+              </View>
+            </>
           }
         >
           <Text style={{ ...styles.campusName, color: theme.screen.text }}>
@@ -184,6 +207,12 @@ const ApartmentItem: React.FC<BuildingItemProps> = ({
         </TooltipText>
       </TooltipContent>
     </Tooltip>
+    <AvailableFromModal
+      visible={showFreeModal}
+      onClose={() => setShowFreeModal(false)}
+      availableFrom={String(apartment?.available_from)}
+    />
+    </>
   );
 };
 
