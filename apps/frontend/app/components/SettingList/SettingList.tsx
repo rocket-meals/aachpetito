@@ -119,8 +119,8 @@ const SettingList: React.FC<SettingListProps> = ({
             bottom: 0,
             left: '10%',
             width: '80%',
-            height: StyleSheet.hairlineWidth,
-            backgroundColor: theme.screen.iconBg,
+            height: 1,
+            backgroundColor: theme.screen.background,
           }}
         />
       )}
