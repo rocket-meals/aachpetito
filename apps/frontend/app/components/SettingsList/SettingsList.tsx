@@ -51,13 +51,21 @@ const SettingsList: React.FC<SettingsListProps> = ({
             : leftIcon}
         </View>
         <View style={styles.textWrapper}>
-          <Text style={[styles.title, { color: theme.screen.text } as TextStyle]}>
-            {title || label}
-          </Text>
-          {value ? (
-            <Text style={[styles.value, { color: theme.screen.text } as TextStyle]}>
-              {value}
+          <View style={styles.titleContainer}>
+            <Text
+              style={[styles.title, { color: theme.screen.text } as TextStyle]}
+            >
+              {title || label}
             </Text>
+          </View>
+          {value ? (
+            <View style={styles.valueContainer}>
+              <Text
+                style={[styles.value, { color: theme.screen.text } as TextStyle]}
+              >
+                {value}
+              </Text>
+            </View>
           ) : null}
         </View>
         {rightElement || rightIcon ? (
@@ -95,7 +103,15 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  titleContainer: {
+    flexShrink: 1,
+  },
+  valueContainer: {
+    marginLeft: 8,
   },
   title: {
     fontSize: 16,
