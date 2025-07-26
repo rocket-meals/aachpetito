@@ -53,6 +53,21 @@ export default StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
+  freeBadge: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  freeBadgeText: {
+    fontSize: 16,
+    fontFamily: 'Poppins_400Regular',
+  },
   distance: {
     fontSize: 16,
     fontFamily: 'Poppins_400Regular',

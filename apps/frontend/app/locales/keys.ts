@@ -75,6 +75,7 @@ export enum TranslationKeys {
   food_category_label = 'food_category_label',
   foodoffer_category_label = 'foodoffer_category_label',
   free_rooms = 'free_rooms',
+  free_from = 'free_from',
   foodweekplan = 'foodweekplan',
   monitorDayPlan = 'monitorDayPlan',
   foodBigScreen = 'foodBigScreen',

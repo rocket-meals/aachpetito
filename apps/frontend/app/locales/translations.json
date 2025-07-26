@@ -749,6 +749,16 @@
     "tr": "Boş Odalar",
     "zh": "空房间"
   },
+  "free_from": {
+    "de": "Frei ab",
+    "en": "Free from",
+    "ar": "متاح من",
+    "es": "Libre desde",
+    "fr": "Libre à partir de",
+    "ru": "Свободно с",
+    "tr": "Şu tarihten itibaren boş",
+    "zh": "从...开始空闲"
+  },
   "foodweekplan": {
     "de": "Speiseplan: Woche",
     "en": "Food Plan: Week",
