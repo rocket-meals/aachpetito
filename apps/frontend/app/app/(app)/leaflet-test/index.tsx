@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useSelectedCanteen from '@/hooks/useSelectedCanteen';
-import { Text, Platform } from 'react-native';
+import { Text, Platform, View, ScrollView } from 'react-native';
 import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { RootState } from '@/redux/reducer';
@@ -30,6 +30,7 @@ const LeafletMap = () => {
   const [markerIconSrc, setMarkerIconSrc] = useState<string | null>(null);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [markerError, setMarkerError] = useState<string | null>(null);
 
   // Load marker asset asynchronously
   useEffect(() => {
@@ -41,14 +42,18 @@ const LeafletMap = () => {
 
         if (Platform.OS === 'web') {
           setMarkerIconSrc(asset.uri);
-        } else if (asset.localUri) {
-          const content = await FileSystem.readAsStringAsync(asset.localUri, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
-          setMarkerIconSrc(content);
+        } else if (asset.localUri || asset.uri) {
+          const fileUri = asset.localUri ?? asset.uri;
+          if (fileUri) {
+            const content = await FileSystem.readAsStringAsync(fileUri, {
+              encoding: FileSystem.EncodingType.Base64,
+            });
+            setMarkerIconSrc(content);
+          }
         }
       } catch (error) {
         console.error('Error loading marker icon:', error);
+        setMarkerError(String(error));
       }
     };
 
@@ -66,26 +71,28 @@ const LeafletMap = () => {
     return undefined;
   }, [selectedCanteen, buildings]);
 
-  if (!markerIconSrc) {
+  if (!markerIconSrc && !markerError) {
     // Optional: Add a loading spinner or placeholder here
     return null;
   }
 
-  const markers = [
-    {
-      id: 'example',
-      position: POSITION_BUNDESTAG,
-      icon:
-        Platform.OS === 'web'
-          ? MyMapMarkerIcons.getIconForWebByUri(markerIconSrc)
-          : MyMapMarkerIcons.getIconForWebByBase64(markerIconSrc),
-      size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
-      iconAnchor: getDefaultIconAnchor(
-          MARKER_DEFAULT_SIZE,
-          MARKER_DEFAULT_SIZE,
-      ),
-    },
-  ];
+  const markers = markerIconSrc
+    ? [
+        {
+          id: 'example',
+          position: POSITION_BUNDESTAG,
+          icon:
+            Platform.OS === 'web'
+              ? MyMapMarkerIcons.getIconForWebByUri(markerIconSrc)
+              : MyMapMarkerIcons.getIconForWebByBase64(markerIconSrc),
+          size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
+          iconAnchor: getDefaultIconAnchor(
+            MARKER_DEFAULT_SIZE,
+            MARKER_DEFAULT_SIZE,
+          ),
+        },
+      ]
+    : [];
 
   const handleMarkerClick = (id: string) => {
     console.log('marker clicked', id);
@@ -102,17 +109,28 @@ const LeafletMap = () => {
   );
 
   return (
-    <>
-      <Text>Selected: {selectedMarkerId ?? 'none'} Visible: {String(modalVisible)}</Text>
-      <MyMap
-        mapCenterPosition={centerPosition || POSITION_BUNDESTAG}
-        mapMarkers={markers}
-        onMarkerClick={handleMarkerClick}
-        onMapEvent={(e) => console.log('map event', e.tag)}
-        renderMarkerModal={renderMarkerModal}
-        onMarkerSelectionChange={handleSelectionChange}
-      />
-    </>
+    <View style={{ flex: 1 }}>
+      {markerError && (
+        <View style={{ maxHeight: '50%' }}>
+          <ScrollView>
+            <Text selectable>{markerError}</Text>
+          </ScrollView>
+        </View>
+      )}
+      <View style={{ flex: 1 }}>
+        <Text>
+          Selected: {selectedMarkerId ?? 'none'} Visible: {String(modalVisible)}
+        </Text>
+        <MyMap
+          mapCenterPosition={centerPosition || POSITION_BUNDESTAG}
+          mapMarkers={markers}
+          onMarkerClick={handleMarkerClick}
+          onMapEvent={(e) => console.log('map event', e.tag)}
+          renderMarkerModal={renderMarkerModal}
+          onMarkerSelectionChange={handleSelectionChange}
+        />
+      </View>
+    </View>
   );
 };
 
