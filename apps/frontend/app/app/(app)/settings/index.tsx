@@ -28,7 +28,7 @@ import {
   Octicons,
 } from '@expo/vector-icons';
 import { isWeb } from '@/constants/Constants';
-import SettingList from '@/components/SettingList/SettingList';
+import SettingsList from '@/components/SettingsList';
 import { useExpoUpdateChecker } from '@/components/ExpoUpdateChecker/ExpoUpdateChecker';
 import NicknameSheet from '@/components/NicknameSheet/NicknameSheet';
 import ColorSchemeSheet from '@/components/ColorSchemeSheet/ColorSchemeSheet';
@@ -326,7 +326,7 @@ const Settings = () => {
           </Text>
           {/* Account & Nickname */}
           <View style={{ gap: 0 }}>
-            <SettingList
+            <SettingsList
               iconBgColor={primaryColor}
               leftIcon={<MaterialCommunityIcons name='clipboard-account' size={24} color={theme.screen.icon} />}
               label={translate(TranslationKeys.account)}
@@ -335,7 +335,7 @@ const Settings = () => {
               groupPosition='top'
             />
             {/* NickName */}
-            <SettingList
+            <SettingsList
               iconBgColor={primaryColor}
               leftIcon={
                 <MaterialCommunityIcons
@@ -366,7 +366,7 @@ const Settings = () => {
             />
             {user?.id ? (
               <>
-                <SettingList
+                <SettingsList
                   iconBgColor={primaryColor}
                   leftIcon={
                     <Entypo name='login' size={24} color={theme.screen.icon} />
@@ -378,7 +378,7 @@ const Settings = () => {
                   handleFunction={handleLogout}
                   groupPosition='middle'
                 />
-                <SettingList
+                <SettingsList
                   iconBgColor={primaryColor}
                   leftIcon={
                     <AntDesign
@@ -400,7 +400,7 @@ const Settings = () => {
                 />
               </>
             ) : (
-                <SettingList
+                <SettingsList
                   iconBgColor={primaryColor}
                   leftIcon={
                     <Entypo name='login' size={24} color={theme.screen.icon} />
@@ -413,7 +413,7 @@ const Settings = () => {
                   groupPosition='middle'
                 />
               )}
-            <SettingList
+            <SettingsList
               iconBgColor={primaryColor}
               leftIcon={
                 <Ionicons name='language' size={24} color={theme.screen.icon} />
@@ -436,7 +436,7 @@ const Settings = () => {
           </Text>
           {/* Canteen */}
           <View style={{ gap: 0 }}>
-            <SettingList iconBgColor={foods_area_color}
+            <SettingsList iconBgColor={foods_area_color}
             leftIcon={
               <MaterialIcons
                 name='restaurant-menu'
@@ -456,7 +456,7 @@ const Settings = () => {
             handleFunction={openCanteenSheet}
             groupPosition='top'
           />
-          <SettingList iconBgColor={foods_area_color}
+          <SettingsList iconBgColor={foods_area_color}
             leftIcon={
               <MaterialIcons name='euro' size={24} color={theme.screen.icon} />
             }
@@ -477,7 +477,7 @@ const Settings = () => {
             handleFunction={() => router.navigate('/price-group')}
             groupPosition='middle'
           />
-          <SettingList iconBgColor={foods_area_color}
+          <SettingsList iconBgColor={foods_area_color}
             leftIcon={
               <Ionicons name='card' size={24} color={theme.screen.icon} />
             }
@@ -497,7 +497,7 @@ const Settings = () => {
             handleFunction={() => router.navigate('/account-balance')}
             groupPosition='middle'
           />
-          <SettingList iconBgColor={foods_area_color}
+          <SettingsList iconBgColor={foods_area_color}
             leftIcon={
               <Ionicons
                 name='bag-add-sharp'
@@ -516,7 +516,7 @@ const Settings = () => {
             handleFunction={() => router.navigate('/eating-habits')}
             groupPosition='middle'
           />
-          <SettingList iconBgColor={primaryColor}
+          <SettingsList iconBgColor={primaryColor}
             leftIcon={
               <Ionicons
                 name='notifications'
@@ -541,7 +541,7 @@ const Settings = () => {
           </Text>
           {/* color Scheme */}
           <View style={{ gap: 0 }}>
-            <SettingList
+            <SettingsList
               iconBgColor={primaryColor}
               leftIcon={
                 <MaterialCommunityIcons
@@ -569,7 +569,7 @@ const Settings = () => {
               groupPosition='top'
             />
 
-            <SettingList
+            <SettingsList
               iconBgColor={primaryColor}
               leftIcon={
                 <Entypo name='menu' size={24} color={theme.screen.icon} />
@@ -593,7 +593,7 @@ const Settings = () => {
               groupPosition='middle'
             />
 
-            <SettingList
+            <SettingsList
               iconBgColor={primaryColor}
               leftIcon={
                 <FontAwesome5
@@ -618,7 +618,7 @@ const Settings = () => {
               handleFunction={() => openAmountColumnModal()}
               groupPosition='middle'
             />
-            <SettingList
+            <SettingsList
               iconBgColor={primaryColor}
               leftIcon={
                 <Feather name='calendar' size={24} color={theme.screen.icon} />
@@ -640,14 +640,14 @@ const Settings = () => {
             {translate(TranslationKeys.group_app_management)}
           </Text>
           <View style={{ gap: 0 }}>
-            <SettingList iconBgColor={primaryColor}
+            <SettingsList iconBgColor={primaryColor}
               leftIcon={<Ionicons name='cloud-download-outline' size={24} color={theme.screen.icon} />}
               label={translate(TranslationKeys.CHECK_FOR_APP_UPDATES)}
               rightIcon={<Octicons name='chevron-right' size={24} color={theme.screen.icon} />}
               handleFunction={handleCheckForUpdates}
               groupPosition='top'
             />
-            <SettingList iconBgColor={primaryColor}
+            <SettingsList iconBgColor={primaryColor}
             leftIcon={
               <MaterialCommunityIcons
                 name='database-eye'
@@ -666,7 +666,7 @@ const Settings = () => {
             handleFunction={() => router.navigate('/data-access')}
             groupPosition='middle'
           />
-          <SettingList iconBgColor={primaryColor}
+          <SettingsList iconBgColor={primaryColor}
           leftIcon={
             <MaterialIcons name='event' size={24} color={theme.screen.icon} />
           }
@@ -677,7 +677,7 @@ const Settings = () => {
             handleFunction={() => router.navigate('/events')}
             groupPosition='middle'
           />
-          <SettingList iconBgColor={primaryColor}
+          <SettingsList iconBgColor={primaryColor}
           leftIcon={
             <MaterialIcons
               name='support-agent'
@@ -696,7 +696,7 @@ const Settings = () => {
             handleFunction={() => router.navigate('/support-FAQ')}
             groupPosition='middle'
           />
-            <SettingList iconBgColor={primaryColor}
+            <SettingsList iconBgColor={primaryColor}
             leftIcon={
               <MaterialCommunityIcons
                 name='license'
@@ -716,7 +716,7 @@ const Settings = () => {
             groupPosition='middle'
           />
           {/* Terms & Conditions */}
-          <SettingList
+          <SettingsList
             iconBgColor={primaryColor}
             leftIcon={
               <MaterialCommunityIcons
@@ -763,7 +763,7 @@ const Settings = () => {
             </Text>
           )}
           {isManagement && isDevMode && (
-            <SettingList iconBgColor={primaryColor}
+            <SettingsList iconBgColor={primaryColor}
               leftIcon={
                 <MaterialCommunityIcons
                   name='server'

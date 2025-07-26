@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { SafeAreaView, ScrollView } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
-import SettingList from '@/components/SettingList/SettingList';
+import SettingsList from '@/components/SettingsList';
 import { MaterialIcons, Octicons } from '@expo/vector-icons';
 import BaseBottomSheet from '@/components/BaseBottomSheet';
 import PopupEventSheet from '@/components/PopupEventSheet/PopupEventSheet';
@@ -59,7 +59,7 @@ const EventsScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.screen.background }}>
       <ScrollView contentContainerStyle={styles.container}>
-        <SettingList
+        <SettingsList
           iconBgColor={primaryColor}
           leftIcon={<MaterialIcons name='refresh' size={24} color={theme.screen.icon} />}
           label={translate(TranslationKeys.reset_seen_popup_events)}
@@ -68,7 +68,7 @@ const EventsScreen = () => {
         />
         {!kioskMode &&
           popupEvents.map((event: any) => (
-            <SettingList
+            <SettingsList
               iconBgColor={primaryColor}
               key={event.id}
               leftIcon={<MaterialIcons name='event' size={24} color={theme.screen.icon} />}
