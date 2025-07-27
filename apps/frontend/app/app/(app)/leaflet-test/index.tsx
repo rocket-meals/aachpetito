@@ -1,16 +1,18 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useSelectedCanteen from '@/hooks/useSelectedCanteen';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, Platform, View, ScrollView } from 'react-native';
 import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { RootState } from '@/redux/reducer';
 import MyMap from '@/components/MyMap/MyMap';
 import {
   MARKER_DEFAULT_SIZE,
+  MyMapMarkerIcons,
   getDefaultIconAnchor,
 } from '@/components/MyMap/markerUtils';
 import { Asset } from 'expo-asset';
+import * as FileSystem from 'expo-file-system';
 
 const POSITION_BUNDESTAG = {
   lat: 52.518594247456804,
@@ -25,10 +27,6 @@ const LeafletMap = () => {
   );
   const selectedCanteen = useSelectedCanteen();
 
-  const [debugText, setDebugText] = useState('');
-  const addDebug = (msg: string) =>
-    setDebugText((prev) => `${prev}${msg}\n`);
-
   const [markerIconSrc, setMarkerIconSrc] = useState<string | null>(null);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -39,15 +37,22 @@ const LeafletMap = () => {
     const loadMarkerIcon = async () => {
       try {
         const mapMarkerIcon = require('@/assets/map/marker-icon-2x.png');
-        addDebug('loadMarkerIcon start');
-        const asset = Asset.fromModule(mapMarkerIcon);
+        const asset = await Asset.fromModule(mapMarkerIcon);
         await asset.downloadAsync();
-        addDebug(`asset uri: ${asset.uri}`);
-        setMarkerIconSrc(asset.uri);
+
+        if (Platform.OS === 'web') {
+          setMarkerIconSrc(asset.uri);
+        } else if (asset.localUri) {
+          const content = await FileSystem.readAsStringAsync(asset.localUri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          setMarkerIconSrc(content);
+        } else {
+          setMarkerError('marker asset missing localUri');
+        }
       } catch (error) {
         console.error('Error loading marker icon:', error);
         setMarkerError(String(error));
-        addDebug(`Error loading marker icon: ${error}`);
       }
     };
 
@@ -75,7 +80,10 @@ const LeafletMap = () => {
         {
           id: 'example',
           position: POSITION_BUNDESTAG,
-          iconUrl: markerIconSrc,
+          icon:
+            Platform.OS === 'web'
+              ? MyMapMarkerIcons.getIconForWebByUri(markerIconSrc)
+              : MyMapMarkerIcons.getIconForWebByBase64(markerIconSrc),
           size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
           iconAnchor: getDefaultIconAnchor(
             MARKER_DEFAULT_SIZE,
@@ -101,6 +109,21 @@ const LeafletMap = () => {
 
   return (
     <View style={{ flex: 1 }}>
+      {markerError && (
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '40%',
+          }}
+        >
+          <ScrollView>
+            <Text selectable>{markerError}</Text>
+          </ScrollView>
+        </View>
+      )}
       <View style={{ flex: 1 }}>
         <Text>
           Selected: {selectedMarkerId ?? 'none'} Visible: {String(modalVisible)}
@@ -113,14 +136,6 @@ const LeafletMap = () => {
           renderMarkerModal={renderMarkerModal}
           onMarkerSelectionChange={handleSelectionChange}
         />
-      </View>
-      <View style={{ flex: 1 }}>
-        <ScrollView>
-          {markerError && (
-            <Text selectable>{markerError}</Text>
-          )}
-          <Text selectable>{debugText}</Text>
-        </ScrollView>
       </View>
     </View>
   );
