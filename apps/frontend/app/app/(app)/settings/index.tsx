@@ -30,6 +30,7 @@ import {
 import { isWeb } from '@/constants/Constants';
 import SettingsList from '@/components/SettingsList';
 import { useExpoUpdateChecker } from '@/components/ExpoUpdateChecker/ExpoUpdateChecker';
+import SettingsGroupTitle from '@/components/SettingsGroupTitle';
 import NicknameSheet from '@/components/NicknameSheet/NicknameSheet';
 import ColorSchemeSheet from '@/components/ColorSchemeSheet/ColorSchemeSheet';
 import DrawerPositionSheet from '@/components/DrawerPositionSheet/DrawerPositionSheet';
@@ -321,9 +322,9 @@ const Settings = () => {
             width: windowWidth < 500 ? '100%' : isWeb ? '80%' : '100%',
           }}
         >
-          <Text style={{ ...styles.groupHeading, color: theme.screen.text }}>
+          <SettingsGroupTitle>
             {translate(TranslationKeys.group_account_personalization)}
-          </Text>
+          </SettingsGroupTitle>
           {/* Account & Nickname */}
           <View style={{ gap: 0 }}>
             <SettingsList
@@ -431,9 +432,9 @@ const Settings = () => {
               groupPosition='bottom'
             />
           </View>
-          <Text style={{ ...styles.groupHeading, color: theme.screen.text }}>
+          <SettingsGroupTitle>
             {translate(TranslationKeys.group_canteen_usage)}
-          </Text>
+          </SettingsGroupTitle>
           {/* Canteen */}
           <View style={{ gap: 0 }}>
             <SettingsList iconBgColor={foods_area_color}
@@ -536,9 +537,9 @@ const Settings = () => {
             groupPosition='bottom'
           />
           </View>
-          <Text style={{ ...styles.groupHeading, color: theme.screen.text }}>
+          <SettingsGroupTitle>
             {translate(TranslationKeys.group_app_settings)}
-          </Text>
+          </SettingsGroupTitle>
           {/* color Scheme */}
           <View style={{ gap: 0 }}>
             <SettingsList
@@ -636,9 +637,9 @@ const Settings = () => {
               groupPosition='bottom'
             />
           </View>
-          <Text style={{ ...styles.groupHeading, color: theme.screen.text }}>
+          <SettingsGroupTitle>
             {translate(TranslationKeys.group_app_management)}
-          </Text>
+          </SettingsGroupTitle>
           <View style={{ gap: 0 }}>
             <SettingsList iconBgColor={primaryColor}
               leftIcon={<Ionicons name='cloud-download-outline' size={24} color={theme.screen.icon} />}

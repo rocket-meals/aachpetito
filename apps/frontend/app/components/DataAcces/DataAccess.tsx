@@ -15,6 +15,7 @@ import SettingsList from '@/components/SettingsList';
 import { useLanguage } from '@/hooks/useLanguage';
 import { TranslationKeys } from '@/locales/keys';
 import { RootState } from '@/redux/reducer';
+import SettingsGroupTitle from '@/components/SettingsGroupTitle';
 
 const parseMarkdown = (text: string, theme: any) => {
   return text.split('\n').map((line, index) => {
@@ -139,7 +140,7 @@ const DataAccess = ({ onOpenBottomSheet }: any) => {
               styles.infoContainer,
               {
                 width:
-                  windowWidth < 500 ? '100%' : isWeb ? '80%' : '90%',
+                  windowWidth < 500 ? '100%' : isWeb ? '80%' : '100%',
               },
             ]}
           >
@@ -155,15 +156,11 @@ const DataAccess = ({ onOpenBottomSheet }: any) => {
               },
             ]}
           >
-            <View>
-              <Text
-                style={{ ...styles.labelParagraph, color: theme.header.text }}
-              >
-                {translate(
-                  TranslationKeys.your_data_which_we_know_if_you_have_a_profile
-                )}
-              </Text>
-            </View>
+          <SettingsGroupTitle>
+            {translate(
+              TranslationKeys.your_data_which_we_know_if_you_have_a_profile
+            )}
+          </SettingsGroupTitle>
             {/* Info Items List */}
             <View
               style={{
@@ -217,19 +214,11 @@ const DataAccess = ({ onOpenBottomSheet }: any) => {
                   windowWidth < 500 ? '100%' : isWeb ? '80%' : '100%',
               }}
             >
-              <View>
-                <Text
-                  style={{
-                    marginBottom: 10,
-                    fontSize: 16,
-                    color: theme.header.text,
-                  }}
-                >
-                  {translate(
-                    TranslationKeys.translation_all_on_device_saved_data
-                  )}
-                </Text>
-              </View>
+            <SettingsGroupTitle>
+              {translate(
+                TranslationKeys.translation_all_on_device_saved_data
+              )}
+            </SettingsGroupTitle>
               {dataDevice.map((data, index) => {
                 if (!data?.value) return null;
                 const last = index === dataDevice.length - 1;
