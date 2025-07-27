@@ -19,6 +19,14 @@ const POSITION_BUNDESTAG = {
   lng: 13.376281624711964,
 };
 
+const POSITION_IMG_MARKER = {
+  lat: 52.5195942474568,
+  lng: 13.376281624711964,
+};
+
+const EXTERNAL_MARKER_URL =
+  'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png';
+
 const LeafletMap = () => {
   useSetPageTitle(TranslationKeys.leaflet_map);
 
@@ -75,23 +83,35 @@ const LeafletMap = () => {
     return null;
   }
 
-  const markers = markerIconSrc
-    ? [
-        {
-          id: 'example',
-          position: POSITION_BUNDESTAG,
-          icon:
-            Platform.OS === 'web'
-              ? MyMapMarkerIcons.getIconForWebByUri(markerIconSrc)
-              : MyMapMarkerIcons.getIconForWebByBase64(markerIconSrc),
-          size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
-          iconAnchor: getDefaultIconAnchor(
-            MARKER_DEFAULT_SIZE,
-            MARKER_DEFAULT_SIZE,
-          ),
-        },
-      ]
-    : [];
+  const markers = [
+    ...(markerIconSrc
+      ? [
+          {
+            id: 'example',
+            position: POSITION_BUNDESTAG,
+            icon:
+              Platform.OS === 'web'
+                ? MyMapMarkerIcons.getIconForWebByUri(markerIconSrc)
+                : MyMapMarkerIcons.getIconForWebByBase64(markerIconSrc),
+            size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
+            iconAnchor: getDefaultIconAnchor(
+              MARKER_DEFAULT_SIZE,
+              MARKER_DEFAULT_SIZE,
+            ),
+          },
+        ]
+      : []),
+    {
+      id: 'img-marker',
+      position: POSITION_IMG_MARKER,
+      icon: MyMapMarkerIcons.getIconForWebByUri(EXTERNAL_MARKER_URL),
+      size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
+      iconAnchor: getDefaultIconAnchor(
+        MARKER_DEFAULT_SIZE,
+        MARKER_DEFAULT_SIZE,
+      ),
+    },
+  ];
 
   const handleMarkerClick = (id: string) => {
     console.log('marker clicked', id);
