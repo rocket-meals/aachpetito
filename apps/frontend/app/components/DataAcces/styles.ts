@@ -43,11 +43,11 @@ export default StyleSheet.create({
 
   infoContainer: {
     // width: width * 0.9,
-
-    padding: 15,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
     elevation: 3,
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   infoRow: {
     flexDirection: 'row',
