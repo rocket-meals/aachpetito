@@ -151,16 +151,6 @@ const DataAccess = ({ onOpenBottomSheet }: any) => {
           >
             <View>{parseMarkdown(dataAccessText, theme)}</View>
           </View>
-
-          <View
-            style={[
-              styles.infoContainer,
-              {
-                width:
-                  windowWidth < 500 ? '100%' : isWeb ? '80%' : '100%',
-              },
-            ]}
-          >
           <SettingsGroupTitle>
             {translate(
               TranslationKeys.your_data_which_we_know_if_you_have_a_profile
@@ -209,7 +199,6 @@ const DataAccess = ({ onOpenBottomSheet }: any) => {
                   />
                 );
               })}
-            </View>
 
             {/* Device Data List */}
             <View
