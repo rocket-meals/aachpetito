@@ -11,6 +11,12 @@ export class ChatsHelper extends CollectionHelper<DatabaseTypes.Chats> {
   async fetchChatsByProfile(profileId: string, queryOverride: any = {}) {
     const defaultQuery = {
       fields: ['*'],
+      deep: {
+        messages: {
+          _limit: 10,
+          _sort: ['-date_created']
+        }
+      },
       limit: 100,
       sort: ['-date_updated'],
     };
