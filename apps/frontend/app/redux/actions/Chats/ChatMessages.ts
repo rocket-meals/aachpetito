@@ -17,4 +17,8 @@ export class ChatMessagesHelper extends CollectionHelper<DatabaseTypes.ChatMessa
     const query = { ...defaultQuery, ...queryOverride };
     return await this.readItems(query);
   }
+
+  async createChatMessage(data: Partial<DatabaseTypes.ChatMessages>) {
+    return await this.createItem(data);
+  }
 }
