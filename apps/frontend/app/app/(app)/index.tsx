@@ -58,7 +58,6 @@ const Home = () => {
 
   const handleSelectCanteen = (canteen: DatabaseTypes.Canteens) => {
     dispatch({ type: SET_SELECTED_CANTEEN, payload: canteen });
-    router.push('/(app)/' + AppScreens.FOOD_OFFERS);
   };
 
   const getCanteensWithBuildings = async () => {
@@ -134,6 +133,10 @@ const Home = () => {
       getCanteensWithBuildings();
     }, [])
   );
+
+  useEffect(() => {
+    checkCanteenSelection();
+  }, [selectedCanteen]); // Dependency gesetzt
 
   useEffect(() => {
     const handleResize = () => {

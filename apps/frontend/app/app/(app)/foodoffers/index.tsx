@@ -483,9 +483,9 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
       setLoading(true);
       const canteenId = selectedCanteen?.id as string;
       let foodOffers =
-        prefetchedFoodOffers[canteenId]?.[selectedDate];
+        prefetchedFoodOffers[canteenId]?.[selectedDate]
 
-      if (!foodOffers) {
+      if (!foodOffers && canteenId) {
         const foodData = await fetchFoodOffersByCanteen(
           canteenId,
           selectedDate
