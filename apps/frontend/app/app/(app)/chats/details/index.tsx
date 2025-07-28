@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import { useLocalSearchParams } from 'expo-router';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/reducer';
 import { myContrastColor } from '@/helper/colorHelper';
 import { ChatMessagesHelper } from '@/redux/actions/Chats/ChatMessages';
+import { useLanguage } from '@/hooks/useLanguage';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DatabaseTypes } from 'repo-depkit-common';
 import styles from './styles';
 
@@ -24,6 +26,9 @@ const ChatDetailsScreen = () => {
   const { chats } = useSelector((state: RootState) => state.chats);
   const { profile } = useSelector((state: RootState) => state.authReducer);
   const [messages, setMessages] = useState<DatabaseTypes.ChatMessages[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [sending, setSending] = useState(false);
+  const { translate } = useLanguage();
 
   useEffect(() => {
     const fetchMsgs = async () => {
@@ -49,6 +54,29 @@ const ChatDetailsScreen = () => {
     const db = b.date_created || b.date_updated || '';
     return da < db ? 1 : -1;
   });
+
+  const handleSendMessage = async () => {
+    if (!newMessage.trim() || !chat_id || !profile?.id) {
+      return;
+    }
+    setSending(true);
+    try {
+      const helper = new ChatMessagesHelper();
+      const created = (await helper.createChatMessage({
+        chat: chat_id,
+        profile: profile.id,
+        message: newMessage.trim(),
+      })) as DatabaseTypes.ChatMessages;
+      if (created) {
+        setMessages((prev) => [created, ...prev]);
+        setNewMessage('');
+      }
+    } catch (e) {
+      console.error('Error creating chat message:', e);
+    } finally {
+      setSending(false);
+    }
+  };
 
   const renderItem = ({ item }: { item: DatabaseTypes.ChatMessages }) => {
     const profileId = typeof item.profile === 'object' ? item.profile?.id : item.profile;
@@ -90,7 +118,38 @@ const ChatDetailsScreen = () => {
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={styles.list}
+        inverted
       />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={[
+            styles.textInput,
+            { color: theme.screen.text, borderColor: theme.screen.placeholder },
+          ]}
+          placeholder={translate(TranslationKeys.type_here)}
+          placeholderTextColor={theme.screen.placeholder}
+          multiline
+          value={newMessage}
+          onChangeText={setNewMessage}
+        />
+        <TouchableOpacity
+          onPress={handleSendMessage}
+          disabled={!newMessage.trim() || sending}
+          style={[
+            styles.sendButton,
+            {
+              backgroundColor: projectColor,
+              opacity: newMessage.trim() ? 1 : 0.5,
+            },
+          ]}
+        >
+          <MaterialCommunityIcons
+            name='send'
+            size={24}
+            color={myContrastColor(projectColor, theme, mode === 'dark')}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
