@@ -113,6 +113,7 @@ export default SettingsList;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    width: '100%',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: basePaddingVertical,
