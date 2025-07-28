@@ -1,6 +1,7 @@
 import { DatabaseTypes } from 'repo-depkit-common';
 import { CollectionHelper } from '@/helper/collectionHelper';
 import { ServerAPI } from '@/redux/actions/Auth/Auth';
+import {ChatMessagesHelper} from "@/redux/actions/Chats/ChatMessages";
 
 export class ChatsHelper extends CollectionHelper<DatabaseTypes.Chats> {
   constructor(client?: any) {
@@ -9,20 +10,16 @@ export class ChatsHelper extends CollectionHelper<DatabaseTypes.Chats> {
 
   async fetchChatsByProfile(profileId: string, queryOverride: any = {}) {
     const defaultQuery = {
-      fields: ['*', '!messages'],
+      fields: ['*'],
       limit: 100,
       sort: ['-date_updated'],
-      filter: {
-        participants: { profiles_id: { _eq: profileId } },
-      },
     };
     const query = { ...defaultQuery, ...queryOverride };
     return await this.readItems(query);
   }
 
   async fetchChatById(id: string, queryOverride: any = {}) {
-    const defaultQuery = { fields: ['*', '!messages'] };
-    const query = { ...defaultQuery, ...queryOverride };
-    return await this.readItem(id, query);
+    let chatMessagesHelper = new ChatMessagesHelper();
+    return await chatMessagesHelper.fetchMessagesByChat(id, queryOverride);
   }
 }

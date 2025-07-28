@@ -55,6 +55,11 @@ const ChatDetailsScreen = () => {
     const isMe = profileId === profile?.id;
     const bgColor = isMe ? projectColor : theme.card.background;
     const textColor = myContrastColor(bgColor, theme, mode === 'dark');
+
+    if (!item.message) {
+      return null; // Skip rendering if message is empty
+    }
+
     return (
       <View
         style={[
@@ -63,7 +68,7 @@ const ChatDetailsScreen = () => {
         ]}
       >
         <View style={[styles.bubble, { backgroundColor: bgColor }]}>
-          <MyMarkdown content={item.text} textColor={textColor} />
+          <MyMarkdown content={item.message} textColor={textColor} />
         </View>
         <Text
           style={{
@@ -72,7 +77,7 @@ const ChatDetailsScreen = () => {
             textAlign: isMe ? 'right' : 'left',
           }}
         >
-          {new Date(item.timestamp).toLocaleString()}
+          {new Date(item.date_created+"").toLocaleString()}
         </Text>
       </View>
     );

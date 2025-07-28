@@ -9,7 +9,7 @@ export class ChatMessagesHelper extends CollectionHelper<DatabaseTypes.ChatMessa
 
   async fetchMessagesByChat(chatId: string, queryOverride: any = {}) {
     const defaultQuery = {
-      fields: ['*', 'profile.*'],
+      fields: ['*'],
       limit: 100,
       sort: ['-date_created'],
       filter: { chat: { _eq: chatId } },
