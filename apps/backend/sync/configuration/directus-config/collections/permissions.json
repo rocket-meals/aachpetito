@@ -2412,6 +2412,18 @@
     "fields": [
       "*"
     ],
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "action": "read",
+    "collection": "foodoffers_static_elements",
+    "policy": "abf8a154-5b1c-4a46-ac9c-7300570f4f17",
+    "_syncId": "5be061b4-a2c4-4fd9-8588-e1f67cc642b4"
+  },
+  {
+    "fields": [
+      "*"
+    ],
     "permissions": {},
     "validation": {},
     "presets": null,

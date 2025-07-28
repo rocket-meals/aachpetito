@@ -448,7 +448,9 @@ export type Chats = {
   alias?: string | null;
   date_created?: string | null;
   date_updated?: string | null;
+  foods_feedback?: string | FoodsFeedbacks | null;
   id: string;
+  linked_entities: string;
   messages: any[] | ChatMessages[];
   participants: any[] | ChatsParticipants[];
   sort?: number | null;
@@ -1037,6 +1039,7 @@ export type FoodoffersStaticElements = {
   id: string;
   image?: string | AppElements | null;
   name?: string | AppElements | null;
+  placement?: string | null;
   sort?: number | null;
   status: string;
   user_created?: string | DirectusUsers | null;
