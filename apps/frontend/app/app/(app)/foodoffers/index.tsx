@@ -52,6 +52,7 @@ import BaseBottomSheet from '@/components/BaseBottomSheet';
 import type BottomSheet from '@gorhom/bottom-sheet';
 import CanteenSelectionSheet from '@/components/CanteenSelectionSheet/CanteenSelectionSheet';
 import SortSheet from '@/components/SortSheet/SortSheet';
+import CanteenSelection from "@/components/CanteenSelection";
 import HourSheet from '@/components/HoursSheet/HoursSheet';
 import CalendarSheet from '@/components/CalendarSheet/CalendarSheet';
 import { excerpt } from '@/constants/HelperFunctions';
@@ -166,6 +167,14 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
 
   // Set Page Title
   useSetPageTitle(selectedCanteen?.alias || TranslationKeys.food_offers);
+
+  if (!selectedCanteen) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.screen.background }}>
+        <CanteenSelection />
+      </SafeAreaView>
+    );
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -667,10 +676,12 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
                   activeOpacity={0.7}
                 >
                   <Text style={{ ...styles.heading, color: theme.header.text }}>
-                    {excerpt(
-                      String(selectedCanteen?.alias),
-                      screenWidth > 800 ? 30 : 10
-                    ) || 'Food Offers'}
+                    {selectedCanteen
+                      ? excerpt(
+                          String(selectedCanteen.alias),
+                          screenWidth > 800 ? 30 : 10,
+                        )
+                      : translate(TranslationKeys.food_offers)}
                   </Text>
                 </TouchableOpacity>
               </View>
