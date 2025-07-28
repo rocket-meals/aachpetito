@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
+import SupportFAQ from '../../../../components/SupportFAQ/SupportFAQ';
 import { useTheme } from '@/hooks/useTheme';
 import { useLocalSearchParams } from 'expo-router';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
@@ -54,6 +56,11 @@ const ChatDetailsScreen = () => {
     const db = b.date_created || b.date_updated || '';
     return da < db ? 1 : -1;
   });
+
+  const lastMessageDate = sortedMessages[0]?.date_created || sortedMessages[0]?.date_updated;
+  const showOldMessageNotice = lastMessageDate
+    ? new Date(lastMessageDate).getTime() < Date.now() - 7 * 24 * 60 * 60 * 1000
+    : false;
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !chat_id || !profile?.id) {
@@ -120,6 +127,17 @@ const ChatDetailsScreen = () => {
         contentContainerStyle={styles.list}
         inverted
       />
+      {showOldMessageNotice && (
+        <View style={styles.oldMessageContainer}>
+          <Text style={[styles.oldMessageText, { color: theme.screen.text }]}> 
+            {translate(TranslationKeys.chat_last_message_unanswered)}
+          </Text>
+          <SupportFAQ
+            label={translate(TranslationKeys.feedback_support_faq)}
+            onPress={() => router.navigate('/support-FAQ')}
+          />
+        </View>
+      )}
       <View style={styles.inputContainer}>
         <TextInput
           style={[
