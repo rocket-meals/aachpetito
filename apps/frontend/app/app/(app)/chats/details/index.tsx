@@ -8,13 +8,10 @@ import MyMarkdown from '@/components/MyMarkdown/MyMarkdown';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/reducer';
 import { myContrastColor } from '@/helper/colorHelper';
-import { ChatsHelper } from '@/redux/actions/Chats/Chats';
 import { ChatMessagesHelper } from '@/redux/actions/Chats/ChatMessages';
 import { DatabaseTypes } from 'repo-depkit-common';
 import styles from './styles';
 
-const chatsHelper = new ChatsHelper();
-const chatMessagesHelper = new ChatMessagesHelper();
 
 const ChatDetailsScreen = () => {
   useSetPageTitle(TranslationKeys.chat);
@@ -32,7 +29,8 @@ const ChatDetailsScreen = () => {
     const fetchMsgs = async () => {
       if (chat_id) {
         try {
-          const result = (await chatMessagesHelper.fetchMessagesByChat(chat_id)) as DatabaseTypes.ChatMessages[];
+          const helper = new ChatMessagesHelper();
+          const result = (await helper.fetchMessagesByChat(chat_id)) as DatabaseTypes.ChatMessages[];
           if (result) {
             setMessages(result);
           }

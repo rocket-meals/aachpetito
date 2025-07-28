@@ -47,7 +47,6 @@ import { AppSettingsHelper } from '@/redux/actions/AppSettings/AppSettings';
 import { MarkingGroupsHelper } from '@/redux/actions/MarkingGroups/MarkingGroups';
 import { NewsHelper } from '@/redux/actions/News/News';
 import { ChatsHelper } from '@/redux/actions/Chats/Chats';
-import { ChatMessagesHelper } from '@/redux/actions/Chats/ChatMessages';
 import { FoodAttributeGroupHelper } from '@/redux/actions/FoodAttributes/FoodAttributeGroup';
 import { FoodAttributesHelper } from '@/redux/actions/FoodAttributes/FoodAttributes';
 import DeviceMock from '@/components/DeviceMock/DeviceMock';
@@ -96,7 +95,6 @@ export default function Layout() {
   const foodOffersCategoriesHelper = new FoodOffersCategoriesHelper();
   const newsHelper = new NewsHelper();
   const chatsHelper = new ChatsHelper();
-  const chatMessagesHelper = new ChatMessagesHelper();
   const collectionLastUpdateHelper = new CollectionLastUpdateHelper();
   const foodFeedbackLabelEntryHelper = new FoodFeedbackLabelEntryHelper();
   const canteenFeedbackLabelEntryHelper = new CanteenFeedbackLabelEntryHelper();
@@ -208,6 +206,7 @@ export default function Layout() {
         getFeedbackEntries(profile?.id);
         getCanteenFeedbackEntries(profile?.id);
         dispatch({ type: UPDATE_PROFILE, payload: profile });
+        fetchChats();
       }
     } catch (error) {
       console.error('Error fetching profiles:', error);
@@ -588,7 +587,6 @@ export default function Layout() {
   useEffect(() => {
     if (user?.id) {
       fetchProfile();
-      fetchChats();
     }
     resetCalendarSelectedDate();
     getAllCollectionDatesLastUpdate();
