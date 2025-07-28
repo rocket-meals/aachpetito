@@ -46,6 +46,8 @@ import { WikisHelper } from '@/redux/actions/Wikis/Wikis';
 import { AppSettingsHelper } from '@/redux/actions/AppSettings/AppSettings';
 import { MarkingGroupsHelper } from '@/redux/actions/MarkingGroups/MarkingGroups';
 import { NewsHelper } from '@/redux/actions/News/News';
+import { ChatsHelper } from '@/redux/actions/Chats/Chats';
+import { ChatMessagesHelper } from '@/redux/actions/Chats/ChatMessages';
 import { FoodAttributeGroupHelper } from '@/redux/actions/FoodAttributes/FoodAttributeGroup';
 import { FoodAttributesHelper } from '@/redux/actions/FoodAttributes/FoodAttributes';
 import DeviceMock from '@/components/DeviceMock/DeviceMock';
@@ -69,6 +71,7 @@ import { CollectionKeys } from '@/constants/collectionKeys';
 import { RootState } from '@/redux/reducer';
 import { sortMarkingsByGroup, sortBySortField } from '@/helper/sortingHelper';
 import { SET_NEWS } from '@/redux/Types/types';
+import { SET_CHATS } from '@/redux/Types/types';
 
 export default function Layout() {
   const { theme } = useTheme();
@@ -92,6 +95,8 @@ export default function Layout() {
   const businessHoursGroupsHelper = new BusinessHoursGroupsHelper();
   const foodOffersCategoriesHelper = new FoodOffersCategoriesHelper();
   const newsHelper = new NewsHelper();
+  const chatsHelper = new ChatsHelper();
+  const chatMessagesHelper = new ChatMessagesHelper();
   const collectionLastUpdateHelper = new CollectionLastUpdateHelper();
   const foodFeedbackLabelEntryHelper = new FoodFeedbackLabelEntryHelper();
   const canteenFeedbackLabelEntryHelper = new CanteenFeedbackLabelEntryHelper();
@@ -206,6 +211,21 @@ export default function Layout() {
       }
     } catch (error) {
       console.error('Error fetching profiles:', error);
+    }
+  };
+
+  const fetchChats = async () => {
+    try {
+      if (user?.profile) {
+        const result = (await chatsHelper.fetchChatsByProfile(
+          user.profile
+        )) as DatabaseTypes.Chats[];
+        if (result) {
+          dispatch({ type: SET_CHATS, payload: result });
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching chats:', error);
     }
   };
 
@@ -568,6 +588,7 @@ export default function Layout() {
   useEffect(() => {
     if (user?.id) {
       fetchProfile();
+      fetchChats();
     }
     resetCalendarSelectedDate();
     getAllCollectionDatesLastUpdate();
