@@ -1,9 +1,9 @@
 {
-  "collection": "foodoffers_static_elements",
+  "collection": "foodoffers_info_items",
   "field": "placement",
   "type": "string",
   "meta": {
-    "collection": "foodoffers_static_elements",
+    "collection": "foodoffers_info_items",
     "conditions": null,
     "display": null,
     "display_options": null,
@@ -37,7 +37,7 @@
   },
   "schema": {
     "name": "placement",
-    "table": "foodoffers_static_elements",
+    "table": "foodoffers_info_items",
     "data_type": "character varying",
     "default_value": "end",
     "max_length": 255,

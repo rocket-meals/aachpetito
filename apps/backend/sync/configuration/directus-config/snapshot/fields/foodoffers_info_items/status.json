@@ -1,9 +1,9 @@
 {
-  "collection": "foodoffers_static_elements",
+  "collection": "foodoffers_info_items",
   "field": "status",
   "type": "string",
   "meta": {
-    "collection": "foodoffers_static_elements",
+    "collection": "foodoffers_info_items",
     "conditions": null,
     "display": "labels",
     "display_options": {
@@ -67,9 +67,9 @@
   },
   "schema": {
     "name": "status",
-    "table": "foodoffers_static_elements",
+    "table": "foodoffers_info_items",
     "data_type": "character varying",
-    "default_value": "published",
+    "default_value": "draft",
     "max_length": 255,
     "numeric_precision": null,
     "numeric_scale": null,

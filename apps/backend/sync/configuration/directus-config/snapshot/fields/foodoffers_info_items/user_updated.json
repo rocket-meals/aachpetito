@@ -1,9 +1,9 @@
 {
-  "collection": "foodoffers_static_elements",
+  "collection": "foodoffers_info_items",
   "field": "user_updated",
   "type": "uuid",
   "meta": {
-    "collection": "foodoffers_static_elements",
+    "collection": "foodoffers_info_items",
     "conditions": null,
     "display": "user",
     "display_options": null,
@@ -28,7 +28,7 @@
   },
   "schema": {
     "name": "user_updated",
-    "table": "foodoffers_static_elements",
+    "table": "foodoffers_info_items",
     "data_type": "uuid",
     "default_value": null,
     "max_length": null,
@@ -41,7 +41,7 @@
     "is_generated": false,
     "generation_expression": null,
     "has_auto_increment": false,
-    "foreign_key_table": "directus_users",
-    "foreign_key_column": "id"
+    "foreign_key_table": null,
+    "foreign_key_column": null
   }
 }

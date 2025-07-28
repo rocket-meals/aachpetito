@@ -1,15 +1,15 @@
 {
-  "collection": "foodoffers_static_elements",
-  "field": "date_created",
+  "collection": "foodoffers_info_items",
+  "field": "date_updated",
   "type": "timestamp",
   "meta": {
-    "collection": "foodoffers_static_elements",
+    "collection": "foodoffers_info_items",
     "conditions": null,
     "display": "datetime",
     "display_options": {
       "relative": true
     },
-    "field": "date_created",
+    "field": "date_updated",
     "group": null,
     "hidden": true,
     "interface": "datetime",
@@ -17,9 +17,9 @@
     "options": null,
     "readonly": true,
     "required": false,
-    "sort": 5,
+    "sort": 7,
     "special": [
-      "date-created"
+      "date-updated"
     ],
     "translations": null,
     "validation": null,
@@ -27,8 +27,8 @@
     "width": "half"
   },
   "schema": {
-    "name": "date_created",
-    "table": "foodoffers_static_elements",
+    "name": "date_updated",
+    "table": "foodoffers_info_items",
     "data_type": "timestamp with time zone",
     "default_value": null,
     "max_length": null,

@@ -1027,26 +1027,26 @@ export type FoodoffersCategoriesTranslations = {
   translation_settings: string;
 };
 
-export type FoodoffersMarkings = {
-  foodoffers_id?: string | Foodoffers | null;
-  id: number;
-  markings_id?: string | Markings | null;
-};
-
-export type FoodoffersStaticElements = {
-  canteen?: string | Canteens | null;
+export type FoodoffersInfoItems = {
+  canteen?: string | null;
   date_created?: string | null;
   date_updated?: string | null;
   id: string;
-  image?: string | AppElements | null;
+  image?: string | DirectusFiles | null;
   link?: string | null;
   name?: string | AppElements | null;
   placement?: string | null;
-  show_when_no_foodoffers_found?: boolean | null;
+  show_only_when_no_foodoffers_found?: boolean | null;
   sort?: number | null;
   status: string;
   user_created?: string | DirectusUsers | null;
   user_updated?: string | DirectusUsers | null;
+};
+
+export type FoodoffersMarkings = {
+  foodoffers_id?: string | Foodoffers | null;
+  id: number;
+  markings_id?: string | Markings | null;
 };
 
 export type Foods = {
@@ -1887,8 +1887,8 @@ export type CustomDirectusTypes = {
   foodoffers: Foodoffers[];
   foodoffers_categories: FoodoffersCategories[];
   foodoffers_categories_translations: FoodoffersCategoriesTranslations[];
+  foodoffers_info_items: FoodoffersInfoItems[];
   foodoffers_markings: FoodoffersMarkings[];
-  foodoffers_static_elements: FoodoffersStaticElements[];
   foods: Foods[];
   foods_attributes: FoodsAttributes[];
   foods_attributes_groups: FoodsAttributesGroups[];

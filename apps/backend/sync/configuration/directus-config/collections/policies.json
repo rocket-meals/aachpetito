@@ -5,8 +5,8 @@
     "app_access": true,
     "ip_access": null,
     "description": "$t:admin_policy_description",
-    "icon": "verified",
     "name": "Administrator",
+    "icon": "verified",
     "roles": [
       {
         "role": "_sync_default_admin_role",
@@ -21,8 +21,8 @@
     "app_access": true,
     "ip_access": null,
     "description": null,
-    "icon": "badge",
     "name": "AppAccess",
+    "icon": "badge",
     "roles": [
       {
         "role": null,
@@ -37,8 +37,8 @@
     "app_access": true,
     "ip_access": null,
     "description": null,
-    "icon": "badge",
     "name": "Apartmentmanagement",
+    "icon": "badge",
     "roles": [
       {
         "role": "e0d3b51c-8f50-4844-a788-b5152180bf43",
@@ -53,8 +53,8 @@
     "app_access": false,
     "ip_access": null,
     "description": null,
-    "icon": "supervised_user_circle",
     "name": "User",
+    "icon": "supervised_user_circle",
     "roles": [
       {
         "role": "abe3a726-f85c-4d70-a86c-15e7092e5da2",
@@ -73,8 +73,8 @@
     "app_access": false,
     "ip_access": null,
     "description": "$t:public_description",
-    "icon": "public",
     "name": "$t:public_label",
+    "icon": "public",
     "roles": [
       {
         "role": "e0d3b51c-8f50-4844-a788-b5152180bf43",
@@ -97,8 +97,8 @@
     "app_access": true,
     "ip_access": null,
     "description": null,
-    "icon": "badge",
     "name": "Gebäudemanagement",
+    "icon": "badge",
     "roles": [
       {
         "role": "9aaa0300-e0ee-4874-b32f-2d165607867d",

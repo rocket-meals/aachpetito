@@ -1,37 +1,35 @@
 {
-  "collection": "foodoffers_static_elements",
-  "field": "image",
-  "type": "uuid",
+  "collection": "foodoffers_info_items",
+  "field": "sort",
+  "type": "integer",
   "meta": {
-    "collection": "foodoffers_static_elements",
+    "collection": "foodoffers_info_items",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "image",
+    "field": "sort",
     "group": null,
-    "hidden": false,
-    "interface": "select-dropdown-m2o",
+    "hidden": true,
+    "interface": "input",
     "note": null,
     "options": null,
     "readonly": false,
     "required": false,
-    "sort": 9,
-    "special": [
-      "m2o"
-    ],
+    "sort": 3,
+    "special": null,
     "translations": null,
     "validation": null,
     "validation_message": null,
     "width": "full"
   },
   "schema": {
-    "name": "image",
-    "table": "foodoffers_static_elements",
-    "data_type": "uuid",
+    "name": "sort",
+    "table": "foodoffers_info_items",
+    "data_type": "integer",
     "default_value": null,
     "max_length": null,
-    "numeric_precision": null,
-    "numeric_scale": null,
+    "numeric_precision": 32,
+    "numeric_scale": 0,
     "is_nullable": true,
     "is_unique": false,
     "is_indexed": false,
@@ -39,7 +37,7 @@
     "is_generated": false,
     "generation_expression": null,
     "has_auto_increment": false,
-    "foreign_key_table": "app_elements",
-    "foreign_key_column": "id"
+    "foreign_key_table": null,
+    "foreign_key_column": null
   }
 }
