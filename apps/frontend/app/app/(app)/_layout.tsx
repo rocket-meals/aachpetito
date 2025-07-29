@@ -20,6 +20,7 @@ import {
   SET_FOOD_CATEGORIES,
   SET_FOOD_COLLECTION,
   SET_FOOD_OFFERS_CATEGORIES,
+  SET_FOODOFFERS_INFO_ITEMS,
   SET_OWN_CANTEEN_FEEDBACK_LABEL_ENTRIES,
   SET_POPUP_EVENTS,
   SET_POPUP_EVENTS_HASH,
@@ -39,6 +40,7 @@ import CustomMenuHeader from '@/components/CustomMenuHeader/CustomMenuHeader';
 import { CanteenFeedbackLabelEntryHelper } from '@/redux/actions/CanteenFeedbackLabelEntries/CanteenFeedbackLabelEntries';
 import { FoodCategoriesHelper } from '@/redux/actions/FoodCategories/FoodCategories';
 import { FoodOffersCategoriesHelper } from '@/redux/actions/FoodOffersCategories/FoodOffersCategories';
+import { FoodOffersInfoItemsHelper } from '@/redux/actions/FoodOffersInfoItems/FoodOffersInfoItems';
 import { BusinessHoursHelper } from '@/redux/actions/BusinessHours/BusinessHours';
 import CustomStackHeader from '@/components/CustomStackHeader/CustomStackHeader';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -93,6 +95,7 @@ export default function Layout() {
   const foodAttributeGroupHelper = new FoodAttributeGroupHelper();
   const businessHoursGroupsHelper = new BusinessHoursGroupsHelper();
   const foodOffersCategoriesHelper = new FoodOffersCategoriesHelper();
+  const foodOffersInfoItemsHelper = new FoodOffersInfoItemsHelper();
   const newsHelper = new NewsHelper();
   const chatsHelper = new ChatsHelper();
   const collectionLastUpdateHelper = new CollectionLastUpdateHelper();
@@ -352,6 +355,22 @@ export default function Layout() {
     }
   };
 
+  const getFoodOffersInfoItems = async () => {
+    try {
+      const result = (await foodOffersInfoItemsHelper.fetchFoodOffersInfoItems(
+        {}
+      )) as DatabaseTypes.FoodoffersInfoItems[];
+      if (result) {
+        dispatch({
+          type: SET_FOODOFFERS_INFO_ITEMS,
+          payload: sortBySortField(result),
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching food offers info items:', error);
+    }
+  };
+
   const getAllFoodAttributes = async () => {
     try {
       const result =
@@ -518,6 +537,7 @@ export default function Layout() {
       ],
       action: getFoodOffersCategories,
     },
+    { key: CollectionKeys.FOODOFFERS_INFO_ITEMS, action: getFoodOffersInfoItems },
     {
       key: CollectionKeys.FOODS_FEEDBACKS_LABELS,
       action: getFoodFeedBackLabels,
