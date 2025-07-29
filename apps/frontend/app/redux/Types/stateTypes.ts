@@ -63,6 +63,7 @@ export interface FoodState {
   selectedFoodMarkings: any[];
   foodCategories: DatabaseTypes.FoodsCategories[];
   foodOfferCategories: DatabaseTypes.FoodoffersCategories[];
+  foodOffersInfoItems: DatabaseTypes.FoodoffersInfoItems[];
   markingDetails: DatabaseTypes.Markings;
   mostLikedFoods: any[];
   mostDislikedFoods: any[];
