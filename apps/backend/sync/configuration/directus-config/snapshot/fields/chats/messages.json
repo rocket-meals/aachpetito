@@ -14,7 +14,9 @@
     "note": null,
     "options": {
       "fields": [
-        "profile.nickname"
+        "profile.nickname",
+        "message",
+        "date_created"
       ],
       "layout": "table",
       "sort": "date_created"
