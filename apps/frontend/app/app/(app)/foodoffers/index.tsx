@@ -174,17 +174,25 @@ const index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
 
   const dayItems = useMemo(() => {
     const offers = selectedCanteenFoodOffers || [];
+
+    const hasOffers = offers.length > 0;
+
     const infoItemsFiltered = (foodOffersInfoItems || []).filter((info) => {
-      if (info.canteen && selectedCanteen && info.canteen !== selectedCanteen.id) return false;
-      if (info.show_only_when_no_foodoffers_found && offers.length > 0) return false;
-      return true;
+      if (info.canteen && selectedCanteen && info.canteen !== selectedCanteen.id){
+        return false;
+      }
+      if (info.show_only_when_no_foodoffers_found) {
+        return !hasOffers;
+      }
+      return hasOffers;
     });
+
 
     const startInfos = sortBySortField(
       infoItemsFiltered.filter((i) => i.placement === 'start')
     );
     const endInfos = sortBySortField(
-      infoItemsFiltered.filter((i) => i.placement !== 'start')
+      infoItemsFiltered.filter((i) => i.placement === 'end')
     );
 
     const start = startInfos.map((i) => ({ foodoffer: null, foodofferInfoItem: i }));
