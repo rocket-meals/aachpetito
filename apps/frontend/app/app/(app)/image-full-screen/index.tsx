@@ -11,6 +11,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { PinchGestureHandler, PinchGestureHandlerGestureEvent } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
+
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 import BaseBottomModal from '@/components/BaseBottomModal';
 import SettingsList from '@/components/SettingsList';
 import * as FileSystem from 'expo-file-system';
@@ -80,7 +82,7 @@ export default function ImageFullScreen() {
       <PinchGestureHandler onGestureEvent={pinchHandler}>
         <Animated.View style={styles.flex}>
           <TouchableWithoutFeedback onPress={toggleControls} onLongPress={() => setModalVisible(true)}>
-            <Image source={{ uri: String(uri) }} style={[styles.image, animatedStyle]} contentFit='contain' />
+            <AnimatedImage source={{ uri: String(uri) }} style={[styles.image, animatedStyle]} contentFit='contain' />
           </TouchableWithoutFeedback>
         </Animated.View>
       </PinchGestureHandler>
