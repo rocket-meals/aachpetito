@@ -3,7 +3,12 @@ import { View, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Platform 
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
-import Animated, { useSharedValue, useAnimatedStyle, useAnimatedGestureHandler, withTiming } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  useAnimatedGestureHandler,
+  useDerivedValue,
+} from 'react-native-reanimated';
 import { PinchGestureHandler, PinchGestureHandlerGestureEvent } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import BaseBottomModal from '@/components/BaseBottomModal';
@@ -18,16 +23,21 @@ export default function ImageFullScreen() {
   const [showControls, setShowControls] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const scale = useSharedValue(1);
+  const baseScale = useSharedValue(1);
+  const pinchScale = useSharedValue(1);
+  const scale = useDerivedValue(() => baseScale.value * pinchScale.value);
 
-  const pinchHandler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
-    onActive: (event) => {
-      scale.value = event.scale;
+  const pinchHandler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>(
+    {
+      onActive: (event) => {
+        pinchScale.value = event.scale;
+      },
+      onEnd: () => {
+        baseScale.value = baseScale.value * pinchScale.value;
+        pinchScale.value = 1;
+      },
     },
-    onEnd: () => {
-      scale.value = withTiming(1);
-    },
-  });
+  );
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -59,11 +69,11 @@ export default function ImageFullScreen() {
     <View style={[styles.container, { backgroundColor: theme.screen.background }]}> 
       {showControls && (
         <View style={styles.topRow} pointerEvents='box-none'>
-          <TouchableOpacity style={[styles.iconButton, { backgroundColor: theme.screen.iconBg }]} onPress={() => router.back()}>
-            <Ionicons name='close' size={28} color={theme.screen.icon} />
-          </TouchableOpacity>
           <TouchableOpacity style={[styles.iconButton, { backgroundColor: theme.screen.iconBg }]} onPress={downloadImage}>
             <Ionicons name='cloud-download-outline' size={28} color={theme.screen.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.iconButton, { backgroundColor: theme.screen.iconBg }]} onPress={() => router.back()}>
+            <Ionicons name='close' size={28} color={theme.screen.icon} />
           </TouchableOpacity>
         </View>
       )}
