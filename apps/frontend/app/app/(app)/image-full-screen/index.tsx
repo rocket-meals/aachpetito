@@ -6,15 +6,9 @@ import { useTheme } from '@/hooks/useTheme';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  useAnimatedGestureHandler,
   useDerivedValue,
 } from 'react-native-reanimated';
-import {
-  PinchGestureHandler,
-  PinchGestureHandlerGestureEvent,
-  TapGestureHandler,
-  TapGestureHandlerGestureEvent,
-} from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
@@ -34,28 +28,27 @@ export default function ImageFullScreen() {
   const pinchScale = useSharedValue(1);
   const scale = useDerivedValue(() => baseScale.value * pinchScale.value);
 
-  const pinchHandler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>(
-    {
-      onActive: (event) => {
-        pinchScale.value = event.scale;
-      },
-      onEnd: () => {
-        baseScale.value = baseScale.value * pinchScale.value;
-        pinchScale.value = 1;
-      },
-    },
-  );
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((event) => {
+      pinchScale.value = event.scale;
+    })
+    .onEnd(() => {
+      baseScale.value = baseScale.value * pinchScale.value;
+      pinchScale.value = 1;
+    });
 
-  const doubleTapHandler = useAnimatedGestureHandler<TapGestureHandlerGestureEvent>({
-    onActive: () => {
+  const doubleTapGesture = Gesture.Tap()
+    .numberOfTaps(2)
+    .onStart(() => {
       if (baseScale.value !== 1 || pinchScale.value !== 1) {
         baseScale.value = 1;
         pinchScale.value = 1;
       } else {
         baseScale.value = 2;
       }
-    },
-  });
+    });
+
+  const composedGesture = Gesture.Simultaneous(doubleTapGesture, pinchGesture);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -95,15 +88,13 @@ export default function ImageFullScreen() {
           </TouchableOpacity>
         </View>
       )}
-      <TapGestureHandler numberOfTaps={2} onGestureEvent={doubleTapHandler}>
-        <PinchGestureHandler onGestureEvent={pinchHandler}>
-          <Animated.View style={styles.flex}>
-            <TouchableWithoutFeedback onPress={toggleControls} onLongPress={() => setModalVisible(true)}>
-              <AnimatedImage source={{ uri: String(uri) }} style={[styles.image, animatedStyle]} contentFit='contain' />
-            </TouchableWithoutFeedback>
-          </Animated.View>
-        </PinchGestureHandler>
-      </TapGestureHandler>
+      <GestureDetector gesture={composedGesture}>
+        <Animated.View style={styles.flex}>
+          <TouchableWithoutFeedback onPress={toggleControls} onLongPress={() => setModalVisible(true)}>
+            <AnimatedImage source={{ uri: String(uri) }} style={[styles.image, animatedStyle]} contentFit='contain' />
+          </TouchableWithoutFeedback>
+        </Animated.View>
+      </GestureDetector>
       <BaseBottomModal visible={modalVisible} onClose={() => setModalVisible(false)}>
         <SettingsList
           leftIcon={<Ionicons name='cloud-download-outline' size={24} color={theme.screen.icon} />}
