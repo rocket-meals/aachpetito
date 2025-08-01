@@ -1200,7 +1200,7 @@ const index = () => {
                             background_color: marking?.background_color,
                             hide_border: marking?.hide_border,
                           } as any}
-                          size={30}
+                          size={24}
                           color={MarkingColor}
                         />
                         <Text
