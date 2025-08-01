@@ -652,7 +652,7 @@ export default function FoodDetailsScreen() {
                 style={styles.mobileFeaturedImage}
               />
               </TouchableOpacity>
-              <View style={styles.overlay}>
+              <View style={styles.overlay} pointerEvents='box-none'>
                 <View style={styles.mobileDetailsHeader}>
                   <View style={styles.row}>
                     <View />
