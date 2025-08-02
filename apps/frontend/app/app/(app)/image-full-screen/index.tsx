@@ -187,15 +187,17 @@ export default function ImageFullScreen() {
     <Animated.View
       style={[styles.container, { backgroundColor: theme.screen.background }]}
     >
-      <Animated.View
-        pointerEvents='none'
-        style={[styles.backIndicator, indicatorStyle]}
-      >
-        <Ionicons name='chevron-down' size={48} color={theme.screen.text} />
-        <Text style={[styles.backText, { color: theme.screen.text }]}>
-          {translate(TranslationKeys.pull_down_to_close)}
-        </Text>
-      </Animated.View>
+      {showControls && (
+        <Animated.View
+          pointerEvents='none'
+          style={[styles.backIndicator, indicatorStyle]}
+        >
+          <Ionicons name='chevron-down' size={48} color={theme.screen.text} />
+          <Text style={[styles.backText, { color: theme.screen.text }]}>
+            {translate(TranslationKeys.pull_down_to_close)}
+          </Text>
+        </Animated.View>
+      )}
       {showControls && (
         <View
           style={[
