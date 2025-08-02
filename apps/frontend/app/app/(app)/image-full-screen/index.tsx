@@ -271,11 +271,10 @@ const styles = StyleSheet.create({
   image: { width: '100%', height: '100%' },
   backIndicator: {
     position: 'absolute',
-    top: 0,
-    bottom: 0,
+    top: 110,
     left: 0,
     right: 0,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   backText: { marginTop: 8, fontSize: 16 },
