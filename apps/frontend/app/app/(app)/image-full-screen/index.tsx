@@ -17,13 +17,16 @@ import BaseBottomModal from '@/components/BaseBottomModal';
 import SettingsList from '@/components/SettingsList';
 import * as FileSystem from 'expo-file-system';
 import useToast from '@/hooks/useToast';
+import { getHighResImageUrl } from '@/constants/HelperFunctions';
 
 export default function ImageFullScreen() {
-  const { uri } = useLocalSearchParams<{ uri: string }>();
+  const { uri, assetId } = useLocalSearchParams<{ uri?: string; assetId?: string }>();
   const { theme } = useTheme();
   const toast = useToast();
   const [showControls, setShowControls] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const imageUri = assetId ? getHighResImageUrl(String(assetId)) : String(uri);
 
   const baseScale = useSharedValue(1);
   const pinchScale = useSharedValue(1);
@@ -88,15 +91,15 @@ export default function ImageFullScreen() {
     try {
       if (Platform.OS === 'web') {
         const link = document.createElement('a');
-        link.href = String(uri);
+        link.href = String(imageUri);
         link.download = '';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       } else {
-        const filename = String(uri).split('/').pop() || `image_${Date.now()}`;
+        const filename = String(imageUri).split('/').pop() || `image_${Date.now()}`;
         const fileUri = FileSystem.documentDirectory + filename;
-        await FileSystem.downloadAsync(String(uri), fileUri);
+        await FileSystem.downloadAsync(String(imageUri), fileUri);
         toast('Image downloaded', 'success');
       }
     } catch (e) {
@@ -119,7 +122,7 @@ export default function ImageFullScreen() {
       <GestureDetector gesture={composedGesture}>
         <Animated.View style={styles.flex}>
           <TouchableWithoutFeedback onPress={toggleControls} onLongPress={() => setModalVisible(true)}>
-            <AnimatedImage source={{ uri: String(uri) }} style={[styles.image, animatedStyle]} contentFit='contain' />
+            <AnimatedImage source={{ uri: String(imageUri) }} style={[styles.image, animatedStyle]} contentFit='contain' />
           </TouchableWithoutFeedback>
         </Animated.View>
       </GestureDetector>
