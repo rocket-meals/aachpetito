@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams, router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import { useSelector } from 'react-redux';
@@ -119,6 +119,18 @@ export default function ImageFullScreen() {
     ],
     opacity: imageOpacity.value,
   }));
+
+  useFocusEffect(
+    useCallback(() => {
+      translationX.value = 0;
+      translationY.value = 0;
+      startX.value = 0;
+      startY.value = 0;
+      imageOpacity.value = 1;
+      baseScale.value = 1;
+      pinchScale.value = 1;
+    }, [])
+  );
 
   const toggleControls = () => setShowControls((p) => !p);
 
