@@ -137,10 +137,13 @@ export default function FoodDetailsScreen() {
   };
 
   const openFullScreenImage = () => {
-    const uri =
-      foodDetails?.image_remote_url ||
-      (foodDetails?.image ? getImageUrl(foodDetails.image) : defaultImage);
-    router.push({ pathname: '/(app)/image-full-screen', params: { uri } });
+    if (foodDetails?.image_remote_url) {
+      router.push({ pathname: '/(app)/image-full-screen', params: { uri: foodDetails.image_remote_url } });
+    } else if (foodDetails?.image) {
+      router.push({ pathname: '/(app)/image-full-screen', params: { assetId: String(foodDetails.image) } });
+    } else {
+      router.push({ pathname: '/(app)/image-full-screen', params: { uri: defaultImage } });
+    }
   };
 
   const filterAttributes = () => {
