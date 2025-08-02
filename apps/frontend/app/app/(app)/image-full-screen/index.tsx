@@ -46,7 +46,7 @@ export default function ImageFullScreen() {
   const translationY = useSharedValue(0);
   const startX = useSharedValue(0);
   const startY = useSharedValue(0);
-  const containerOpacity = useSharedValue(1);
+  const imageOpacity = useSharedValue(1);
 
   const windowHeight = Dimensions.get('window').height;
   const CLOSE_DISTANCE = windowHeight * 0.3;
@@ -83,25 +83,26 @@ export default function ImageFullScreen() {
       if (scale.value > 1) {
         translationX.value = startX.value + event.translationX;
         translationY.value = startY.value + event.translationY;
-        containerOpacity.value = 1;
+        imageOpacity.value = 1;
       } else {
         translationY.value = event.translationY;
         if (event.translationY > 0) {
-          containerOpacity.value =
+          imageOpacity.value =
             1 - Math.min(event.translationY / FADE_DISTANCE, 1);
         } else {
-          containerOpacity.value = 1;
+          imageOpacity.value = 1;
         }
       }
     })
     .onEnd(() => {
       if (scale.value <= 1) {
         if (translationY.value > CLOSE_DISTANCE) {
+          imageOpacity.value = 1;
           runOnJS(router.back)();
         } else {
           translationX.value = withTiming(0);
           translationY.value = withTiming(0);
-          containerOpacity.value = withTiming(1);
+          imageOpacity.value = withTiming(1);
         }
       }
     });
@@ -114,6 +115,7 @@ export default function ImageFullScreen() {
       { translateX: translationX.value },
       { translateY: translationY.value },
     ],
+    opacity: imageOpacity.value,
   }));
 
   const toggleControls = () => setShowControls((p) => !p);
@@ -140,13 +142,9 @@ export default function ImageFullScreen() {
     }
   };
 
-  const containerStyle = useAnimatedStyle(() => ({
-    opacity: containerOpacity.value,
-  }));
-
   return (
     <Animated.View
-      style={[styles.container, { backgroundColor: theme.screen.background }, containerStyle]}
+      style={[styles.container, { backgroundColor: theme.screen.background }]}
     >
       {showControls && (
         <View
