@@ -7,6 +7,7 @@ import {
   Platform,
   Dimensions,
   Text,
+  Share,
 } from 'react-native';
 import { useLocalSearchParams, router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -175,7 +176,14 @@ export default function ImageFullScreen() {
       } else {
         const filename = extension ? `${name}.${extension}` : name;
         const fileUri = FileSystem.documentDirectory + filename;
-        await FileSystem.downloadAsync(String(highResUri), fileUri);
+        const { uri } = await FileSystem.downloadAsync(
+          String(highResUri),
+          fileUri
+        );
+        await Share.share({
+          url: uri,
+          message: uri,
+        });
         toast('Image downloaded', 'success');
       }
     } catch (e) {
