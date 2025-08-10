@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import { LeafletView, LatLng } from 'react-native-leaflet-view';
@@ -41,8 +41,9 @@ const LeafletViewScreen = () => {
   }
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+    <View style={styles.container}>
       <LeafletView
+        style={styles.map}
         mapCenterPosition={CENTER}
         zoom={13}
         source={{ html }}
@@ -55,10 +56,20 @@ const LeafletViewScreen = () => {
           },
         ]}
       />
-      <View style={{ width: 50, height: 50, backgroundColor: 'red', marginLeft: 10 }} />
     </View>
   );
 };
 
 export default LeafletViewScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  map: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+});
 
