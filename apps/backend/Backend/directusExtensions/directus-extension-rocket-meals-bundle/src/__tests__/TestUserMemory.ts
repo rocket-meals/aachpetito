@@ -14,7 +14,7 @@ beforeAll(async () => {
 
   db = getDatabase();
   await install(db);
-  await migrate(db);
+  await migrate(db, 'latest');
   const schema = await getSchema({ database: db });
   usersService = new ItemsService('directus_users', { schema, knex: db });
 });
