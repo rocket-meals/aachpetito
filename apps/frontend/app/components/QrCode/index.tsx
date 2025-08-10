@@ -12,6 +12,7 @@ const QrCode: React.FC<QrCodeProps> = ({
   ecl,
   backgroundColor = 'white',
   margin = 0,
+  quietZone = 10,
 }) => {
   const imageSource = image ? image : imageUrl ? { uri: imageUrl } : undefined;
 
@@ -37,7 +38,7 @@ const QrCode: React.FC<QrCodeProps> = ({
         justifyContent: 'center',
       }}
     >
-      <QRCode value={value} size={size} ecl={qrEcl} />
+      <QRCode value={value} size={size} ecl={qrEcl} quietZone={quietZone} />
       {imageSource && (
         <View
           style={{
