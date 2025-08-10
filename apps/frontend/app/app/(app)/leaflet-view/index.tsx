@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import { LeafletView, LatLng } from 'react-native-leaflet-view';
@@ -11,42 +11,52 @@ const CENTER: LatLng = { lat: 52.52, lng: 13.405 };
 const LeafletViewScreen = () => {
   useSetPageTitle(TranslationKeys.leaflet_map);
   const [html, setHtml] = useState<string | null>(null);
+  const [icon, setIcon] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
-    const loadHtml = async () => {
-      const asset = Asset.fromModule(require('@/assets/leaflet.html'));
-      await asset.downloadAsync();
-      const content = await FileSystem.readAsStringAsync(asset.localUri!);
+    const loadAssets = async () => {
+      const htmlAsset = Asset.fromModule(require('@/assets/leaflet.html'));
+      const iconAsset = Asset.fromModule(require('@/assets/map/marker-icon-2x.png'));
+      await Promise.all([htmlAsset.downloadAsync(), iconAsset.downloadAsync()]);
+      const [htmlContent, iconContent] = await Promise.all([
+        FileSystem.readAsStringAsync(htmlAsset.localUri!),
+        FileSystem.readAsStringAsync(iconAsset.localUri!, {
+          encoding: FileSystem.EncodingType.Base64,
+        }),
+      ]);
       if (isMounted) {
-        setHtml(content);
+        setHtml(htmlContent);
+        setIcon(iconContent);
       }
     };
-    loadHtml();
+    loadAssets();
     return () => {
       isMounted = false;
     };
   }, []);
 
-  if (!html) {
+  if (!html || !icon) {
     return <ActivityIndicator />;
   }
 
   return (
-    <LeafletView
-      mapCenterPosition={CENTER}
-      zoom={13}
-      source={{ html }}
-      mapMarkers={[
-        {
-          id: 'remote-icon',
-          position: CENTER,
-          icon:
-            "<img src='https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png' style='width:32px;height:32px;' />",
-          size: [32, 32],
-        },
-      ]}
-    />
+    <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+      <LeafletView
+        mapCenterPosition={CENTER}
+        zoom={13}
+        source={{ html }}
+        mapMarkers={[
+          {
+            id: 'berlin-icon',
+            position: CENTER,
+            icon: `<img src='data:image/png;base64,${icon}' style='width:32px;height:32px;' />`,
+            size: [32, 32],
+          },
+        ]}
+      />
+      <View style={{ width: 50, height: 50, backgroundColor: 'red', marginLeft: 10 }} />
+    </View>
   );
 };
 
