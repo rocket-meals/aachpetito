@@ -263,7 +263,8 @@ export function sortByOwnFavorite(foodOffers: DatabaseTypes.Foodoffers[], ownFee
     food: string | DatabaseTypes.Foods | null | undefined
   ): string | undefined => {
     if (typeof food === 'object' && food !== null) {
-      return food.id;
+      // Cast to DatabaseTypes.Foods to satisfy TypeScript when food is an object
+      return (food as DatabaseTypes.Foods).id;
     }
     return food ?? undefined;
   };
@@ -292,8 +293,10 @@ export function sortByOwnFavorite(foodOffers: DatabaseTypes.Foodoffers[], ownFee
 export function sortByPublicFavorite(foodOffers: DatabaseTypes.Foodoffers[]) {
     console.log('sortByPublicFavorite - before', JSON.parse(JSON.stringify(foodOffers)));
     foodOffers.sort((a, b) => {
-      const aFood: DatabaseTypes.Foods = a.food || {};
-      const bFood: DatabaseTypes.Foods = b.food || {};
+      const aFood =
+        (typeof a.food === 'object' && a.food !== null ? a.food : {}) as DatabaseTypes.Foods;
+      const bFood =
+        (typeof b.food === 'object' && b.food !== null ? b.food : {}) as DatabaseTypes.Foods;
       const getRatingCategory = (rating: number | null | undefined) => {
         if (isRatingNegative(rating)) return "negative";
         if (rating === null || rating === undefined) return "null";
@@ -324,7 +327,7 @@ export function sortByEatingHabits(
 ) {
   console.log('sortByEatingHabits - before', JSON.parse(JSON.stringify(foodOffers)));
 
-  const profileMarkingsMap = new Map(
+  const profileMarkingsMap = new Map<string, any>(
       profileMarkingsData?.map((marking: any) => [marking.markings_id, marking])
   );
 
@@ -338,7 +341,7 @@ export function sortByEatingHabits(
 
     if (offer?.markings) {
       for (const marking of offer.markings) {
-        const profileMarking = profileMarkingsMap.get(marking.markings_id);
+        const profileMarking: any = profileMarkingsMap.get(marking.markings_id);
 
         if (profileMarking) {
           if (profileMarking.like === true) {
@@ -380,8 +383,11 @@ export function sortMarkingsByGroup(markings: DatabaseTypes.Markings[], markingG
     group.markings.forEach((markingId) => {
       if (typeof markingId === 'string') {
         markingToGroupMap.set(markingId, group);
-      } else if (markingId && typeof markingId === 'object' && 'id' in markingId) {
-        markingToGroupMap.set(markingId.id, group);
+      } else if (markingId && typeof markingId === 'object') {
+        markingToGroupMap.set(
+          (markingId as DatabaseTypes.Markings).id,
+          group
+        );
       }
     });
   });
