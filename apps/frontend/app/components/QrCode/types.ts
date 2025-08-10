@@ -31,4 +31,9 @@ export interface QrCodeProps {
   ecl?: QrCodeEcl;
   backgroundColor?: string;
   margin?: number;
+  /**
+   * Additional white space around the QR code in pixels.
+   * Defaults to 10px.
+   */
+  quietZone?: number;
 }
