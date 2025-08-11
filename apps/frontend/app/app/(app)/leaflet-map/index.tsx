@@ -13,6 +13,9 @@ import {
 } from '@/components/MyMap/markerUtils';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
+import styles from "@/app/(app)/settings/styles";
+import CanteenSelectionSheet from "@/components/CanteenSelectionSheet/CanteenSelectionSheet";
+import BaseBottomSheet from "@/components/BaseBottomSheet";
 
 const POSITION_BUNDESTAG = {
   lat: 52.518594247456804,
@@ -41,7 +44,7 @@ const LeafletMap = () => {
   );
   const selectedCanteen = useSelectedCanteen();
 
-  const [markerIconSrc, setMarkerIconSrc] = useState<string | null>(null);
+  const [markerIconUri, setMarkerIconUri] = useState<string | null>(null);
   const [markerIconLocalUri, setMarkerIconLocalUri] = useState<string | null>(null);
   const [markerIconBase64, setMarkerIconBase64] = useState<string | null>(null);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
@@ -56,8 +59,7 @@ const LeafletMap = () => {
         const asset = await Asset.fromModule(mapMarkerIcon);
         await asset.downloadAsync();
         setMarkerIconLocalUri(asset.localUri || null);
-
-        setMarkerIconSrc(asset.uri);
+        setMarkerIconUri(asset.uri);
 
         if(asset.localUri){
           const content = await FileSystem.readAsStringAsync(asset.localUri, {
@@ -74,7 +76,7 @@ const LeafletMap = () => {
     loadMarkerIcon();
   }, []);
 
-  const centerPosition = useMemo(() => {
+  const selectedCanteenPosition = useMemo(() => {
     if (selectedCanteen?.building) {
       const building = buildings.find((b) => b.id === selectedCanteen.building);
       const coords = (building as any)?.coordinates?.coordinates;
@@ -85,7 +87,9 @@ const LeafletMap = () => {
     return undefined;
   }, [selectedCanteen, buildings]);
 
-  if (!markerIconSrc && !markerError) {
+  const centerPosition = selectedCanteenPosition || POSITION_BUNDESTAG;
+
+  if (!markerIconUri && !markerError) {
     // Optional: Add a loading spinner or placeholder here
     return null;
   }
@@ -113,11 +117,11 @@ const LeafletMap = () => {
     },
   ];
 
-    if (markerIconSrc) {
+    if (markerIconUri) {
         markers.push({
         id: 'img-marker-local',
         position: getMarkerPosition(3),
-        icon: MyMapMarkerIcons.getIconForWebByLocalPathUri(markerIconSrc),
+        icon: MyMapMarkerIcons.getIconForWebByLocalPathUri(markerIconUri),
         size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
         iconAnchor: getDefaultIconAnchor(
             MARKER_DEFAULT_SIZE,
@@ -137,19 +141,6 @@ const LeafletMap = () => {
             MARKER_DEFAULT_SIZE,
         ),
         });
-    }
-
-    if (markerIconBase64) {
-      markers.push({
-        id: 'img-marker-base64-uri',
-        position: getMarkerPosition(5),
-        icon: MyMapMarkerIcons.getIconForWebByBase64(markerIconBase64),
-        size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
-        iconAnchor: getDefaultIconAnchor(
-            MARKER_DEFAULT_SIZE,
-            MARKER_DEFAULT_SIZE,
-        ),
-      });
     }
 
   const handleMarkerClick = (id: string) => {
@@ -188,7 +179,7 @@ const LeafletMap = () => {
           Selected: {selectedMarkerId ?? 'none'} Visible: {String(modalVisible)}
         </Text>
         <MyMap
-          mapCenterPosition={centerPosition || POSITION_BUNDESTAG}
+          mapCenterPosition={selectedCanteenPosition}
           mapMarkers={markers}
           onMarkerClick={handleMarkerClick}
           onMapEvent={(e) => console.log('map event', e.tag)}

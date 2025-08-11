@@ -1,13 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {useTheme} from '@/hooks/useTheme';
-import type {MapMarker} from './model';
-import {LatLng, LeafletView, MapMarker as LeafletViewMapMarkers} from 'react-native-leaflet-view';
+import type {LeafletWebViewEvent, MapMarker} from './model';
+import {
+  LatLng,
+  LeafletView,
+  MapMarker as LeafletViewMapMarkers,
+  WebviewLeafletMessage
+} from 'react-native-leaflet-view';
 import useSetPageTitle from "@/hooks/useSetPageTitle";
 import {TranslationKeys} from "@/locales/keys";
 import {Asset} from "expo-asset";
 import * as FileSystem from "expo-file-system";
 import {MyMapProps} from "@/components/MyMap/MyMapHelper";
+import BaseModal from "@/components/BaseModal";
 
 const MyMap: React.FC<MyMapProps> = ({
   mapCenterPosition,
@@ -19,6 +25,8 @@ const MyMap: React.FC<MyMapProps> = ({
   onMarkerSelectionChange,
 }) => {
   const { theme } = useTheme();
+
+  const [selectedMarker, setSelectedMarker] = useState<string | null>(null);
 
   useSetPageTitle(TranslationKeys.leaflet_map);
   const [html, setHtml] = useState<string | null>(null);
@@ -67,15 +75,49 @@ const MyMap: React.FC<MyMapProps> = ({
     size: [32, 32],
   })
 
+  const handler = (webviewLeafletMessage: WebviewLeafletMessage) => {
+    try {
+      let event: MessageEvent = webviewLeafletMessage?.event;
+      const data: LeafletWebViewEvent = JSON.parse(event.data);
+      if (data.tag === 'onMapMarkerClicked') {
+        onMarkerClick?.(data.mapMarkerId);
+        onMarkerSelectionChange?.(data.mapMarkerId);
+        if (renderMarkerModal) {
+          setSelectedMarker(data.mapMarkerId);
+        }
+      }
+      onMapEvent?.(data);
+    } catch {
+      // ignore malformed messages
+    }
+  };
+
   return (
       <View style={styles.container}>
         <LeafletView
-            webviewStyle={styles.map}
             mapCenterPosition={mapCenterPosition}
+            onMessageReceived={handler}
+            onMarkerClick={(markerId: any) => {
+              if (onMarkerClick) {
+                onMarkerClick(markerId);
+              }
+              if (renderMarkerModal) {
+                setSelectedMarker(markerId);
+              }
+              if (onMarkerSelectionChange) {
+                onMarkerSelectionChange(markerId);
+              }
+            }}
             zoom={13}
             source={{ html }}
             mapMarkers={finalMapMarkers}
+            webviewStyle={styles.map}
         />
+        {renderMarkerModal && selectedMarker && (
+            <BaseModal isVisible={true} onClose={() => setSelectedMarker(null)}>
+              {renderMarkerModal(selectedMarker, () => setSelectedMarker(null))}
+            </BaseModal>
+        )}
       </View>
   );
 };
