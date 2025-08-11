@@ -4,6 +4,7 @@ import {exec, spawn} from 'child_process';
 import {FetchHelper} from "../helpers/FetchHelper";
 import * as os from "node:os";
 import path from "path";
+import fse from "fs-extra";
 
 // Hier wird die Directus-Instanz gestartet
 // Zum Halten des Child-Prozesses des Directus-Servers
@@ -20,6 +21,9 @@ const DB_FILENAME = dbFile;
 const SECRET = "Ihr-langer-zufälliger-geheimer-Schlüssel-für-Tests";
 const ADMIN_EMAIL = "test@example.com"
 const ADMIN_PASSWORD = "testpassword";
+const EXTENSIONS_PATH = path.join(__dirname, '..', '..', '..');
+
+const addExtensionPath = false;
 
 beforeAll(async () => {
   // 1. Umgebungsvariablen für Directus setzen
@@ -33,6 +37,7 @@ beforeAll(async () => {
     SECRET: SECRET,
     ADMIN_EMAIL: ADMIN_EMAIL,
     ADMIN_PASSWORD: ADMIN_PASSWORD,
+    ...(addExtensionPath ? {EXTENSIONS_PATH: EXTENSIONS_PATH} : {}),
   }
 
   // 2. Directus-Server in einem Child-Prozess starten
@@ -67,7 +72,7 @@ beforeAll(async () => {
   // Logs vom Directus-Server auf die Jest-Konsole umleiten
   if (directusProcess.stdout) {
     directusProcess.stdout.on('data', (data) => {
-      //console.log(`[Directus stdout]: ${data}`);
+      console.log(`[Directus stdout]: ${data}`);
     });
   }
 
@@ -142,6 +147,17 @@ afterAll(async () => {
     }
   } else {
     //console.log('Kein Directus-Serverprozess gefunden.');
+  }
+
+  try{
+    // Löscht die In-Memory-Datenbankdatei
+    if( fse.existsSync(dbFile)) {
+      //console.log('In-Memory-Datenbankdatei wird gelöscht...');
+      await fse.remove(dbFile);
+      //console.log('In-Memory-Datenbankdatei gelöscht.');
+    }
+  } catch (error: any) {
+    console.error('Fehler beim Löschen der In-Memory-Datenbankdatei:', error);
   }
 });
 

@@ -1,4 +1,4 @@
-import {StringHelper } from 'repo-depkit-common';
+import {StringHelper } from './StringHelper';
 
 export class NumberHelper {
 

@@ -1,4 +1,4 @@
-import { StringHelper } from 'repo-depkit-common/src/StringHelper';
+import { StringHelper } from './StringHelper';
 import * as DatabaseTypes from 'repo-depkit-common/src/databaseTypes/types';
 
 export type TranslationEntry = {

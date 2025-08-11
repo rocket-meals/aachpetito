@@ -159,8 +159,9 @@
 	"scripts": {
 		"typecheck": "tsc --noEmit",
 		"buildWithoutTest": "directus-extension build",
-		"build": "yarn typecheck && yarn run test && yarn run cleanTestArtifacts && yarn run buildWithoutTest",
-		"test": "jest",
+		"build": "yarn run test && yarn run cleanTestArtifacts && yarn run buildWithoutTest",
+		"test": "yarn typecheck && yarn buildWithoutTest && yarn testOnly",
+		"testOnly": "jest",
 		"cleanTestArtifacts": "rimraf ./test-artifacts",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link",
