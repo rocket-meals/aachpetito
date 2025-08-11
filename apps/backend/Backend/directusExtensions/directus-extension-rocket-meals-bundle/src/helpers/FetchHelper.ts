@@ -17,4 +17,17 @@ export class FetchHelper{
         return text;
     }
 
+    static async fetch(url: string, options?: any): Promise<Response> {
+        const response = await undici.fetch(url, {
+            dispatcher: agent,
+            ...options
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch from ${url}. HTTP status ${response.status} - Error: ${await response.text()}`);
+        }
+
+        return response;
+    }
+
 }

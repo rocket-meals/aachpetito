@@ -12,22 +12,15 @@
 	"files": [
 		"dist"
 	],
-       "jest": {
-               "testEnvironment": "jest-environment-node",
-               "extensionsToTreatAsEsm": [".ts"],
-               "moduleNameMapper": {
-                       "^(\\.{1,2}/.*)\\.js$": "$1"
-               },
-               "transform": {
-                       "^.+\\.ts$": [
-                               "ts-jest",
-                               {
-                                       "useESM": true
-                               }
-                       ]
-               },
-               "testTimeout": 20000
-       },
+	"jest": {
+		"testEnvironment": "jest-environment-node",
+		"transform": {
+			"^.+\\.ts$": [
+				"ts-jest"
+			]
+		},
+		"testTimeout": 20000
+	},
 	"directus:extension": {
 		"type": "bundle",
 		"path": {
@@ -130,16 +123,16 @@
 				"name": "push-notification-hook",
 				"source": "src/push-notification-hook/index.ts"
 			},
-                        {
-                                "type": "endpoint",
-                                "name": "redirect-with-token-endpoint",
-                                "source": "src/redirect-with-token-endpoint/index.ts"
-                        },
-                        {
-                                "type": "endpoint",
-                                "name": "proof-key-code-exchange-endpoint",
-                                "source": "src/proof-key-code-exchange-endpoint/index.ts"
-                        },
+			{
+				"type": "endpoint",
+				"name": "redirect-with-token-endpoint",
+				"source": "src/redirect-with-token-endpoint/index.ts"
+			},
+			{
+				"type": "endpoint",
+				"name": "proof-key-code-exchange-endpoint",
+				"source": "src/proof-key-code-exchange-endpoint/index.ts"
+			},
 			{
 				"type": "hook",
 				"name": "users-avatar-delete-hook",
@@ -213,15 +206,16 @@
 		"moment-timezone": "^0.5.47",
 		"ms": "^2.1.3",
 		"object-hash": "^3.0.0",
+		"openai": "^5.9.0",
 		"p-limit": "^6.1.0",
 		"p-queue": "^8.0.1",
 		"puppeteer": "^24.3.0",
 		"puppeteer-core": "^24.3.0",
 		"short-unique-id": "^5.2.2",
 		"spark-md5": "^3.0.2",
+		"sqlite3": "^5.1.7",
 		"ts-morph": "^25.0.1",
 		"undici": "5.22.1",
-		"uuid": "^11.1.0",
-		"openai": "^5.9.0"
+		"uuid": "^11.1.0"
 	}
 }

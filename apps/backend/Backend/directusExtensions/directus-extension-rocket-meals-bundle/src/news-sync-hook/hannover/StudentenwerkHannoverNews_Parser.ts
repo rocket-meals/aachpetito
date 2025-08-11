@@ -1,14 +1,11 @@
 //import axios from "axios";
-import {load as cheerioLoad, CheerioAPI} from 'cheerio';
-import type { Element as CheerioElement } from 'domhandler';
-import { TranslationHelper } from "../../helpers/TranslationHelper";
-import { NewsParserInterface, NewsTypeForParser } from "./../NewsParserInterface";
-import * as https from "node:https";
+import {CheerioAPI, load as cheerioLoad} from 'cheerio';
+import type {Element as CheerioElement} from 'domhandler';
+import {TranslationHelper} from "../../helpers/TranslationHelper";
+import {NewsParserInterface, NewsTypeForParser} from "./../NewsParserInterface";
 //import undici, {Agent} from 'undici';
 import {DatabaseTypes} from "repo-depkit-common"
-import {MyDatabaseHelper} from "../../helpers/MyDatabaseHelper";
 import {WorkflowRunLogger} from "../../workflows-runs-hook/WorkflowRunJobInterface";
-import axios from "axios";
 import {FetchHelper} from "../../helpers/FetchHelper";
 
 //const agent = new Agent({ maxHeaderSize: 32 * 1024 });
