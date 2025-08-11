@@ -16,6 +16,7 @@ import * as FileSystem from 'expo-file-system';
 import styles from "@/app/(app)/settings/styles";
 import CanteenSelectionSheet from "@/components/CanteenSelectionSheet/CanteenSelectionSheet";
 import BaseBottomSheet from "@/components/BaseBottomSheet";
+import {MapMarker} from "@/components/MyMap/model";
 
 const POSITION_BUNDESTAG = {
   lat: 52.518594247456804,
@@ -44,37 +45,37 @@ const LeafletMap = () => {
   );
   const selectedCanteen = useSelectedCanteen();
 
-  const [markerIconUri, setMarkerIconUri] = useState<string | null>(null);
-  const [markerIconLocalUri, setMarkerIconLocalUri] = useState<string | null>(null);
-  const [markerIconBase64, setMarkerIconBase64] = useState<string | null>(null);
-  const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [markerError, setMarkerError] = useState<string | null>(null);
+    const [markerIconSrc, setMarkerIconSrc] = useState<string | null>(null);
+    const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [markerError, setMarkerError] = useState<string | null>(null);
 
-  // Load marker asset asynchronously
-  useEffect(() => {
-    const loadMarkerIcon = async () => {
-      try {
-        const mapMarkerIcon = require('@/assets/map/marker-icon-2x.png');
-        const asset = await Asset.fromModule(mapMarkerIcon);
-        await asset.downloadAsync();
-        setMarkerIconLocalUri(asset.localUri || null);
-        setMarkerIconUri(asset.uri);
+    // Load marker asset asynchronously
+    useEffect(() => {
+        const loadMarkerIcon = async () => {
+            try {
+                const mapMarkerIcon = require('@/assets/map/marker-icon-2x.png');
+                const asset = await Asset.fromModule(mapMarkerIcon);
+                await asset.downloadAsync();
 
-        if(asset.localUri){
-          const content = await FileSystem.readAsStringAsync(asset.localUri, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
-          setMarkerIconBase64(content);
-        }
-      } catch (error) {
-        console.error('Error loading marker icon:', error);
-        setMarkerError(String(error));
-      }
-    };
+                if (Platform.OS === 'web') {
+                    setMarkerIconSrc(asset.uri);
+                } else if (asset.localUri) {
+                    const content = await FileSystem.readAsStringAsync(asset.localUri, {
+                        encoding: FileSystem.EncodingType.Base64,
+                    });
+                    setMarkerIconSrc(content);
+                } else {
+                    setMarkerError('marker asset missing localUri');
+                }
+            } catch (error) {
+                console.error('Error loading marker icon:', error);
+                setMarkerError(String(error));
+            }
+        };
 
-    loadMarkerIcon();
-  }, []);
+        loadMarkerIcon();
+    }, []);
 
   const selectedCanteenPosition = useMemo(() => {
     if (selectedCanteen?.building) {
@@ -89,64 +90,53 @@ const LeafletMap = () => {
 
   const centerPosition = selectedCanteenPosition || POSITION_BUNDESTAG;
 
-  if (!markerIconUri && !markerError) {
-    // Optional: Add a loading spinner or placeholder here
-    return null;
-  }
-
-  const markers = [
-    {
-      id: 'img-marker', // Wird in Web/iOS/Android KORREKT angezeigt
-      position: getMarkerPosition(1),
-      icon: MyMapMarkerIcons.getIconForWebByExternalUri(EXTERNAL_MARKER_URL),
-      size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
-      iconAnchor: getDefaultIconAnchor(
-        MARKER_DEFAULT_SIZE,
-        MARKER_DEFAULT_SIZE,
-      ),
-    },
-    { // Zeigt in Expo/React Native einen Bus einfach an, aber nicht das Base64-Bild
-      id: 'img-marker-base64',
-      position: getMarkerPosition(2),
-      icon: MyMapMarkerIcons.getIconForWebByBase64(LOCAL_BASE64_MARKER),
-      size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
-      iconAnchor: getDefaultIconAnchor(
-        MARKER_DEFAULT_SIZE,
-        MARKER_DEFAULT_SIZE,
-      ),
-    },
-  ];
-
-    if (markerIconUri) {
-        markers.push({
-        id: 'img-marker-local',
-        position: getMarkerPosition(3),
-        icon: MyMapMarkerIcons.getIconForWebByLocalPathUri(markerIconUri),
-        size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
-        iconAnchor: getDefaultIconAnchor(
-            MARKER_DEFAULT_SIZE,
-            MARKER_DEFAULT_SIZE,
-        ),
-        });
+    if (!markerIconSrc && !markerError) {
+        // Optional: Add a loading spinner or placeholder here
+        return null;
     }
 
-    if( markerIconLocalUri) {
-        markers.push({
-        id: 'img-marker-local-uri',
-        position: getMarkerPosition(4),
-        icon: markerIconLocalUri,
-        size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
-        iconAnchor: getDefaultIconAnchor(
-            MARKER_DEFAULT_SIZE,
-            MARKER_DEFAULT_SIZE,
-        ),
-        });
-    }
+    const markers: MapMarker[] = [
+        ...(markerIconSrc
+            ? [
+                {
+                    id: 'example',
+                    position: getMarkerPosition(1),
+                    icon:MyMapMarkerIcons.getIconForWebByLocalPathUri(markerIconSrc),
+                    size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
+                    iconAnchor: getDefaultIconAnchor(
+                        MARKER_DEFAULT_SIZE,
+                        MARKER_DEFAULT_SIZE,
+                    ),
+                },
+            ]
+            : []),
+        {
+            id: 'img-marker',
+            position: getMarkerPosition(2),
+            icon: MyMapMarkerIcons.getIconForWebByExternalUri(EXTERNAL_MARKER_URL),
+            size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
+            iconAnchor: getDefaultIconAnchor(
+                MARKER_DEFAULT_SIZE,
+                MARKER_DEFAULT_SIZE,
+            ),
+        },
+        {
+            id: 'img-marker-base64',
+            position: getMarkerPosition(3),
+            icon: MyMapMarkerIcons.getIconForWebByBase64(LOCAL_BASE64_MARKER),
+            size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
+            iconAnchor: getDefaultIconAnchor(
+                MARKER_DEFAULT_SIZE,
+                MARKER_DEFAULT_SIZE,
+            ),
+        },
+    ];
 
   const handleMarkerClick = (id: string) => {
     console.log('marker clicked', id);
     setSelectedMarkerId(id);
   };
+
 
   const handleSelectionChange = (id: string | null) => {
     setModalVisible(id !== null);
@@ -179,7 +169,7 @@ const LeafletMap = () => {
           Selected: {selectedMarkerId ?? 'none'} Visible: {String(modalVisible)}
         </Text>
         <MyMap
-          mapCenterPosition={selectedCanteenPosition}
+          mapCenterPosition={centerPosition}
           mapMarkers={markers}
           onMarkerClick={handleMarkerClick}
           onMapEvent={(e) => console.log('map event', e.tag)}
