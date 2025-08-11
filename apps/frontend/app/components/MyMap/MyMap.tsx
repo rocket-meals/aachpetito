@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import { WebView, WebViewMessageEvent } from 'react-native-webview';
-import styles from './styles';
-import { useTheme } from '@/hooks/useTheme';
-import type { MapMarker, LeafletWebViewEvent } from './model';
-import { LeafletView, LatLng, MapMarker as LeafletViewMapMarkers } from 'react-native-leaflet-view';
+import {useTheme} from '@/hooks/useTheme';
+import type {MapMarker} from './model';
+import {LatLng, LeafletView, MapMarker as LeafletViewMapMarkers} from 'react-native-leaflet-view';
 import useSetPageTitle from "@/hooks/useSetPageTitle";
 import {TranslationKeys} from "@/locales/keys";
 import {Asset} from "expo-asset";

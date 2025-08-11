@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
-import styles from './styles';
+import {StyleSheet, View} from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import DEFAULT_TILE_LAYER from './defaultTileLayer';
 import type { MapMarker, LeafletWebViewEvent } from './model';
@@ -86,3 +85,15 @@ const MyMap: React.FC<MyMapProps> = ({
 };
 
 export default MyMap;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  webview: {
+    flex: 1,
+    width: '100%',
+  },
+});
