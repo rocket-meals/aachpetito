@@ -739,7 +739,6 @@ export default function Layout() {
             title: translate(TranslationKeys.experimentell),
           }}
         />
-
         <Drawer.Screen
           name='leaflet-map/index'
           options={{
@@ -752,20 +751,6 @@ export default function Layout() {
             title: translate(TranslationKeys.leaflet_map),
           }}
         />
-
-        <Drawer.Screen
-          name='leaflet-test/index'
-          options={{
-            header: () => (
-              <CustomStackHeader
-                label={translate(TranslationKeys.leaflet_test)}
-                key={'LeafletTest'}
-              />
-            ),
-            title: translate(TranslationKeys.leaflet_test),
-          }}
-        />
-
         <Drawer.Screen
           name='vertical-image-scroll/index'
           options={{

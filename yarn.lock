@@ -15784,6 +15784,11 @@ react-native-is-edge-to-edge@^1.1.6:
   resolved "https://registry.yarnpkg.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.2.1.tgz#64e10851abd9d176cbf2b40562f751622bde3358"
   integrity sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==
 
+react-native-leaflet-view@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-leaflet-view/-/react-native-leaflet-view-1.1.2.tgz#636f10b70f12c4d73fd63ff589e517815b9632da"
+  integrity sha512-uZetk1IIUC3UZBiMjHaXFJLXiUSX+9hXCRstJrds0K+gB4SNoJ7T1p+yZgZTX3HoOombSy1Zvz+6JOzE0dhp1Q==
+
 react-native-modal@^13.0.1:
   version "13.0.2"
   resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-13.0.2.tgz#4e4d777fdb0f5af5a50003a53eebc4de9ead5695"

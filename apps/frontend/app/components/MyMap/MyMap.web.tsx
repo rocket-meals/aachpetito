@@ -5,24 +5,7 @@ import { useTheme } from '@/hooks/useTheme';
 import DEFAULT_TILE_LAYER from './defaultTileLayer';
 import type { MapMarker, LeafletWebViewEvent } from './model';
 import BaseModal from '@/components/BaseModal';
-
-export interface Position {
-  lat: number;
-  lng: number;
-}
-
-export interface MyMapProps {
-  mapCenterPosition: Position;
-  zoom?: number;
-  mapMarkers?: MapMarker[];
-  onMarkerClick?: (id: string) => void;
-  onMapEvent?: (event: LeafletWebViewEvent) => void;
-  renderMarkerModal?: (
-    markerId: string,
-    onClose: () => void
-  ) => React.ReactNode;
-  onMarkerSelectionChange?: (markerId: string | null) => void;
-}
+import {MyMapProps} from "@/components/MyMap/MyMapHelper";
 
 const MyMap: React.FC<MyMapProps> = ({
   mapCenterPosition,

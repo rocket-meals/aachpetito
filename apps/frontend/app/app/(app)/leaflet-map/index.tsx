@@ -97,10 +97,7 @@ const LeafletMap = () => {
           {
             id: 'example',
             position: POSITION_BUNDESTAG,
-            icon:
-              Platform.OS === 'web'
-                ? MyMapMarkerIcons.getIconForWebByUri(markerIconSrc)
-                : MyMapMarkerIcons.getIconForWebByBase64(markerIconSrc),
+            icon:MyMapMarkerIcons.getIconForWebByLocalPathUri(markerIconSrc),
             size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
             iconAnchor: getDefaultIconAnchor(
               MARKER_DEFAULT_SIZE,
@@ -112,7 +109,7 @@ const LeafletMap = () => {
     {
       id: 'img-marker',
       position: POSITION_IMG_MARKER,
-      icon: MyMapMarkerIcons.getIconForWebByUri(EXTERNAL_MARKER_URL),
+      icon: MyMapMarkerIcons.getIconForWebByExternalUri(EXTERNAL_MARKER_URL),
       size: [MARKER_DEFAULT_SIZE, MARKER_DEFAULT_SIZE],
       iconAnchor: getDefaultIconAnchor(
         MARKER_DEFAULT_SIZE,
