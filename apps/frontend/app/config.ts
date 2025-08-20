@@ -13,11 +13,11 @@ export type CustomerConfig = {
 };
 
 export function getVersion() {
-    return "20.0.25";
+    return "20.0.26";
 }
 
 export function getBuildNumber() {
-    return 155;
+    return 156;
 }
 
 export function getIosBuildNumber() {
