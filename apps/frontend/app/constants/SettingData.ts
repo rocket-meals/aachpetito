@@ -1,3 +1,11 @@
+import flagUs from '@/assets/images/flags/us.svg';
+import flagTr from '@/assets/images/flags/tr.svg';
+import flagEs from '@/assets/images/flags/es.svg';
+import flagFr from '@/assets/images/flags/fr.svg';
+import flagDe from '@/assets/images/flags/de.svg';
+import flagCn from '@/assets/images/flags/cn.svg';
+import flagAr from '@/assets/images/flags/ar.svg';
+import flagRu from '@/assets/images/flags/ru.svg';
 
 
 // Themes
