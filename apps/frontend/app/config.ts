@@ -13,7 +13,7 @@ export type CustomerConfig = {
 };
 
 export function getBuildNumber() {
-    return 158;
+    return 159;
 }
 
 export function getVersionPatch(){

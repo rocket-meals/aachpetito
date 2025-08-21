@@ -10,7 +10,7 @@
       "android": {
         "buildType": "apk"
       },
-      "channel": "production",
+      "channel": "preview",
       "node": "22.16.0"
     },
     "preview2": {
