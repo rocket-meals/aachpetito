@@ -8,11 +8,16 @@ on:
       - 'packages/common/**'
       - '.github/workflows/**'
       - 'package.json'
+  workflow_run:
+    workflows: ["🔧 Auto-Linter"]
+    types:
+      - completed
 
 jobs:
   deploy-gh-pages:
     name: 🌍 Deploy to GitHub Pages
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || (github.event.workflow_run.conclusion == 'success') }}
 
     steps:
       - name: 🔄 Checkout Repository
