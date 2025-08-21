@@ -12,12 +12,16 @@ export type CustomerConfig = {
     server_url: string;
 };
 
-export function getVersion() {
-    return "20.0.27";
+export function getBuildNumber() {
+    return 158;
 }
 
-export function getBuildNumber() {
-    return 157;
+export function getVersionPatch(){
+    return 0;
+}
+
+export function getVersion() {
+    return "20."+getBuildNumber()+"."+getVersionPatch();
 }
 
 export function getIosBuildNumber() {
@@ -177,6 +181,10 @@ export function getFinalConfig(config?: any){
                     "backgroundColor": "#ffffff"
                 },
                 "package": customerConfig.bundleIdAndroid,
+                "blockedPermissions": [
+                    "android.permission.READ_MEDIA_IMAGES",
+                    "android.permission.READ_MEDIA_VIDEO"
+                ],
                 "versionCode": getBuildNumber()
             },
             "web": {
