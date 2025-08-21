@@ -37,9 +37,7 @@
     "readonly": false,
     "required": false,
     "sort": 1,
-    "special": [
-      "cast-json"
-    ],
+    "special": ["cast-json"],
     "translations": [
       {
         "language": "de-DE",

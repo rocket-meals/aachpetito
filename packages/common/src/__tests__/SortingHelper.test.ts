@@ -83,12 +83,8 @@ describe('SortingHelper', () => {
   });
 
   test('sortBySortField sorts numerically and keeps missing at end', () => {
-    const items = [
-      { id: 'a', sort: 3 },
-      { id: 'b', sort: 1 },
-      { id: 'c' },
-    ];
+    const items = [{ id: 'a', sort: 3 }, { id: 'b', sort: 1 }, { id: 'c' }];
     const sorted = sortBySortField(items);
-    expect(sorted.map((i) => i.id)).toEqual(['b', 'a', 'c']);
+    expect(sorted.map(i => i.id)).toEqual(['b', 'a', 'c']);
   });
 });

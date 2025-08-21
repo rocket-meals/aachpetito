@@ -25,9 +25,7 @@
     "readonly": false,
     "required": false,
     "sort": 22,
-    "special": [
-      "m2m"
-    ],
+    "special": ["m2m"],
     "translations": null,
     "validation": null,
     "validation_message": null,

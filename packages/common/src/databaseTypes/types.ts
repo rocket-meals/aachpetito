@@ -319,13 +319,19 @@ export type CanteenFoodFeedbackReportSchedules = {
 };
 
 export type CanteenFoodFeedbackReportSchedulesCanteens = {
-  canteen_food_feedback_report_schedules_id?: string | CanteenFoodFeedbackReportSchedules | null;
+  canteen_food_feedback_report_schedules_id?:
+    | string
+    | CanteenFoodFeedbackReportSchedules
+    | null;
   canteens_id?: string | Canteens | null;
   id: number;
 };
 
 export type CanteenFoodFeedbackReportSchedulesReportRecipients = {
-  canteen_food_feedback_report_schedules_id?: string | CanteenFoodFeedbackReportSchedules | null;
+  canteen_food_feedback_report_schedules_id?:
+    | string
+    | CanteenFoodFeedbackReportSchedules
+    | null;
   id: number;
   report_recipients_id?: string | ReportRecipients | null;
 };
