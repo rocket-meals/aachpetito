@@ -8,10 +8,15 @@ on:
       - 'apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/**'
       - '.github/workflows/**'
       - 'package.json'
+  workflow_run:
+    workflows: ["🔧 Auto-Linter"]
+    types:
+      - completed
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || (github.event.workflow_run.conclusion == 'success') }}
     steps:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
