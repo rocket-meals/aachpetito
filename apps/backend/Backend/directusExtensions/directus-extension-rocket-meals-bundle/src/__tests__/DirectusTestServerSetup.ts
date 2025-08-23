@@ -147,11 +147,21 @@ export class DirectusTestServerSetup {
       try {
         if (this.directusProcess.pid) {
           // Send SIGTERM to the process group to ensure all child processes are terminated
-          process.kill(-this.directusProcess.pid);
+          process.kill(-this.directusProcess.pid, 'SIGTERM');
           this.log('Directus server process stopped.');
+          
+          // Wait a moment for graceful shutdown
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Force kill if still running
+          if (!this.directusProcess.killed) {
+            process.kill(-this.directusProcess.pid, 'SIGKILL');
+            this.log('Directus server process force-killed.');
+          }
         }
-      } catch (error) {
-        this.log(`Error stopping server process: ${error}`);
+      } catch (error: any) {
+        this.log(`Error stopping server process: ${error.message}`);
+        // Continue with cleanup even if process termination fails
       }
       this.directusProcess = null;
     }
