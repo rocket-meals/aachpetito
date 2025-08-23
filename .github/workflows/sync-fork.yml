@@ -2,7 +2,6 @@ name: 🔄 Fork Synchronization
 
 permissions:
   contents: write
-  workflows: write
 
 on:
   # Run hourly
