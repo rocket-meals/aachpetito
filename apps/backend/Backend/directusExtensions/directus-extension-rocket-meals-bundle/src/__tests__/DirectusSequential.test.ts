@@ -6,18 +6,19 @@ import { DirectusTestServerSetup } from '../helpers/DirectusTestServerSetup';
 
 describe('Directus server sequential tests', () => {
   it('sets up server and performs user operations', async () => {
-    const serverSetup = new DirectusTestServerSetup({ enableExtensions: false });
-    await serverSetup.setup();
+    const freshServer = new DirectusTestServerSetup({ enableExtensions: false });
+
+    // isReady should return false for a fresh server that hasn't started
+    const notReady = await freshServer.isReady();
+    expect(notReady).toBe(false);
+
+    await freshServer.setup();
+    const serverSetup = freshServer; // after setup, server should be ready
 
     try {
       // isReady should return true when server is started
       const ready = await serverSetup.isReady();
       expect(ready).toBe(true);
-
-      // isReady should return false for a fresh server that hasn't started
-      const freshServer = new DirectusTestServerSetup();
-      const notReady = await freshServer.isReady();
-      expect(notReady).toBe(false);
 
       // Use Directus SDK to login and read users
       const directusUrl = serverSetup.getDirectusUrl();
