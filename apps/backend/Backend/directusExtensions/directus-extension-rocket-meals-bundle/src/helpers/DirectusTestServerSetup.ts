@@ -113,6 +113,8 @@ export class DirectusTestServerSetup {
       const response = await FetchHelper.fetch(`${this.directusUrl}/server/ping`);
       return response.ok;
     } catch (error) {
+      console.log("Error checking server readiness:");
+        console.log(error);
       return false;
     }
   }
@@ -141,6 +143,8 @@ export class DirectusTestServerSetup {
       this.log('Directus test server setup completed successfully!');
     } catch (error) {
       // Clean up in case of errors
+      console.log("Directus test server setup failed:");
+      console.log(error);
       await this.teardown();
       throw error;
     }
