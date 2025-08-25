@@ -75,9 +75,8 @@ export class DirectusTestServerSetup {
       startupCheckDelay: options.startupCheckDelay ?? 1000,
       debug: options.debug ?? true,
     };
-
-    const clientHost = this.options.host === '0.0.0.0' ? '127.0.0.1' : this.options.host;
-    this.directusUrl = `http://${clientHost}:${this.options.port}`;
+    
+    this.directusUrl = `http://${this.options.host}:${this.options.port}`;
   }
 
   /**
