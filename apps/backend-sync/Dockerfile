@@ -36,4 +36,4 @@ COPY . .
 WORKDIR /app/apps/backend-sync
 
 # Start the application directly with tsx
-CMD ["yarn", "start"]
+CMD ["yarn", "start:push"]

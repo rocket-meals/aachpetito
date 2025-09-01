@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "tsx src/index.ts"
+    "start:push": "tsx src/index.ts push",
+    "start:pull": "tsx src/index.ts pull"
   },
   "author": "",
   "license": "ISC",
