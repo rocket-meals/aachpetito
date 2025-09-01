@@ -44,8 +44,3 @@ runs:
     - name: 📦 Install dependencies
       run: yarn install --immutable
       shell: bash
-
-    - name: 📦 Install dependencies
-      run: yarn install --immutable
-      shell: bash
-      working-directory: ./apps/frontend/app
