@@ -146,17 +146,11 @@ const AccountBalanceScreen = () => {
 				try {
 					const nfcAvailable = await myCardReader.isNfcSupported();
 					setIsNfcSupported(nfcAvailable.result);
-
-					if (!nfcAvailable.result && nfcAvailable.error) {
-						addDebugError(nfcAvailable.error, 'NFC Support Check');
-					}
+					addDebugError(JSON.stringify(nfcAvailable, null, 2), 'NFC Supported Check');
 
 					const nfcEnabled = await myCardReader.isNfcEnabled();
 					setIsNfcEnabled(nfcEnabled.result);
-
-					if (!nfcEnabled.result && nfcEnabled.error) {
-						addDebugError(nfcEnabled.error, 'NFC Enabled Check');
-					}
+					addDebugError(JSON.stringify(nfcEnabled, null, 2), 'NFC Enabled Check');
 				} catch (error) {
 					console.error('Error checking NFC status:', error);
 					addDebugError(error, 'NFC Status Check');
