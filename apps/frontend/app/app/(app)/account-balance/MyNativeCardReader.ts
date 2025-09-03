@@ -6,15 +6,23 @@ import CardReader from '@/helper/nfcCardReaderHelper/CardReader';
 
 const isExpoGo = isRunningInExpoGo();
 
-let NfcManager: any;
-let NfcTech: any;
+class NfcManagerClass {
+	public static NfcManager: any;
+	public static NfcTech: any;
+}
 
-if (!isExpoGo) {
-	// Expo Go does not have this module boundled by default, therefore we need to lazy load it to prevent errors
-	import('react-native-nfc-manager').then(nfcManager => {
-		NfcManager = nfcManager.default;
-		NfcTech = nfcManager.NfcTech;
-	});
+// Loader-Funktion (wird nur einmal wirklich importieren)
+async function loadNfc() {
+	if (isExpoGo) return null;
+	if (!NfcManagerClass.NfcManager || !NfcManagerClass.NfcTech) {
+		const nfcManager = await import('react-native-nfc-manager');
+		NfcManagerClass.NfcManager = nfcManager.default;
+		NfcManagerClass.NfcTech = nfcManager.NfcTech;
+	}
+	return {
+		NfcManager: NfcManagerClass.NfcManager,
+		NfcTech: NfcManagerClass.NfcTech,
+	};
 }
 
 export default class MyNativeCardReader implements MyCardReaderInterface {
@@ -23,10 +31,12 @@ export default class MyNativeCardReader implements MyCardReaderInterface {
 			if(isExpoGo){
 				return {result: false, message: 'NFC is not supported in Expo Go'};
 			}
-			if(!NfcManager){
+
+			const nfc = await loadNfc();
+			if(!nfc?.NfcManager){
 				return {result: false, message: 'NFC Manager is not available'};
 			}
-			let isEnabled = await NfcManager.isEnabled();
+			let isEnabled = await nfc.NfcManager.isEnabled();
 			return {result: isEnabled};
 		} catch(e: any){
 			return {result: false, message: 'Error checking NFC status', error: e};
@@ -38,10 +48,11 @@ export default class MyNativeCardReader implements MyCardReaderInterface {
 			if(isExpoGo){
 				return {result: false, message: 'NFC is not supported in Expo Go'};
 			}
-			if(!NfcManager){
+			const nfc = await loadNfc();
+			if(!nfc?.NfcManager){
 				return {result: false, message: 'NFC Manager is not available'};
 			}
-			let isSupported = await NfcManager.isSupported();
+			let isSupported = await nfc.NfcManager.isSupported();
 			return {result: isSupported};
 		} catch (e: any){
 			return {result: false, message: 'Error checking NFC support', error: e};
@@ -49,17 +60,23 @@ export default class MyNativeCardReader implements MyCardReaderInterface {
 	}
 
 	async readCard(callBack: (answer: CardResponse | undefined) => Promise<void>, showInstruction: () => void, hideInstruction: () => void, nfcInstruction: string): Promise<void> {
-		if (isExpoGo || !NfcManager) {
+		if (isExpoGo) {
 			console.error('NFC operations are not supported in this environment.');
 			return;
 		}
+		const nfc = await loadNfc();
+		if (!nfc?.NfcManager || !nfc?.NfcTech) {
+			console.error('NFC Manager or Tech is not available.');
+			return;
+		}
+
 
 		if (Platform.OS === 'android') {
 			// only show instruction on android since ios has a built in instruction
 			showInstruction();
 		}
 
-		let reader = new CardReader(NfcManager, NfcTech, Platform);
+		let reader = new CardReader(nfc.NfcManager, nfc.NfcTech, Platform);
 		try {
 			console.log('DEBUG: start reading card');
 			let newAnswer = await reader.readCard(nfcInstruction);
