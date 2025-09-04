@@ -4,6 +4,7 @@ import * as Updates from 'expo-updates';
 import usePlatformHelper from '@/helper/platformHelper';
 import { TranslationKeys } from '@/locales/keys';
 import { useLanguage } from '@/hooks/useLanguage';
+import {isInExpoGo} from "@/helper/DeviceRuntimeHelper";
 
 interface ExpoUpdateLoaderProps {
 	children?: React.ReactNode;
@@ -21,7 +22,7 @@ const ExpoUpdateLoader: React.FC<ExpoUpdateLoaderProps> = ({ children }) => {
 
 	useEffect(() => {
 		async function loadUpdates() {
-			if (!isSmartPhone()) {
+			if (!isSmartPhone() || isInExpoGo()) {
 				setLoading(false);
 				return;
 			}

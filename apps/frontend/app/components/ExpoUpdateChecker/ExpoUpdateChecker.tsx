@@ -11,6 +11,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/reducer';
 import { myContrastColor } from '@/helper/colorHelper';
+import {isInExpoGo} from "@/helper/DeviceRuntimeHelper";
 
 interface ExpoUpdateCheckerProps {
 	children?: ReactNode;
@@ -38,6 +39,7 @@ const ExpoUpdateChecker: React.FC<ExpoUpdateCheckerProps> = ({ children }) => {
 
 	const checkForUpdates = async (showUpToDate = false) => {
 		if (!isSmartPhone()) return;
+		if(isInExpoGo()) return;
 		try {
 			const update = await Updates.checkForUpdateAsync();
 			if (update.isAvailable) {
