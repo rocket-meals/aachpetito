@@ -1,0 +1,23 @@
+{
+  "name": "sonarCloudReportDownloader",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "debug": "yarn run start"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^22.5.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "tsx": "^4.7.0",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "repo-depkit-common": "workspace:*",
+    "yargs": "^17.7.2"
+  }
+}

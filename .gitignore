@@ -52,3 +52,5 @@ apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/t
 # Cache & State
 .yarn/install-state.gz
 .pnp.*
+
+apps/sonarCloudReportDownloader/reports/

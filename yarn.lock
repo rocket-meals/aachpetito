@@ -23387,6 +23387,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sonarCloudReportDownloader@workspace:apps/sonarCloudReportDownloader":
+  version: 0.0.0-use.local
+  resolution: "sonarCloudReportDownloader@workspace:apps/sonarCloudReportDownloader"
+  dependencies:
+    "@types/jest": "npm:^29.5.12"
+    "@types/node": "npm:^22.5.0"
+    jest: "npm:^29.7.0"
+    repo-depkit-common: "workspace:*"
+    ts-jest: "npm:^29.2.5"
+    tsx: "npm:^4.7.0"
+    typescript: "npm:^5.5.4"
+    yargs: "npm:^17.7.2"
+  languageName: unknown
+  linkType: soft
+
 "sonic-boom@npm:^2.2.0":
   version: 2.8.0
   resolution: "sonic-boom@npm:2.8.0"
