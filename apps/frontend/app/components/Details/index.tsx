@@ -130,7 +130,7 @@ const Details: React.FC<DetailsProps> = ({ groupedAttributes, loading }) => {
 																		resizeMode: 'contain',
 																	},
 																	image?.uri && {
-																		backgroundColor: background_color && background_color,
+																		backgroundColor: background_color,
 																		borderRadius: background_color ? 8 : 0,
 																	},
 																]}

@@ -36,7 +36,7 @@ export const useFoodCard = (borderWidth: number = 0) => {
 
 	const contentStyle: ViewStyle = {
 		gap: isWeb ? 15 : 5,
-		paddingHorizontal: isWeb ? (screenWidth > 550 ? 5 : screenWidth > 360 ? 5 : 5) : 5,
+		paddingHorizontal: 5,
 	};
 
 	return { screenWidth, containerStyle, imageContainerStyle, contentStyle };

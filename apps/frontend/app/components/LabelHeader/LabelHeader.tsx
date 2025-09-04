@@ -13,8 +13,8 @@ const LabelHeader: React.FC<{ Label: any; isConnected?: Boolean }> = ({ Label, i
 	const { appSettings } = useSelector((state: RootState) => state.settings);
 	const updateLogoStyle = useCallback(() => {
 		setLogoStyle({
-			width: width < 600 ? 150 : width > 600 ? 300 : 300,
-			height: width < 600 ? 75 : width > 600 ? 75 : 75,
+			width: width < 600 ? 150 : 300,
+			height: 75,
 			marginRight: width > 600 ? 20 : 10,
 		});
 	}, [width]);

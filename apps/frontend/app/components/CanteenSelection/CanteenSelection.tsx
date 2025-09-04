@@ -37,7 +37,7 @@ const CanteenSelection: React.FC<CanteenSelectionProps> = ({ onSelectCanteen }) 
 		<View
 			style={{
 				...styles.canteensContainer,
-				width: isWeb ? '100%' : '100%',
+				width: '100%',
 				gap: isWeb ? (screenWidth < 500 ? 10 : 20) : 5,
 				marginTop: isWeb ? 40 : 20,
 			}}

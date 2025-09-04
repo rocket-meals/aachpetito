@@ -122,7 +122,7 @@ const Details = () => {
 					<View
 						style={{
 							...styles.bulidingContainer,
-							width: screenWidth > 1000 ? '80%' : screenWidth > 900 ? '100%' : '100%',
+							width: screenWidth > 1000 ? '80%' : '100%',
 							flexDirection: 'column',
 						}}
 					>
