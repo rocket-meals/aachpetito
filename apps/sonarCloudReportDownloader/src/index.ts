@@ -120,13 +120,14 @@ async function generateReport(
 
 async function main() {
   const { token, project, qualities, "output-dir": outputDir } = argv;
+  const resolvedOutputDir = path.resolve(outputDir);
 
   console.log(`Generating reports for project ${project}...`);
   console.log(`Impact Software Qualities: ${qualities.join(", ")}`);
-  console.log(`Output directory: ${outputDir}`);
+  console.log(`Output directory: ${resolvedOutputDir}`);
 
   for (const quality of qualities) {
-    await generateReport(token, project, quality, outputDir);
+    await generateReport(token, project, quality, resolvedOutputDir);
   }
 
   console.log("All reports generated successfully ✅");

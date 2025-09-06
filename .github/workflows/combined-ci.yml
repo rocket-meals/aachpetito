@@ -78,16 +78,23 @@ jobs:
       - name: 📥 Download SonarCloud reports
         run: |
           SONAR_PROJECT=$(grep -E '^sonar.projectKey' sonar-project.properties | cut -d= -f2)
-          yarn workspace sonarCloudReportDownloader start --token "$SONAR_TOKEN" --project "$SONAR_PROJECT" --output-dir apps/sonarCloudReportDownloader/reports
+          OUTPUT_DIR=apps/sonarCloudReportDownloader/reports
+          echo "Saving SonarCloud reports to $OUTPUT_DIR"
+          yarn workspace sonarCloudReportDownloader start --token "$SONAR_TOKEN" --project "$SONAR_PROJECT" --output-dir "$OUTPUT_DIR"
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: 💾 Commit reports
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add -f apps/sonarCloudReportDownloader/reports
-          git commit -m "chore: update sonarcloud reports" || echo "No changes to commit"
-          git push
+          if [ -d apps/sonarCloudReportDownloader/reports ]; then
+            echo "Committing reports from apps/sonarCloudReportDownloader/reports"
+            git add -f apps/sonarCloudReportDownloader/reports
+            git commit -m "chore: update sonarcloud reports" || echo "No changes to commit"
+            git push
+          else
+            echo "No reports generated at apps/sonarCloudReportDownloader/reports, skipping commit"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
