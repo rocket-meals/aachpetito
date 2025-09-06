@@ -180,7 +180,7 @@ services:
 
   rocket-meals-database-sync:
     build:
-      context: ./../../  # Build from project root for monorepo access
+      context: ./../../ # Build from project root for monorepo access
       dockerfile: apps/backend-sync/Dockerfile
     environment:
       # Directus Admin user

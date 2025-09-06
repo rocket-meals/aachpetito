@@ -12,7 +12,7 @@ import { DatabaseTypes } from 'repo-depkit-common';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
 class NewsParseWorkflow extends SingleWorkflowRun {
-  private newsParserInterface: NewsParserInterface;
+  private readonly newsParserInterface: NewsParserInterface;
 
   constructor(newsParserInterface: NewsParserInterface) {
     super();

@@ -18,8 +18,8 @@ import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { DatabaseTypes } from 'repo-depkit-common';
 import { RootState } from '@/redux/reducer';
 import { myContrastColor } from '@/helper/colorHelper';
-import {PriceGroupKey} from "@/app/(app)/settings/types";
-import {UserHelper} from "@/helper/UserHelper";
+import { PriceGroupKey } from '@/app/(app)/settings/types';
+import { UserHelper } from '@/helper/UserHelper';
 
 const Index = () => {
 	useSetPageTitle(TranslationKeys.price_group);

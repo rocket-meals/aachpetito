@@ -1,8 +1,8 @@
 export class TimerHelper {
-  private name: string;
-  private total_count: number;
+  private readonly name: string;
+  private readonly total_count: number;
   private current_count: number;
-  private print_every_x_count: number;
+  private readonly print_every_x_count: number;
   private startTime: number;
   private lastTime: number | undefined;
 

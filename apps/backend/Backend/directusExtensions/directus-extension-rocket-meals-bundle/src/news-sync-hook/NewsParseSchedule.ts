@@ -10,10 +10,10 @@ import { HashHelper } from '../helpers/HashHelper';
 
 export class NewsParseSchedule {
   //TODO stringfiy and cache results to reduce dublicate removing from foodOffers and Meals ...
-  private parser: NewsParserInterface;
-  private myDatabaseHelper: MyDatabaseHelper;
-  private logger: WorkflowRunLogger;
-  private workflowRun: DatabaseTypes.WorkflowsRuns;
+  private readonly parser: NewsParserInterface;
+  private readonly myDatabaseHelper: MyDatabaseHelper;
+  private readonly logger: WorkflowRunLogger;
+  private readonly workflowRun: DatabaseTypes.WorkflowsRuns;
 
   constructor(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger, parser: NewsParserInterface) {
     this.workflowRun = workflowRun;

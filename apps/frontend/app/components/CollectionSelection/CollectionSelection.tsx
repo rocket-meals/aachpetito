@@ -57,7 +57,7 @@ const CollectionSelection = ({ id, value, onChange, error, isDisabled, loading, 
 										{item?.alias ? item?.alias : '-'}
 									</Text>
 
-									<MaterialCommunityIcons name={isSelected ? 'checkbox-marked' : 'checkbox-blank'} size={24} color='#ffffff' style={styles.radioButton} />
+									<MaterialCommunityIcons name={isSelected ? 'checkbox-marked' : 'checkbox-blank'} size={24} color="#ffffff" style={styles.radioButton} />
 								</TouchableOpacity>
 							);
 						})}

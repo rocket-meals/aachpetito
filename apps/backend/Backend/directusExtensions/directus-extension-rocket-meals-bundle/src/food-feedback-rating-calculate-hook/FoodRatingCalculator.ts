@@ -6,7 +6,7 @@ export class FoodRatingCalculator {
   static MAX_RATING_VALUE = 5;
   static MIN_RATING_VALUE = 1;
 
-  private myDatabaseHelper: MyDatabaseHelper;
+  private readonly myDatabaseHelper: MyDatabaseHelper;
 
   constructor(apiContext: ApiContext) {
     this.myDatabaseHelper = new MyDatabaseHelper(apiContext);

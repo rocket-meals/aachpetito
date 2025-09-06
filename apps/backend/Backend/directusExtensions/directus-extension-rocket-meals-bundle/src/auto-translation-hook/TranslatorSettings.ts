@@ -3,9 +3,9 @@ import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { AutoTranslationSettingsHelper } from '../helpers/itemServiceHelpers/AutoTranslationSettingsHelper';
 
 export class TranslatorSettings {
-  private apiKey: undefined | string | null;
-  private translationSettingsService: AutoTranslationSettingsHelper;
-  private myDatabaseHelper: MyDatabaseHelper;
+  private readonly apiKey: undefined | string | null;
+  private readonly translationSettingsService: AutoTranslationSettingsHelper;
+  private readonly myDatabaseHelper: MyDatabaseHelper;
 
   constructor(myDatabaseHelper: MyDatabaseHelper) {
     this.myDatabaseHelper = myDatabaseHelper;

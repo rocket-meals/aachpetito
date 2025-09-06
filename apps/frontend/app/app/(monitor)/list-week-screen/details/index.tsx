@@ -22,7 +22,7 @@ import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { RootState } from '@/redux/reducer';
 import { sortMarkingsByGroup } from 'repo-depkit-common';
-import {PriceGroupKey} from "@/app/(app)/settings/types";
+import { PriceGroupKey } from '@/app/(app)/settings/types';
 
 const fontSize = 10;
 

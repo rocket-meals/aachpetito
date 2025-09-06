@@ -76,7 +76,7 @@ const Index = () => {
 	);
 
 	const handleSearchFilter = () => {
-			loadFormSubmissions(1, false);
+		loadFormSubmissions(1, false);
 	};
 
 	useFocusEffect(

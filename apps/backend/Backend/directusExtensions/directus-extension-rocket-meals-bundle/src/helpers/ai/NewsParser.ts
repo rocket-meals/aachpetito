@@ -9,7 +9,7 @@ export type NewsItem = {
 };
 
 export class NewsParser extends OpenAIChat {
-  constructor(private url: string) {
+  constructor(private readonly url: string) {
     super();
   }
 

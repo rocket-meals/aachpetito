@@ -8,25 +8,17 @@ const originalConsoleWarn = console.warn;
 const originalConsoleError = console.error;
 
 // Override console.warn to filter specific warnings
-console.warn = (message) => {
-  if (
-    typeof message === "string" &&
-    (message.includes("puppeteer-core") || message.includes("yargs")) &&
-    message.includes("The 'this' keyword is equivalent to 'undefined' at the top level of an ES module")
-  ) {
+console.warn = message => {
+  if (typeof message === 'string' && (message.includes('puppeteer-core') || message.includes('yargs')) && message.includes("The 'this' keyword is equivalent to 'undefined' at the top level of an ES module")) {
     return; // Suppress Puppeteer & Yargs 'this' warnings
   }
-  
+
   originalConsoleWarn(message); // Log other warnings normally
 };
 
 // Override console.error to filter specific errors (if needed)
-console.error = (message) => {
-  if (
-    typeof message === "string" &&
-    (message.includes("puppeteer-core") || message.includes("yargs")) &&
-    message.includes("The 'this' keyword is equivalent to 'undefined' at the top level of an ES module")
-  ) {
+console.error = message => {
+  if (typeof message === 'string' && (message.includes('puppeteer-core') || message.includes('yargs')) && message.includes("The 'this' keyword is equivalent to 'undefined' at the top level of an ES module")) {
     return; // Suppress Puppeteer & Yargs errors if necessary
   }
 
@@ -38,13 +30,9 @@ export default {
     // Your plugins here
   ],
   onwarn(warning, warn) {
-    if (
-      warning.code === "THIS_IS_UNDEFINED" &&
-      warning.loc?.file &&
-      (warning.loc.file.includes("puppeteer-core") || warning.loc.file.includes("yargs"))
-    ) {
+    if (warning.code === 'THIS_IS_UNDEFINED' && warning.loc?.file && (warning.loc.file.includes('puppeteer-core') || warning.loc.file.includes('yargs'))) {
       return; // Suppress Puppeteer & Yargs 'this' warnings
     }
     warn(warning); // Show other warnings normally
-  }
+  },
 };

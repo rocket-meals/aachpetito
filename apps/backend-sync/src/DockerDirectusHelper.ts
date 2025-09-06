@@ -1,5 +1,4 @@
 export class DockerDirectusHelper {
-
   static DIRECTUS_CONTAINER_NAME = 'rocket-meals-directus';
 
   // Health-Check-Funktion für Directus
@@ -10,7 +9,6 @@ export class DockerDirectusHelper {
   }
 
   public static getDataPathToDirectusSyncData(): string {
-      return "/rocket-meals/data/directus-sync-data";
+    return '/rocket-meals/data/directus-sync-data';
   }
-
 }

@@ -85,7 +85,7 @@ class GetItemsService {
 
 // https://github.com/directus/directus/blob/main/api/src/services/items.ts
 export class ItemsServiceCreator extends GetItemsService {
-  private eventContext: MyEventContext | undefined;
+  private readonly eventContext: MyEventContext | undefined;
 
   constructor(apiContext: ApiContext, eventContext?: MyEventContext) {
     super(apiContext);
@@ -118,7 +118,7 @@ export interface FilesService extends ItemsService<DatabaseTypes.DirectusFiles> 
 }
 
 export class FileServiceCreator extends GetItemsService {
-  private eventContext: MyEventContext | undefined;
+  private readonly eventContext: MyEventContext | undefined;
 
   constructor(apiContext: ApiContext, eventContext?: MyEventContext) {
     super(apiContext);

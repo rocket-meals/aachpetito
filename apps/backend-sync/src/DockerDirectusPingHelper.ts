@@ -1,8 +1,7 @@
-import {DockerDirectusHelper} from "./DockerDirectusHelper";
-import {FetchIngoreSelfSignedCertHelper} from "./FetchIngoreSelfSignedCertHelper";
+import { DockerDirectusHelper } from './DockerDirectusHelper';
+import { FetchIngoreSelfSignedCertHelper } from './FetchIngoreSelfSignedCertHelper';
 
 export class DockerDirectusPingHelper {
-
   // Ping-Check-Funktion für Directus
   public static async waitForDirectusHealthy(directusUrl = DockerDirectusHelper.getDirectusServerUrl(), maxRetries: number = -1, retryIntervalSeconds: number = 5): Promise<boolean> {
     //const healthCheckUrl = `${directusUrl}/server/health`; // Health prüft auch email connection, welche wenn nicht konfiguriert fehlschlägt
@@ -20,10 +19,10 @@ export class DockerDirectusPingHelper {
         let response = await FetchIngoreSelfSignedCertHelper.fetch(pingCheckUrl, {
           method: 'GET',
           headers: {
-            'Accept': 'application/json'
+            Accept: 'application/json',
           },
           // Timeout nach 5 Sekunden
-          signal: AbortSignal.timeout(retryIntervalSeconds*1000)
+          signal: AbortSignal.timeout(retryIntervalSeconds * 1000),
         });
 
         if (response.ok) {
@@ -35,8 +34,8 @@ export class DockerDirectusPingHelper {
         }
       } catch (error: any) {
         // Behandlung spezifischer Fehlertypen
-        if(error.name === 'FetchError'){
-          if(error.type === 'system' && error.code === 'ECONNREFUSED'){
+        if (error.name === 'FetchError') {
+          if (error.type === 'system' && error.code === 'ECONNREFUSED') {
             console.log(`🔌 Verbindungsfehler - Directus ist noch nicht erreichbar (${error.code})`);
           } else {
             console.log(`❌ Fetch-Fehler beim Ping-Check:`, error.message);
@@ -52,9 +51,8 @@ export class DockerDirectusPingHelper {
       }
 
       console.log(`⏸️  Warte ${retryIntervalSeconds} Sekunden vor dem nächsten Ping-Check...`);
-      await new Promise(resolve => setTimeout(resolve, retryIntervalSeconds*1000));
+      await new Promise(resolve => setTimeout(resolve, retryIntervalSeconds * 1000));
     }
     return false;
   }
-
 }

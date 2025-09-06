@@ -92,7 +92,7 @@ export interface HannoverHousingFileReaderInterface {
 }
 
 export class HannoverTL1HousingFileReader implements HannoverHousingFileReaderInterface {
-  private path_to_file: string;
+  private readonly path_to_file: string;
   private logger?: WorkflowRunLogger;
 
   constructor(path_to_file: string) {
@@ -310,7 +310,7 @@ export class HannoverTL1HousingFileReader implements HannoverHousingFileReaderIn
    * Mail: Martin Gertz: 15.05.2025
    * @private
    */
-  private static WOHNHEIM_NUMMER_TO_EMAIL: Record<string, string> = {
+  private static readonly WOHNHEIM_NUMMER_TO_EMAIL: Record<string, string> = {
     'Bischofsholer Damm': 'whl-bida@studentenwerk-hannover.de',
     Hufelandstraße: 'WHL-Hu@studentenwerk-hannover.de',
     Jägerstraße: 'whl-jae@studentenwerk-hannover.de',

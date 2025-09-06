@@ -27,13 +27,13 @@ export type FoodCreationHelperObject = {
 };
 
 export class ParseSchedule {
-  private foodParser: FoodParserInterface | null;
-  private markingParser: MarkingParserInterface | null;
+  private readonly foodParser: FoodParserInterface | null;
+  private readonly markingParser: MarkingParserInterface | null;
   //private previousMealOffersHash: string | null; // in multi instance environment this should be a field in the database
   //private finished: boolean; // in multi instance environment this should be a field in the database
-  private myDatabaseHelper: MyDatabaseHelper;
-  private workflowRun: DatabaseTypes.WorkflowsRuns;
-  private logger: WorkflowRunLogger;
+  private readonly myDatabaseHelper: MyDatabaseHelper;
+  private readonly workflowRun: DatabaseTypes.WorkflowsRuns;
+  private readonly logger: WorkflowRunLogger;
 
   constructor(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger, foodParser: FoodParserInterface | null, markingParser: MarkingParserInterface | null) {
     this.myDatabaseHelper = myDatabaseHelper;

@@ -165,7 +165,7 @@ const ManagementFoodCategorySheet: React.FC<ManagementFoodCategorySheetProps> = 
 								</Text>
 
 								{/* Radio Button */}
-								<MaterialCommunityIcons name={currentSelectedId === item?.id ? 'checkbox-marked' : 'checkbox-blank'} size={24} color='#ffffff' style={styles.radioButton} />
+								<MaterialCommunityIcons name={currentSelectedId === item?.id ? 'checkbox-marked' : 'checkbox-blank'} size={24} color="#ffffff" style={styles.radioButton} />
 							</TouchableOpacity>
 						))}
 					<TouchableOpacity

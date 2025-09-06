@@ -14,7 +14,7 @@ import ColorSchemeSheet from '@/components/ColorSchemeSheet/ColorSchemeSheet';
 import DrawerPositionSheet from '@/components/DrawerPositionSheet/DrawerPositionSheet';
 import ServerSelectionSheet from '@/components/ServerSelectionSheet/ServerSelectionSheet';
 import { router, useFocusEffect } from 'expo-router';
-import {type CustomerConfig, getBuildNumber, getVersion, getVersionPatch} from '@/config';
+import { type CustomerConfig, getBuildNumber, getVersion, getVersionPatch } from '@/config';
 import { useDispatch, useSelector } from 'react-redux';
 import useSelectedCanteen from '@/hooks/useSelectedCanteen';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -34,8 +34,8 @@ import { TranslationKeys } from '@/locales/keys';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { DatabaseTypes } from 'repo-depkit-common';
 import { RootState } from '@/redux/reducer';
-import {ServerInfoHelper} from "@/helper/ServerInfoHelper";
-import {UserHelper} from "@/helper/UserHelper";
+import { ServerInfoHelper } from '@/helper/ServerInfoHelper';
+import { UserHelper } from '@/helper/UserHelper';
 
 const Settings = () => {
 	useSetPageTitle(TranslationKeys.settings);

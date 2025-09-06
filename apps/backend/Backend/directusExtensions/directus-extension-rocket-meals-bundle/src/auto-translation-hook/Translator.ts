@@ -5,7 +5,7 @@ import { EnvVariableHelper } from '../helpers/EnvVariableHelper';
 import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 
 export class Translator {
-  private logger: any;
+  private readonly logger: any;
   translatorSettings: TranslatorSettings;
   private translatorImplementation: undefined | MyTranslatorInterface;
 

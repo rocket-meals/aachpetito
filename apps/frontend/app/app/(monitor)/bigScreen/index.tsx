@@ -20,7 +20,7 @@ import { FoodCategoriesHelper } from '@/redux/actions/FoodCategories/FoodCategor
 import { DatabaseTypes } from 'repo-depkit-common';
 import { SET_FOOD_CATEGORIES, SET_FOOD_OFFERS_CATEGORIES } from '@/redux/Types/types';
 import { FoodOffersCategoriesHelper } from '@/redux/actions/FoodOffersCategories/FoodOffersCategories';
-import {PriceGroupKey} from "@/app/(app)/settings/types";
+import { PriceGroupKey } from '@/app/(app)/settings/types';
 
 const Index = () => {
 	useSetPageTitle(TranslationKeys.big_screen);

@@ -23,10 +23,7 @@ describe('Directus server sequential tests', () => {
       // Use Directus SDK to login and read users
       const directusUrl = serverSetup.getDirectusUrl();
       const directus = createDirectus(directusUrl).with(rest()).with(authentication());
-      await directus.login(
-        DirectusTestServerSetup.ADMIN_EMAIL,
-        DirectusTestServerSetup.ADMIN_PASSWORD
-      );
+      await directus.login(DirectusTestServerSetup.ADMIN_EMAIL, DirectusTestServerSetup.ADMIN_PASSWORD);
       await directus.request(readMe());
       const users = await directus.request(readUsers());
       expect(users).toHaveLength(1);

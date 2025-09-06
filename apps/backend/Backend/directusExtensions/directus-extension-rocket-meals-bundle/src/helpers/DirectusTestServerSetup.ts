@@ -1,5 +1,5 @@
-import {ChildProcess, exec, spawn} from 'child_process';
-import {FetchHelper} from './FetchHelper';
+import { ChildProcess, exec, spawn } from 'child_process';
+import { FetchHelper } from './FetchHelper';
 import * as os from 'node:os';
 import path from 'path';
 import fse from 'fs-extra';
@@ -58,7 +58,7 @@ export class DirectusTestServerSetup {
    */
   constructor(options: DirectusTestServerOptions = {}) {
     let uniqueDbFileNameNanoSeconds = Date.now();
-    let uniqueDbFilename = `directus-memory-test-${process.pid}${uniqueDbFileNameNanoSeconds}.sqlite`
+    let uniqueDbFilename = `directus-memory-test-${process.pid}${uniqueDbFileNameNanoSeconds}.sqlite`;
 
     // Set default values for all options
     this.options = {
@@ -112,8 +112,8 @@ export class DirectusTestServerSetup {
       const response = await FetchHelper.fetch(`${this.directusUrl}/server/ping`);
       return response.ok;
     } catch (error) {
-      console.log("Error checking server readiness:");
-        console.log(error);
+      console.log('Error checking server readiness:');
+      console.log(error);
       return false;
     }
   }
@@ -142,7 +142,7 @@ export class DirectusTestServerSetup {
       this.log('Directus test server setup completed successfully!');
     } catch (error) {
       // Clean up in case of errors
-      console.log("Directus test server setup failed:");
+      console.log('Directus test server setup failed:');
       console.log(error);
       await this.teardown();
       throw error;
@@ -164,10 +164,10 @@ export class DirectusTestServerSetup {
           // Send SIGTERM to the process group to ensure all child processes are terminated
           process.kill(-this.directusProcess.pid, 'SIGTERM');
           this.log('Directus server process stopped.');
-          
+
           // Wait a moment for graceful shutdown
           await new Promise(resolve => setTimeout(resolve, 1000));
-          
+
           // Force kill if still running
           if (!this.directusProcess.killed) {
             process.kill(-this.directusProcess.pid, 'SIGKILL');
@@ -219,24 +219,20 @@ export class DirectusTestServerSetup {
     this.log('Bootstrapping Directus database...');
 
     return new Promise((resolve, reject) => {
-      exec(
-        'npx directus bootstrap',
-        { env },
-        (error: any, stdout: any, stderr: any) => {
-          if (this.options.debug) {
-            if (stdout) console.log(`[Bootstrap stdout]: ${stdout}`);
-            if (stderr) console.error(`[Bootstrap stderr]: ${stderr}`);
-          }
-
-          if (error) {
-            this.log(`Database bootstrap failed: ${error}`);
-            return reject(error);
-          }
-          
-          this.log('Database bootstrap completed.');
-          resolve(undefined);
+      exec('npx directus bootstrap', { env }, (error: any, stdout: any, stderr: any) => {
+        if (this.options.debug) {
+          if (stdout) console.log(`[Bootstrap stdout]: ${stdout}`);
+          if (stderr) console.error(`[Bootstrap stderr]: ${stderr}`);
         }
-      );
+
+        if (error) {
+          this.log(`Database bootstrap failed: ${error}`);
+          return reject(error);
+        }
+
+        this.log('Database bootstrap completed.');
+        resolve(undefined);
+      });
     });
   }
 
@@ -264,7 +260,7 @@ export class DirectusTestServerSetup {
 
     // Handle stdout
     if (this.directusProcess.stdout) {
-      this.directusProcess.stdout.on('data', (data) => {
+      this.directusProcess.stdout.on('data', data => {
         if (this.options.debug) {
           console.log(`[Directus stdout]: ${data}`);
         }
@@ -273,7 +269,7 @@ export class DirectusTestServerSetup {
 
     // Handle stderr with filtering for known non-critical messages
     if (this.directusProcess.stderr) {
-      this.directusProcess.stderr.on('data', (data) => {
+      this.directusProcess.stderr.on('data', data => {
         const message = data.toString();
         if (!this.isKnownError(message)) {
           if (this.options.debug) {
@@ -287,11 +283,11 @@ export class DirectusTestServerSetup {
     this.directusProcess.unref();
 
     // Handle process errors
-    this.directusProcess.on('error', (err) => {
+    this.directusProcess.on('error', err => {
       console.error('Error in Directus server process:', err);
     });
 
-    this.directusProcess.on('close', (code) => {
+    this.directusProcess.on('close', code => {
       this.log(`Directus server process exited with code ${code}`);
     });
   }
@@ -302,11 +298,11 @@ export class DirectusTestServerSetup {
    * @returns True if it's a known non-critical error
    */
   private isKnownError(message: string): boolean {
-    if(message.includes("Update available")) {
+    if (message.includes('Update available')) {
       return true;
     }
-    if(message.includes("SQLite is an experimental feature and might change at any time")){
-        return true;
+    if (message.includes('SQLite is an experimental feature and might change at any time')) {
+      return true;
     }
 
     return false;

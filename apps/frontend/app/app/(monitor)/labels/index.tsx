@@ -22,11 +22,7 @@ const MarkingItem = ({ marking, index, onPress }: { marking: any; index: number;
 	const MarkingColor = useMyContrastColor(marking?.background_color, theme, mode === 'dark');
 
 	return (
-		<TouchableOpacity
-			key={index}
-			style={styles.iconText}
-			onPress={onPress}
-		>
+		<TouchableOpacity key={index} style={styles.iconText} onPress={onPress}>
 			<MarkingIcon
 				marking={
 					{

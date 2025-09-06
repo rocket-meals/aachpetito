@@ -11,8 +11,8 @@ export enum WorkflowEnum {
 }
 
 export class WorkflowRunLogger {
-  private workflowRun: DatabaseTypes.WorkflowsRuns;
-  private myDatabaseHelper: MyDatabaseHelper;
+  private readonly workflowRun: DatabaseTypes.WorkflowsRuns;
+  private readonly myDatabaseHelper: MyDatabaseHelper;
   private currentLog: string = '';
 
   constructor(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper) {

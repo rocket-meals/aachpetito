@@ -8,9 +8,9 @@ import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEn
 const SCHEDULE_NAME = 'FoodNotifySchedule';
 
 export class NotifySchedule {
-  private myDatabaseHelper: MyDatabaseHelper;
-  private workflowRun: DatabaseTypes.WorkflowsRuns;
-  private logger: WorkflowRunLogger;
+  private readonly myDatabaseHelper: MyDatabaseHelper;
+  private readonly workflowRun: DatabaseTypes.WorkflowsRuns;
+  private readonly logger: WorkflowRunLogger;
 
   constructor(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger) {
     this.myDatabaseHelper = myDatabaseHelper;

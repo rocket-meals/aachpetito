@@ -1,7 +1,7 @@
 import { FoodTL1Parser_GetRawReportInterface } from '../FoodTL1Parser_GetRawReportInterface';
 
 export class FoodTL1Parser_RawReportTestReaderHannover implements FoodTL1Parser_GetRawReportInterface {
-  private reportToReturn: string | undefined;
+  private readonly reportToReturn: string | undefined;
 
   constructor(reportToReturn?: string | undefined) {
     this.reportToReturn = reportToReturn;

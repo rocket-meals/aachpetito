@@ -4,7 +4,7 @@ import { WorkflowRunLogger } from '../../workflows-runs-hook/WorkflowRunJobInter
 import { WORKFLOW_RUN_STATE } from './WorkflowsRunEnum';
 
 export class WorkflowResultHash {
-  private result_hash: string | null | undefined;
+  private readonly result_hash: string | null | undefined;
 
   constructor(result_hash: string | null | undefined) {
     this.result_hash = result_hash;

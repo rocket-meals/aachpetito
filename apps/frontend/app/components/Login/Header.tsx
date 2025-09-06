@@ -151,7 +151,7 @@ const LoginHeader = () => {
 							</Text>
 
 							{/* Radio Button */}
-							<MaterialCommunityIcons name={selectedLanguage === language.value ? 'checkbox-marked' : 'checkbox-blank'} size={24} color='#ffffff' style={styles.radioButton} />
+							<MaterialCommunityIcons name={selectedLanguage === language.value ? 'checkbox-marked' : 'checkbox-blank'} size={24} color="#ffffff" style={styles.radioButton} />
 						</TouchableOpacity>
 					))}
 				</View>

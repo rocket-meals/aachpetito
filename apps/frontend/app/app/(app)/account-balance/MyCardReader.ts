@@ -5,10 +5,10 @@ import MyNativeCardReader from './MyNativeCardReader';
 import MyUnsupportedCardReader from './MyUnsupportedCardReader';
 
 export type MyCardReaderResponseSupport = {
-	result: boolean,
-	message?: string
-	error?: any
-}
+	result: boolean;
+	message?: string;
+	error?: any;
+};
 
 export interface MyCardReaderInterface {
 	isNfcSupported: () => Promise<MyCardReaderResponseSupport>;

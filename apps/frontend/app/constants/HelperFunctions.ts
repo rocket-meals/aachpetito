@@ -7,7 +7,7 @@ import { ServerAPI } from '@/redux/actions';
 import { StringHelper } from 'repo-depkit-common';
 import { DatabaseTypes } from 'repo-depkit-common';
 import { configureStore } from '@/redux/store';
-import {PriceGroupKey} from "@/app/(app)/settings/types";
+import { PriceGroupKey } from '@/app/(app)/settings/types';
 
 export const generateCodeVerifier = async () => {
 	const bytesMinAmount = 32;

@@ -58,11 +58,14 @@ const AccountBalanceScreen = () => {
 	// Helper function to add errors to debug list
 	const addDebugError = useCallback((error: any, source: string) => {
 		const errorMessage = typeof error === 'string' ? error : JSON.stringify(error);
-		setDebugErrors(prev => [...prev, {
-			timestamp: new Date(),
-			error: errorMessage,
-			source: source
-		}]);
+		setDebugErrors(prev => [
+			...prev,
+			{
+				timestamp: new Date(),
+				error: errorMessage,
+				source: source,
+			},
+		]);
 	}, []);
 
 	useFocusEffect(
@@ -146,13 +149,13 @@ const AccountBalanceScreen = () => {
 				try {
 					const nfcAvailable = await myCardReader.isNfcSupported();
 					setIsNfcSupported(nfcAvailable.result);
-					if(!nfcAvailable.result){
+					if (!nfcAvailable.result) {
 						addDebugError(JSON.stringify(nfcAvailable, null, 2), 'NFC Supported Check');
 					}
 
 					const nfcEnabled = await myCardReader.isNfcEnabled();
 					setIsNfcEnabled(nfcEnabled.result);
-					if(!nfcEnabled.result){
+					if (!nfcEnabled.result) {
 						addDebugError(JSON.stringify(nfcEnabled, null, 2), 'NFC Enabled Check');
 					}
 				} catch (error) {
@@ -257,9 +260,7 @@ const AccountBalanceScreen = () => {
 						<Text style={{ ...styles.label, color: theme.header.text }}>{translate(TranslationKeys.debugErrors)}:</Text>
 						{debugErrors.map((errorItem, index) => (
 							<View key={index} style={{ marginVertical: 4 }}>
-								<Text style={{ ...styles.errorText, color: theme.header.text }}>
-									{`${format(errorItem.timestamp, 'dd.MM.yyyy HH:mm:ss')} - ${errorItem.source}: ${errorItem.error}`}
-								</Text>
+								<Text style={{ ...styles.errorText, color: theme.header.text }}>{`${format(errorItem.timestamp, 'dd.MM.yyyy HH:mm:ss')} - ${errorItem.source}: ${errorItem.error}`}</Text>
 							</View>
 						))}
 					</View>

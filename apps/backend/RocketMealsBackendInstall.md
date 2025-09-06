@@ -1,12 +1,10 @@
 # RocketMealsBackend - Strato
 
 - Stato V Server mieten
-
   - NICHT! Ubuntu 22 (Das klappt nicht mit dem Docker-Script)
     - Stattdessen Ubuntu 20 oder Debian
 
 - Domain Umleiten:
-
   - Domainverwaltung
     - Subdomain anlegen
     - DNS-Verwaltung
@@ -29,16 +27,13 @@ sudo apt install -t ${VERSION_CODENAME}-backports cockpit
 - `adduser USERNAME`
   - Where `USERNAME` is your username
 - `usermod -aG sudo USERNAME`
-
   - Where `USERNAME` is your username
 
 - Open Browser: `https://ip-address-of-machine:9090`
-
   - Login with your username
   - Optional: Update Packages
 
 - GitHub:
-
   - Profile
   - Sidebar: Developer Settings
     - Personal access tokens
@@ -47,7 +42,6 @@ sudo apt install -t ${VERSION_CODENAME}-backports cockpit
     - Use as login for git clone
 
 - Terminal
-
   - `sudo su`
 
   - Docker version 24.0.2, build cb74dfc

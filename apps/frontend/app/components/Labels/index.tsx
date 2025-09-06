@@ -75,7 +75,9 @@ const Labels: React.FC<LabelsProps> = ({ foodDetails, offerId, handleMenuSheet, 
 		<View style={styles.container}>
 			<Text style={{ ...styles.heading, color: theme.screen.text }}>{translate(TranslationKeys.markings)}</Text>
 
-			{foodMarkings?.map((marking: DatabaseTypes.Markings) => <MarkingLabels key={marking.id} markingId={marking.id} handleMenuSheet={handleMenuSheet} />)}
+			{foodMarkings?.map((marking: DatabaseTypes.Markings) => (
+				<MarkingLabels key={marking.id} markingId={marking.id} handleMenuSheet={handleMenuSheet} />
+			))}
 
 			<FoodLabelingInfo textStyle={styles.body} backgroundColor={foods_area_color} />
 		</View>

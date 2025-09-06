@@ -34,8 +34,8 @@ interface MyKvStorageImplementation {
 }
 
 class MyKvStorageRedis implements MyKvStorageImplementation {
-  private duration: number;
-  private redis: Redis;
+  private readonly duration: number;
+  private readonly redis: Redis;
   constructor(redisUrl: string, duration: number) {
     this.duration = duration;
     this.redis = new Redis(redisUrl); // Assumes env.REDIS is set to "redis://rocket-meals-cache:6379"
@@ -55,8 +55,8 @@ class MyKvStorageRedis implements MyKvStorageImplementation {
 }
 
 class MyKvStorageMemory implements MyKvStorageImplementation {
-  private cache: KvLocal | KvRedis;
-  private duration: number;
+  private readonly cache: KvLocal | KvRedis;
+  private readonly duration: number;
 
   constructor(duration: number) {
     this.duration = duration;
@@ -108,7 +108,7 @@ class MyKvStorage {
   static prefix_code_challenge = 'pkce_code_challenge_';
   static prefix_save_session = 'pkce_save_session_';
 
-  private kvImplementation: MyKvStorageImplementation;
+  private readonly kvImplementation: MyKvStorageImplementation;
 
   constructor(redisUrl: string | null, maxTtl?: number) {
     const defaultDuration = 300; // max Time To Live (TTL) to 300s = 5min

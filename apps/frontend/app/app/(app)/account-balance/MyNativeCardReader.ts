@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import {MyCardReaderInterface, MyCardReaderResponseSupport} from './MyCardReader';
+import { MyCardReaderInterface, MyCardReaderResponseSupport } from './MyCardReader';
 import { isRunningInExpoGo } from 'expo';
 import CardResponse from '@/helper/nfcCardReaderHelper/CardResponse';
 import CardReader from '@/helper/nfcCardReaderHelper/CardReader';
@@ -27,35 +27,35 @@ async function loadNfc() {
 
 export default class MyNativeCardReader implements MyCardReaderInterface {
 	async isNfcEnabled(): Promise<MyCardReaderResponseSupport> {
-		try{
-			if(isExpoGo){
-				return {result: false, message: 'NFC is not supported in Expo Go'};
+		try {
+			if (isExpoGo) {
+				return { result: false, message: 'NFC is not supported in Expo Go' };
 			}
 
 			const nfc = await loadNfc();
-			if(!nfc?.NfcManager){
-				return {result: false, message: 'NFC Manager is not available'};
+			if (!nfc?.NfcManager) {
+				return { result: false, message: 'NFC Manager is not available' };
 			}
 			let isEnabled = await nfc.NfcManager.isEnabled();
-			return {result: isEnabled};
-		} catch(e: any){
-			return {result: false, message: 'Error checking NFC status', error: e};
+			return { result: isEnabled };
+		} catch (e: any) {
+			return { result: false, message: 'Error checking NFC status', error: e };
 		}
 	}
 
 	async isNfcSupported(): Promise<MyCardReaderResponseSupport> {
-		try{
-			if(isExpoGo){
-				return {result: false, message: 'NFC is not supported in Expo Go'};
+		try {
+			if (isExpoGo) {
+				return { result: false, message: 'NFC is not supported in Expo Go' };
 			}
 			const nfc = await loadNfc();
-			if(!nfc?.NfcManager){
-				return {result: false, message: 'NFC Manager is not available'};
+			if (!nfc?.NfcManager) {
+				return { result: false, message: 'NFC Manager is not available' };
 			}
 			let isSupported = await nfc.NfcManager.isSupported();
-			return {result: isSupported};
-		} catch (e: any){
-			return {result: false, message: 'Error checking NFC support', error: e};
+			return { result: isSupported };
+		} catch (e: any) {
+			return { result: false, message: 'Error checking NFC support', error: e };
 		}
 	}
 
@@ -69,7 +69,6 @@ export default class MyNativeCardReader implements MyCardReaderInterface {
 			console.error('NFC Manager or Tech is not available.');
 			return;
 		}
-
 
 		if (Platform.OS === 'android') {
 			// only show instruction on android since ios has a built in instruction

@@ -10,7 +10,7 @@ import { DatabaseTypes } from 'repo-depkit-common';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
 class HousingSyncWorkflow extends SingleWorkflowRun {
-  private parserInterface: ApartmentParserInterface;
+  private readonly parserInterface: ApartmentParserInterface;
 
   constructor(parserInterface: ApartmentParserInterface) {
     super();

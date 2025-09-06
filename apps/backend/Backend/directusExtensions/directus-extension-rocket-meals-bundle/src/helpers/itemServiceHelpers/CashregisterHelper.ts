@@ -6,8 +6,8 @@ import { DateHelper } from 'repo-depkit-common';
 import { MyDatabaseHelperInterface } from '../MyDatabaseHelperInterface';
 
 export class CashregisterHelper {
-  private cashregisterServiceHelper: ItemsServiceHelper<DatabaseTypes.Cashregisters>;
-  private cashregisterTransactionsServiceHelper: ItemsServiceHelper<DatabaseTypes.CashregistersTransactions>;
+  private readonly cashregisterServiceHelper: ItemsServiceHelper<DatabaseTypes.Cashregisters>;
+  private readonly cashregisterTransactionsServiceHelper: ItemsServiceHelper<DatabaseTypes.CashregistersTransactions>;
 
   constructor(myDatabaseHelper: MyDatabaseHelperInterface) {
     this.cashregisterServiceHelper = new ItemsServiceHelper<DatabaseTypes.Cashregisters>(myDatabaseHelper, CollectionNames.CASHREGISTERS);

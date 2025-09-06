@@ -21,7 +21,7 @@ const headers = [
   { text: 'ID', value: 'id' },
   { text: 'Comment', value: 'comment' },
   { text: 'Food', value: 'food' },
-  { text: 'Actions', value: 'actions', sortable: false }
+  { text: 'Actions', value: 'actions', sortable: false },
 ];
 
 async function loadFeedbacks() {
@@ -30,8 +30,8 @@ async function loadFeedbacks() {
     const { data } = await api.get('/items/food_feedbacks', {
       params: {
         fields: ['id', 'comment', 'food'],
-        filter: { comment: { _nnull: true } }
-      }
+        filter: { comment: { _nnull: true } },
+      },
     });
     feedbacks.value = data.data;
   } catch (err) {

@@ -89,7 +89,7 @@ export type ReportType = {
 };
 
 export class ReportGenerator {
-  private myDatabaseHelper: MyDatabaseHelper;
+  private readonly myDatabaseHelper: MyDatabaseHelper;
 
   constructor(apiContext: ApiContext) {
     this.myDatabaseHelper = new MyDatabaseHelper(apiContext);

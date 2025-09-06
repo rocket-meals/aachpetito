@@ -5,8 +5,8 @@ import { EventContext } from '@directus/types';
 import { CollectionNames } from 'repo-depkit-common';
 
 export class AutoTranslationSettingsHelper {
-  private apiExtensionContext: ApiContext;
-  private eventContext: EventContext | undefined;
+  private readonly apiExtensionContext: ApiContext;
+  private readonly eventContext: EventContext | undefined;
 
   constructor(apiExtensionContext: ApiContext, eventContext?: EventContext) {
     this.apiExtensionContext = apiExtensionContext;

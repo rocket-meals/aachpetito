@@ -81,7 +81,7 @@ function registerWashingmachinesFilterUpdate(apiContext: any, registerFunctions:
 }
 
 class WashingmachinesWorkflow extends SingleWorkflowRun {
-  private usedParser: WashingmachineParserInterface;
+  private readonly usedParser: WashingmachineParserInterface;
 
   constructor(usedParser: WashingmachineParserInterface) {
     super();

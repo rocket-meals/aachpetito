@@ -8,7 +8,7 @@ import { WorkflowRunLogger } from '../../../workflows-runs-hook/WorkflowRunJobIn
 export class FormHousingContractsWorkflowHannover extends FormImportSyncWorkflow {
   static FORM_INTERNAL_ID = 'housing-contract-sync-hannover';
 
-  private reader: HannoverTL1HousingFileReader;
+  private readonly reader: HannoverTL1HousingFileReader;
   private contracts: ImportHousingContracts = [];
 
   constructor(housingPath: string) {

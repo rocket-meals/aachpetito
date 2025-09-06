@@ -18,12 +18,12 @@ type FileCleanupWorkflowConfig = {
 };
 
 export class FileCleanupWorkflow extends SingleWorkflowRun {
-  private static PARAM_DELETE_UNREFERENCED_FILES_WHEN_OLDER_THAN_MS_DONT_DELETE = -1;
-  private static PARAM_DELETE_UNREFERENCED_FILES_WHEN_OLDER_THAN_MS_30_DAYS = 30 * 24 * 60 * 60 * 1000; // 30 days
+  private static readonly PARAM_DELETE_UNREFERENCED_FILES_WHEN_OLDER_THAN_MS_DONT_DELETE = -1;
+  private static readonly PARAM_DELETE_UNREFERENCED_FILES_WHEN_OLDER_THAN_MS_30_DAYS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
   private config: FileCleanupWorkflowConfig;
 
-  private statistics = {
+  private readonly statistics = {
     itemsCheckedAmount: 0,
     filesTotalAmount: 0,
     filesTotalDiskSpace: 0,

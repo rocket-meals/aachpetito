@@ -16,9 +16,9 @@ const TABLENAME_CANTEEN_FOOD_FEEDBACK_REPORT_SCHEDULES = CollectionNames.CANTEEN
 const SCHEDULE_NAME = 'CanteenFoodFeedbackReportSchedule';
 
 export class ReportSchedule {
-  private apiContext: ApiContext;
-  private eventContext?: EventContext;
-  private myDatabaseHelper: MyDatabaseHelper;
+  private readonly apiContext: ApiContext;
+  private readonly eventContext?: EventContext;
+  private readonly myDatabaseHelper: MyDatabaseHelper;
 
   constructor(apiContext: ApiContext, eventContext?: EventContext) {
     this.apiContext = apiContext;

@@ -10,7 +10,7 @@ import { CronObject, WorkflowScheduleHelper, WorkflowScheduler } from '../workfl
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
 class CashRegisterWorkflow extends SingleWorkflowRun {
-  private usedParser: CashregisterTransactionParserInterface;
+  private readonly usedParser: CashregisterTransactionParserInterface;
 
   constructor(usedParser: CashregisterTransactionParserInterface) {
     super();

@@ -10,7 +10,7 @@ export enum Languages {
 }
 
 export enum PriceGroupKey {
-	"student" = "student",
-	"employee" = "employee",
-	"guest" = "guest",
+	'student' = 'student',
+	'employee' = 'employee',
+	'guest' = 'guest',
 }

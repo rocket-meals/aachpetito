@@ -2,7 +2,7 @@ import deepl, { SourceLanguageCode, TargetLanguageCode, Translator } from 'deepl
 import { MyTranslatorInterface } from './MyTranslatorInterface';
 
 export class DeepLTranslator implements MyTranslatorInterface {
-  private translator: Translator;
+  private readonly translator: Translator;
 
   constructor(auth_key: string) {
     this.translator = new deepl.Translator(auth_key);

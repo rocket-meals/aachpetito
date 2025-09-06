@@ -6,10 +6,10 @@ import { WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterfac
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
 export class ParseSchedule {
-  private workflowRun: DatabaseTypes.WorkflowsRuns;
-  private logger: WorkflowRunLogger;
-  private myDatabaseHelper: MyDatabaseHelper;
-  private parser: CashregisterTransactionParserInterface;
+  private readonly workflowRun: DatabaseTypes.WorkflowsRuns;
+  private readonly logger: WorkflowRunLogger;
+  private readonly myDatabaseHelper: MyDatabaseHelper;
+  private readonly parser: CashregisterTransactionParserInterface;
 
   constructor(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger, parser: CashregisterTransactionParserInterface) {
     this.myDatabaseHelper = myDatabaseHelper;

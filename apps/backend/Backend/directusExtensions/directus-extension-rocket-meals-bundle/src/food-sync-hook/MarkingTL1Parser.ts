@@ -7,8 +7,8 @@ import { EventContext } from '@directus/types';
 const FIELD_MARKING_TRANSLATION_NAME = 'name';
 
 export class MarkingTL1Parser implements MarkingParserInterface {
-  private path_to_tl1_export: string;
-  private encoding: BufferEncoding;
+  private readonly path_to_tl1_export: string;
+  private readonly encoding: BufferEncoding;
   private parsedReport: { [p: string]: string }[];
 
   constructor(path_to_tl1_marking_export: string, encoding: BufferEncoding) {

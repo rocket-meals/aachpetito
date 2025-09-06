@@ -6,8 +6,8 @@ import { ItemsServiceCreator } from '../ItemsServiceCreator';
 import { EventContext } from '@directus/types';
 
 export class AppSettingsHelper {
-  private apiExtensionContext: ApiContext;
-  private eventContext?: EventContext;
+  private readonly apiExtensionContext: ApiContext;
+  private readonly eventContext?: EventContext;
 
   constructor(apiExtensionContext: ApiContext, eventContext?: EventContext) {
     this.apiExtensionContext = apiExtensionContext;

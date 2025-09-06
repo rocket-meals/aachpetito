@@ -69,7 +69,7 @@ export class FoodTL1Parser implements FoodParserInterface {
   static DEFAULT_ZSNUMMERN_FIELD = 'ZSNUMMERN';
 
   private rawFoodoffersJSONList: RawFoodofferInformationListType = [];
-  private rawFoodofferReader: FoodTL1Parser_GetRawReportInterface;
+  private readonly rawFoodofferReader: FoodTL1Parser_GetRawReportInterface;
   protected markingsJSONListFromMarkingParger: MarkingsTypeForParser[] | undefined = undefined; // passed from MarkingParserInterface
 
   constructor(rawFoodofferReader: FoodTL1Parser_GetRawReportInterface) {
