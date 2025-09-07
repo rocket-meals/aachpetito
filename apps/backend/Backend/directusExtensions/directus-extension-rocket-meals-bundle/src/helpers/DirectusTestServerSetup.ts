@@ -226,8 +226,9 @@ export class DirectusTestServerSetup {
         }
 
         if (error) {
-          this.log(`Database bootstrap failed: ${error}`);
-          return reject(error);
+          const err = error instanceof Error ? error : new Error(String(error));
+          this.log(`Database bootstrap failed: ${err}`);
+          return reject(err);
         }
 
         this.log('Database bootstrap completed.');
