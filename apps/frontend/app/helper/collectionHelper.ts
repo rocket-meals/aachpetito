@@ -1,18 +1,6 @@
-import {
-    aggregate,
-    createItem,
-    deleteItem,
-    deleteItems,
-    DirectusClient,
-    readItem,
-    readItems,
-    readSingleton,
-    RestClient,
-    updateItem,
-    updateItems
-} from '@directus/sdk';
-import {DatabaseTypes} from 'repo-depkit-common';
-import {ServerAPI} from '@/redux/actions/Auth/Auth';
+import { aggregate, createItem, deleteItem, deleteItems, DirectusClient, readItem, readItems, readSingleton, RestClient, updateItem, updateItems } from '@directus/sdk';
+import { DatabaseTypes } from 'repo-depkit-common';
+import { ServerAPI } from '@/redux/actions/Auth/Auth';
 
 // Define types for queries and filters
 export type FilterOperator = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'nin' | 'null' | 'nnull' | 'contains' | 'ncontains' | 'icontains' | 'between' | 'nbetween' | 'empty' | 'nempty' | 'intersects' | 'nintersects' | 'intersects_bbox' | 'nintersects_bbox';

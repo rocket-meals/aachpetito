@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {TextInput, View} from 'react-native';
+import React, { useState } from 'react';
+import { TextInput, View } from 'react-native';
 import styles from './styles';
-import {useTheme} from '@/hooks/useTheme';
+import { useTheme } from '@/hooks/useTheme';
 
 const CustomDateInput = ({ inputType = 'date' }) => {
 	const { theme } = useTheme();

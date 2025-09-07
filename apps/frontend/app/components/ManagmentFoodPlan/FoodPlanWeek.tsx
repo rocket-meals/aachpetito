@@ -1,10 +1,10 @@
-import {Dimensions, Switch, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useTheme} from '@/hooks/useTheme';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
+import { Dimensions, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useTheme } from '@/hooks/useTheme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import styles from './styles';
 import useSelectedCanteen from '@/hooks/useSelectedCanteen';
-import {router} from 'expo-router';
+import { router } from 'expo-router';
 
 const FoodPlanWeek = ({ data, onPressItem }: { data: any[]; onPressItem: (item: any) => void }) => {
 	const { theme } = useTheme();

@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {useTheme} from '@/hooks/useTheme';
-import {Ionicons, MaterialCommunityIcons, MaterialIcons} from '@expo/vector-icons';
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useRouter} from 'expo-router';
-import {useSelector} from 'react-redux';
-import {useLanguage} from '@/hooks/useLanguage';
-import {isWeb} from '@/constants/Constants';
-import {RootState} from '@/redux/reducer';
+import React, { useEffect, useState } from 'react';
+import { useTheme } from '@/hooks/useTheme';
+import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useSelector } from 'react-redux';
+import { useLanguage } from '@/hooks/useLanguage';
+import { isWeb } from '@/constants/Constants';
+import { RootState } from '@/redux/reducer';
 
 const FoodPlanHeader = ({ handlePrint }: any) => {
 	const { theme } = useTheme();

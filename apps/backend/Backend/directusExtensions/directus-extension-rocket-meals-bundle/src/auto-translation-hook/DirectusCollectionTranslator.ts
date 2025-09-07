@@ -1,8 +1,8 @@
-import {Translator} from './Translator';
-import {TranslatorSettings} from './TranslatorSettings';
-import {CollectionNames, DatabaseTypes} from 'repo-depkit-common';
-import {MyDatabaseHelper} from '../helpers/MyDatabaseHelper';
-import {SchemaOverview} from '@directus/types';
+import { Translator } from './Translator';
+import { TranslatorSettings } from './TranslatorSettings';
+import { CollectionNames, DatabaseTypes } from 'repo-depkit-common';
+import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
+import { SchemaOverview } from '@directus/types';
 
 export class DirectusCollectionTranslator {
   static FIELD_BE_SOURCE_FOR_TRANSLATION = 'be_source_for_translations';

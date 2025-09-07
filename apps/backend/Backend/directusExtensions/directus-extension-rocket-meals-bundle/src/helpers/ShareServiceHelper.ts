@@ -1,10 +1,10 @@
-import {ApiContext} from './ApiContext';
-import {CollectionNames, DatabaseTypes} from 'repo-depkit-common';
-import {EventContext, PrimaryKey} from '@directus/types';
-import {EnvVariableHelper} from './EnvVariableHelper';
-import {Accountability} from '@directus/types/dist/accountability';
-import {ItemsServiceHelper} from './ItemsServiceHelper';
-import {MyDatabaseHelperInterface} from './MyDatabaseHelperInterface';
+import { ApiContext } from './ApiContext';
+import { CollectionNames, DatabaseTypes } from 'repo-depkit-common';
+import { EventContext, PrimaryKey } from '@directus/types';
+import { EnvVariableHelper } from './EnvVariableHelper';
+import { Accountability } from '@directus/types/dist/accountability';
+import { ItemsServiceHelper } from './ItemsServiceHelper';
+import { MyDatabaseHelperInterface } from './MyDatabaseHelperInterface';
 
 export type ShareLinkOptions = {
   max_uses?: number;

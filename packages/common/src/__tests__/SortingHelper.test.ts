@@ -1,12 +1,4 @@
-import {
-    sortByEatingHabits,
-    sortByFoodCategoryOnly,
-    sortByFoodName,
-    sortByFoodOfferCategoryOnly,
-    sortByOwnFavorite,
-    sortByPublicFavorite,
-    sortBySortField
-} from 'repo-depkit-common';
+import { sortByEatingHabits, sortByFoodCategoryOnly, sortByFoodName, sortByFoodOfferCategoryOnly, sortByOwnFavorite, sortByPublicFavorite, sortBySortField } from 'repo-depkit-common';
 
 describe('SortingHelper', () => {
   test('sortByFoodName sorts alphabetically', () => {

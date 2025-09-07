@@ -1,10 +1,10 @@
 import React from 'react';
-import {Appearance, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {useSelector} from 'react-redux';
-import {RootState} from '@/redux/reducer';
-import {myContrastColor} from '@/helper/colorHelper';
-import {darkTheme, lightTheme} from '@/styles/themes';
-import {ProjectButtonProps} from './types';
+import { Appearance, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/reducer';
+import { myContrastColor } from '@/helper/colorHelper';
+import { darkTheme, lightTheme } from '@/styles/themes';
+import { ProjectButtonProps } from './types';
 
 const ProjectButton: React.FC<ProjectButtonProps> = ({ text, onPress, iconLeft, iconRight, style }) => {
 	const { primaryColor, selectedTheme } = useSelector((state: RootState) => state.settings);

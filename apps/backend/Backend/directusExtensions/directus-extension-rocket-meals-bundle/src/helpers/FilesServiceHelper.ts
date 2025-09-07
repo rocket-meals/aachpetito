@@ -1,19 +1,13 @@
-import {
-    FileServiceCreator,
-    FileServiceFileStream,
-    FileServiceSteamType,
-    FilesService,
-    MutationOptions
-} from './ItemsServiceCreator';
-import {ItemsServiceHelper} from './ItemsServiceHelper';
-import {CollectionNames, DatabaseTypes} from 'repo-depkit-common';
-import {PrimaryKey} from '@directus/types';
-import {Readable} from 'node:stream';
-import type {Stat} from '@directus/storage';
-import {AssetsService} from './MyServiceClassHelpers';
-import {CreateShareLinkOptionForDirectusFiles, ShareDirectusFileMethod, ShareServiceHelper} from './ShareServiceHelper';
-import {Buffer} from 'node:buffer';
-import {MyDatabaseHelperInterface} from './MyDatabaseHelperInterface';
+import { FileServiceCreator, FileServiceFileStream, FileServiceSteamType, FilesService, MutationOptions } from './ItemsServiceCreator';
+import { ItemsServiceHelper } from './ItemsServiceHelper';
+import { CollectionNames, DatabaseTypes } from 'repo-depkit-common';
+import { PrimaryKey } from '@directus/types';
+import { Readable } from 'node:stream';
+import type { Stat } from '@directus/storage';
+import { AssetsService } from './MyServiceClassHelpers';
+import { CreateShareLinkOptionForDirectusFiles, ShareDirectusFileMethod, ShareServiceHelper } from './ShareServiceHelper';
+import { Buffer } from 'node:buffer';
+import { MyDatabaseHelperInterface } from './MyDatabaseHelperInterface';
 
 export enum MyFileTypes {
   PDF = 'application/pdf',

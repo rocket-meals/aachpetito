@@ -1,7 +1,7 @@
-import {CollectionNames, DatabaseTypes, DateHelper} from 'repo-depkit-common';
-import {CashregistersTransactionsForParser} from '../../cashregister-hook/CashregisterTransactionParserInterface';
-import {ItemsServiceHelper} from '../ItemsServiceHelper';
-import {MyDatabaseHelperInterface} from '../MyDatabaseHelperInterface';
+import { CollectionNames, DatabaseTypes, DateHelper } from 'repo-depkit-common';
+import { CashregistersTransactionsForParser } from '../../cashregister-hook/CashregisterTransactionParserInterface';
+import { ItemsServiceHelper } from '../ItemsServiceHelper';
+import { MyDatabaseHelperInterface } from '../MyDatabaseHelperInterface';
 
 export class CashregisterHelper {
   private readonly cashregisterServiceHelper: ItemsServiceHelper<DatabaseTypes.Cashregisters>;

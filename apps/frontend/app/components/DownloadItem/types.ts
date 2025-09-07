@@ -1,4 +1,4 @@
-import {ImageSourcePropType, StyleProp, ViewStyle} from 'react-native';
+import { ImageSourcePropType, StyleProp, ViewStyle } from 'react-native';
 
 export interface DownloadItemProps {
 	label: string;

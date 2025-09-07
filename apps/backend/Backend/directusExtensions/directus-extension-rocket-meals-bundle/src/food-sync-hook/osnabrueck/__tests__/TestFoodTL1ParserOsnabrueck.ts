@@ -1,9 +1,9 @@
 // small jest test
-import {describe, expect, it} from '@jest/globals';
-import {FoodTL1Parser} from '../../FoodTL1Parser';
-import {FoodTL1Parser_GetRawReportInterface} from '../../FoodTL1Parser_GetRawReportInterface';
-import {FoodTL1Parser_RawReportTestReaderOsnabrueck} from '../FoodTL1Parser_RawReportTestReaderOsnabrueck';
-import {FoodTL1ParserOsnabrueck} from '../FoodTL1ParserOsnabrueck';
+import { describe, expect, it } from '@jest/globals';
+import { FoodTL1Parser } from '../../FoodTL1Parser';
+import { FoodTL1Parser_GetRawReportInterface } from '../../FoodTL1Parser_GetRawReportInterface';
+import { FoodTL1Parser_RawReportTestReaderOsnabrueck } from '../FoodTL1Parser_RawReportTestReaderOsnabrueck';
+import { FoodTL1ParserOsnabrueck } from '../FoodTL1ParserOsnabrueck';
 
 async function getFoodoffersJson(reportToReturn?: string | undefined) {
   let testFileGetter: FoodTL1Parser_GetRawReportInterface = new FoodTL1Parser_RawReportTestReaderOsnabrueck(reportToReturn);

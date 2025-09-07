@@ -1,19 +1,13 @@
 import React from 'react';
-import {Appearance, Linking, Text, useWindowDimensions, View} from 'react-native';
-import {FontAwesome6, MaterialCommunityIcons} from '@expo/vector-icons';
+import { Appearance, Linking, Text, useWindowDimensions, View } from 'react-native';
+import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import MarkdownIt from 'markdown-it';
-import {darkTheme, lightTheme} from '@/styles/themes';
-import RenderHtml, {
-    CustomBlockRenderer,
-    CustomMixedRenderer,
-    CustomTextualRenderer,
-    HTMLContentModel,
-    HTMLElementModel
-} from 'react-native-render-html';
-import {useSelector} from 'react-redux';
-import {RootState} from '@/redux/reducer';
+import { darkTheme, lightTheme } from '@/styles/themes';
+import RenderHtml, { CustomBlockRenderer, CustomMixedRenderer, CustomTextualRenderer, HTMLContentModel, HTMLElementModel } from 'react-native-render-html';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/reducer';
 import ProjectButton from '../ProjectButton';
-import {myContrastColor} from '@/helper/colorHelper';
+import { myContrastColor } from '@/helper/colorHelper';
 
 export interface MyMarkdownProps {
 	content: string;

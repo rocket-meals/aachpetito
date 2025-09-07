@@ -1,13 +1,13 @@
 import moment from 'moment';
-import {ReportGenerator, ReportType} from './ReportGenerator';
-import {ItemsServiceCreator} from '../helpers/ItemsServiceCreator';
-import {CollectionNames, DatabaseTypes, DateHelper, Weekday} from 'repo-depkit-common';
-import {ApiContext} from '../helpers/ApiContext';
+import { ReportGenerator, ReportType } from './ReportGenerator';
+import { ItemsServiceCreator } from '../helpers/ItemsServiceCreator';
+import { CollectionNames, DatabaseTypes, DateHelper, Weekday } from 'repo-depkit-common';
+import { ApiContext } from '../helpers/ApiContext';
 
-import {MyDatabaseHelper} from '../helpers/MyDatabaseHelper';
-import {EventContext, PrimaryKey} from '@directus/types';
-import {DictHelper} from '../helpers/DictHelper';
-import {HtmlTemplatesEnum} from '../helpers/html/HtmlGenerator';
+import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
+import { EventContext, PrimaryKey } from '@directus/types';
+import { DictHelper } from '../helpers/DictHelper';
+import { HtmlTemplatesEnum } from '../helpers/html/HtmlGenerator';
 
 const TABLENAME_CANTEEN_FOOD_FEEDBACK_REPORT_SCHEDULES = CollectionNames.CANTEEN_FOOD_FEEDBACK_REPORT_SCHEDULES;
 

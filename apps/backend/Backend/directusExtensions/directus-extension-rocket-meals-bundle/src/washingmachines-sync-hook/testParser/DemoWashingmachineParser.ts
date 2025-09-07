@@ -1,9 +1,5 @@
-import {
-    WashingmachineParserInterface,
-    WashingmachinesTypeForParser,
-    WashingmachinesTypeForParserOmmited
-} from '../WashingmachineParserInterface';
-import {DateHelper} from 'repo-depkit-common';
+import { WashingmachineParserInterface, WashingmachinesTypeForParser, WashingmachinesTypeForParserOmmited } from '../WashingmachineParserInterface';
+import { DateHelper } from 'repo-depkit-common';
 
 export class DemoWashingmachineParser implements WashingmachineParserInterface {
   constructor() {}

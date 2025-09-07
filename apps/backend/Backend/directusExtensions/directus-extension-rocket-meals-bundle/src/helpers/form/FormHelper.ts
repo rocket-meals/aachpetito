@@ -1,19 +1,13 @@
-import {
-    FormExtractFormAnswer,
-    FormExtractFormAnswerValueFileSingle,
-    FormExtractFormAnswerValueFileSingleOrString,
-    FormExtractRelevantInformation,
-    FormExtractRelevantInformationSingle
-} from '../../forms-sync-hook';
-import {BaseGermanMarkdownTemplateHelper, DEFAULT_HTML_TEMPLATE, HtmlGenerator} from '../html/HtmlGenerator';
-import {PdfGeneratorHelper, RequestOptions} from '../pdf/PdfGeneratorHelper';
-import {DirectusFilesAssetHelper} from '../DirectusFilesAssetHelper';
-import {MarkdownHelper} from '../html/MarkdownHelper';
-import {MyDatabaseTestableHelperInterface} from '../MyDatabaseHelperInterface';
-import {TranslationBackendKeys, TranslationsBackend} from '../TranslationsBackend';
-import {DatabaseTypes, DateHelper, DateHelperTimezone} from 'repo-depkit-common';
-import {EnvVariableHelper} from '../EnvVariableHelper';
-import {HashHelper} from '../HashHelper';
+import { FormExtractFormAnswer, FormExtractFormAnswerValueFileSingle, FormExtractFormAnswerValueFileSingleOrString, FormExtractRelevantInformation, FormExtractRelevantInformationSingle } from '../../forms-sync-hook';
+import { BaseGermanMarkdownTemplateHelper, DEFAULT_HTML_TEMPLATE, HtmlGenerator } from '../html/HtmlGenerator';
+import { PdfGeneratorHelper, RequestOptions } from '../pdf/PdfGeneratorHelper';
+import { DirectusFilesAssetHelper } from '../DirectusFilesAssetHelper';
+import { MarkdownHelper } from '../html/MarkdownHelper';
+import { MyDatabaseTestableHelperInterface } from '../MyDatabaseHelperInterface';
+import { TranslationBackendKeys, TranslationsBackend } from '../TranslationsBackend';
+import { DatabaseTypes, DateHelper, DateHelperTimezone } from 'repo-depkit-common';
+import { EnvVariableHelper } from '../EnvVariableHelper';
+import { HashHelper } from '../HashHelper';
 
 type FormFieldExampleData = {
   value_string?: string | null;

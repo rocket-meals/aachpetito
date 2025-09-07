@@ -1,15 +1,15 @@
-import React, {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, AppState, AppStateStatus, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, AppState, AppStateStatus, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Updates from 'expo-updates';
 import ModalSheet from '../BaseBottomModal';
 import usePlatformHelper from '@/helper/platformHelper';
-import {useLanguage} from '@/hooks/useLanguage';
-import {TranslationKeys} from '@/locales/keys';
-import {useTheme} from '@/hooks/useTheme';
-import {useSelector} from 'react-redux';
-import {RootState} from '@/redux/reducer';
-import {myContrastColor} from '@/helper/colorHelper';
-import {isInExpoGo} from '@/helper/DeviceRuntimeHelper';
+import { useLanguage } from '@/hooks/useLanguage';
+import { TranslationKeys } from '@/locales/keys';
+import { useTheme } from '@/hooks/useTheme';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/reducer';
+import { myContrastColor } from '@/helper/colorHelper';
+import { isInExpoGo } from '@/helper/DeviceRuntimeHelper';
 
 interface ExpoUpdateCheckerProps {
 	children?: ReactNode;
