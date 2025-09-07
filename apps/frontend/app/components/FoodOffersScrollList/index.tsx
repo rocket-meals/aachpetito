@@ -36,7 +36,7 @@ const FoodOffersScrollList: React.FC<FoodOffersScrollListProps> = ({ canteenId, 
 	const { ownFoodFeedbacks, foodCategories, foodOfferCategories } = useSelector((state: RootState) => state.food);
 	const { profile } = useSelector((state: RootState) => state.authReducer);
 	const selectedCanteen = canteens?.find(c => c.id === canteenId) as DatabaseTypes.Canteens | undefined;
-        const [days, setDays] = useState<DayData[]>([]);
+	const [days, setDays] = useState<DayData[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
 	const [selectedSheet, setSelectedSheet] = useState<'menu' | keyof typeof SHEET_COMPONENTS | null>(null);
@@ -91,7 +91,6 @@ const FoodOffersScrollList: React.FC<FoodOffersScrollListProps> = ({ canteenId, 
 			}),
 		[sortBy, language, ownFoodFeedbacks, profile, foodCategories, foodOfferCategories]
 	);
-
 
 	useEffect(() => {
 		setDays(prev => prev.map(d => ({ ...d, offers: sortOffers(d.offers) })));
