@@ -53,7 +53,7 @@ const Details: React.FC<DetailsProps> = ({ groupedAttributes, loading }) => {
 							<View
 								style={{
 									...styles.nutritionsContainer,
-                                                                        justifyContent: 'flex-start',
+									justifyContent: 'flex-start',
 								}}
 							>
 								{item?.attributes &&

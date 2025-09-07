@@ -20,10 +20,10 @@ const MarkingIcon: React.FC<MarkingIconProps> = ({ marking, size = 24, color, co
 	const { theme } = useTheme();
 	const { selectedTheme: mode } = useSelector((state: RootState) => state.settings);
 
-        const bgColor = marking?.background_color;
-        const contrast = useMyContrastColor(bgColor, theme, mode === 'dark');
+	const bgColor = marking?.background_color;
+	const contrast = useMyContrastColor(bgColor, theme, mode === 'dark');
 
-        if (!marking) return null;
+	if (!marking) return null;
 
 	const markingImage = marking.image_remote_url ? { uri: marking.image_remote_url } : marking.image ? { uri: getImageUrl(String(marking.image)) } : null;
 	const textColor = color || contrast;

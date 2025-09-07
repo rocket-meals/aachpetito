@@ -934,7 +934,7 @@ const Index = () => {
 										const markingImage = marking?.image_remote_url ? { uri: marking?.image_remote_url } : { uri: getImageUrl(marking?.image) };
 										const markingText = getTextFromTranslation(marking?.translations, language);
 										const MarkingBackgroundColor = marking?.background_color;
-                                                                                const MarkingColor = myContrastColor(marking?.background_color, theme, mode === 'dark');
+										const MarkingColor = myContrastColor(marking?.background_color, theme, mode === 'dark');
 										return (
 											<View key={index} style={styles.iconText}>
 												<MarkingIcon
