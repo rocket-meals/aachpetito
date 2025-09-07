@@ -5,7 +5,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useDispatch, useSelector } from 'react-redux';
 import { getImageUrl, showDayPlanPrice, showFormatedPrice } from '@/constants/HelperFunctions';
 import { getFoodAttributesTranslation, getTextFromTranslation } from '@/helper/resourceHelper';
-import { myContrastColor, useMyContrastColor } from '@/helper/colorHelper';
+import { myContrastColor } from '@/helper/colorHelper';
 import styles from './styles';
 import { fetchFoodsByCanteen } from '@/redux/actions/FoodOffers/FoodOffers';
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
@@ -934,7 +934,7 @@ const Index = () => {
 										const markingImage = marking?.image_remote_url ? { uri: marking?.image_remote_url } : { uri: getImageUrl(marking?.image) };
 										const markingText = getTextFromTranslation(marking?.translations, language);
 										const MarkingBackgroundColor = marking?.background_color;
-										const MarkingColor = useMyContrastColor(marking?.background_color, theme, mode === 'dark');
+                                                                                const MarkingColor = myContrastColor(marking?.background_color, theme, mode === 'dark');
 										return (
 											<View key={index} style={styles.iconText}>
 												<MarkingIcon

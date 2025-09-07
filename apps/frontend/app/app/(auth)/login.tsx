@@ -216,7 +216,7 @@ export default function Login() {
 						}}
 					/>
 				)}
-				{description && <Text style={{ ...styles.subTitle, color: theme.login.text }}>{description}</Text>}
+                                {!!description && <Text style={{ ...styles.subTitle, color: theme.login.text }}>{description}</Text>}
 			</View>
 		);
 	};
