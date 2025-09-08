@@ -1,4 +1,4 @@
-import { CLEAR_MANAGEMENT, SET_DAY_PLAN, SET_FOOD_PLAN, SET_WEEK_PLAN } from '../Types/types';
+import {CLEAR_DEVELOPER_MODE, CLEAR_MANAGEMENT, SET_DAY_PLAN, SET_FOOD_PLAN, SET_WEEK_PLAN} from '../Types/types';
 
 const initialState = {
 	dayPlan: {
@@ -48,6 +48,12 @@ const managementReducer = (state = initialState, actions: any) => {
 			return {
 				...initialState,
 			};
+		}
+		case CLEAR_DEVELOPER_MODE: {
+			return {
+				...initialState,
+				isDevMode: false,
+			}
 		}
 
 		default:
