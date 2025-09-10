@@ -124,9 +124,6 @@ export default function Layout() {
 		selectCanteen();
 	}, [kioskMode, selectedCanteen]);
 
-	if (!loggedIn && !kioskMode) {
-		return <Redirect href="/(auth)/login" />;
-	}
 
 	const fetchFields = async () => {
 		try {
@@ -511,6 +508,10 @@ export default function Layout() {
 		resetCalendarSelectedDate();
 		getAllCollectionDatesLastUpdate();
 	}, [user]);
+
+	if (!loggedIn && !kioskMode) {
+		return <Redirect href="/(auth)/login" />;
+	}
 
 	return (
 		<>
