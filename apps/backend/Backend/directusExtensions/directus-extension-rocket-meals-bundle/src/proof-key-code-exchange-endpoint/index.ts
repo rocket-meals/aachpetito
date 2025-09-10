@@ -233,7 +233,7 @@ function getProviderRedirectAllowList(provider: string): string[] {
   return allowed_redirect_urls;
 }
 
-async function isRedirectUrlWhitelisted(redirect_url_as_url: URL, provider: string, apiContext: ApiContext) {
+function isRedirectUrlWhitelisted(redirect_url_as_url: URL, provider: string, apiContext: ApiContext) {
   const redirect_url = redirect_url_as_url.toString();
   const allowed_redirect_urls = getProviderRedirectAllowList(provider);
   if (redirect_url.startsWith(PUBLIC_URL)) {
