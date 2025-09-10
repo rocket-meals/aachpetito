@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import path from 'path';
+import { execSync } from 'child_process';
 
 interface Issue {
   key: string;
@@ -17,6 +18,17 @@ const qualityToReportName: Record<string, string> = {
   RELIABILITY: 'reliability',
   MAINTAINABILITY: 'maintainability',
 };
+
+function getRepoRoot(): string {
+  try {
+    return execSync('git rev-parse --show-toplevel', { encoding: 'utf-8' }).trim();
+  } catch {
+    console.warn('Could not determine git repository root. Using current directory.');
+    return process.cwd();
+  }
+}
+
+const repoRoot = getRepoRoot();
 
 const argv = yargs(hideBin(process.argv))
   .scriptName('sonar-report')
@@ -43,7 +55,7 @@ const argv = yargs(hideBin(process.argv))
   .option('output-dir', {
     alias: 'o',
     type: 'string',
-    default: './reports',
+    default: path.join(repoRoot, 'reports', 'sonarCloud'),
     describe: 'Output directory for reports',
   })
   .help()
