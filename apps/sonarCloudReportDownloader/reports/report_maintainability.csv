@@ -1,4 +1,9 @@
 Key,Message,Component,Line
+"AZkybLRC_ky8HW5FJkUk","Prefer using an optional chain expression instead, as it's more concise and easier to read.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",49
+"AZkybLLr_ky8HW5FJkUg","Refactor this function to reduce its Cognitive Complexity from 27 to the 15 allowed.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/AttributeItem.tsx",18
+"AZkybLLr_ky8HW5FJkUh","Move this component definition out of the parent component and pass data as props.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/AttributeItem.tsx",64
+"AZkybLLr_ky8HW5FJkUi","Extract this nested ternary operation into an independent statement.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/AttributeItem.tsx",85
+"AZkybLLr_ky8HW5FJkUj","Prefer using nullish coalescing operator (`??`) instead of a ternary expression, as it is simpler to read.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/AttributeItem.tsx",119
 "AZkfCEQNZWk3l8lfAOUE","Unnecessary escape character: \"".","rocket-meals_rocket-meals:apps/sonarCloudReportDownloader/src/fixStaticReadonly.ts",32
 "AZkfCEQNZWk3l8lfAOUF","Unnecessary escape character: \"".","rocket-meals_rocket-meals:apps/sonarCloudReportDownloader/src/fixStaticReadonly.ts",32
 "AZkfCEQNZWk3l8lfAOUG","Unnecessary escape character: \"".","rocket-meals_rocket-meals:apps/sonarCloudReportDownloader/src/fixStaticReadonly.ts",32
@@ -289,10 +294,7 @@ Key,Message,Component,Line
 "AZkUSvHUS4VhJojFFATd","Extract this nested ternary operation into an independent statement.","rocket-meals_rocket-meals:apps/frontend/app/components/DataAcces/DataAccess.tsx",126
 "AZkUSvHUS4VhJojFFATe","Extract this nested ternary operation into an independent statement.","rocket-meals_rocket-meals:apps/frontend/app/components/DataAcces/DataAccess.tsx",126
 "AZkUSvHUS4VhJojFFATf","Do not use Array index in keys","rocket-meals_rocket-meals:apps/frontend/app/components/DataAcces/DataAccess.tsx",127
-"AZkUSvGmS4VhJojFFAS-","Remove this useless assignment to variable ""food_responsible_organization_name"".","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",22
-"AZkUSvGmS4VhJojFFATA","Prefer using an optional chain expression instead, as it's more concise and easier to read.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",46
-"AZkUSvGmS4VhJojFFATC","Prefer using an optional chain expression instead, as it's more concise and easier to read.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",58
-"AZkUSvGmS4VhJojFFATD","Refactor this function to reduce its Cognitive Complexity from 27 to the 15 allowed.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",59
+"AZkUSvGmS4VhJojFFATA","Prefer using an optional chain expression instead, as it's more concise and easier to read.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",37
 "AZkUSu9iS4VhJojFFAPj","Remove this useless assignment to variable ""isDevMode"".","rocket-meals_rocket-meals:apps/frontend/app/components/Drawer/CustomDrawerContent.tsx",58
 "AZkUSu9iS4VhJojFFAPl","Do not use Array index in keys","rocket-meals_rocket-meals:apps/frontend/app/components/Drawer/CustomDrawerContent.tsx",338
 "AZkUSu9iS4VhJojFFAPm","Prefer using an optional chain expression instead, as it's more concise and easier to read.","rocket-meals_rocket-meals:apps/frontend/app/components/Drawer/CustomDrawerContent.tsx",365
@@ -520,9 +522,6 @@ Key,Message,Component,Line
 "AZkUSvCCS4VhJojFFARG","Move this component definition out of the parent component and pass data as props.","rocket-meals_rocket-meals:apps/frontend/app/components/CustomMarkdown/CustomMarkdown.tsx",107
 "AZkUSvErS4VhJojFFASb","Move this component definition out of the parent component and pass data as props.","rocket-meals_rocket-meals:apps/frontend/app/components/CustomMenuHeader/CustomMenuHeader.tsx",44
 "AZkUSu8DS4VhJojFFAO2","Move this component definition out of the parent component and pass data as props.","rocket-meals_rocket-meals:apps/frontend/app/components/CustomStackHeader/CustomStackHeader.tsx",85
-"AZkUSvGmS4VhJojFFATF","Move this component definition out of the parent component and pass data as props.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",101
-"AZkUSvGmS4VhJojFFATG","Extract this nested ternary operation into an independent statement.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",122
-"AZkUSvGmS4VhJojFFATI","Prefer using nullish coalescing operator (`??`) instead of a ternary expression, as it is simpler to read.","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",156
 "AZkUSvB4S4VhJojFFAQ4","Move this component definition out of the parent component and pass data as props.","rocket-meals_rocket-meals:apps/frontend/app/components/FeedbackLabel/index.tsx",68
 "AZkUSvB4S4VhJojFFAQ5","Move this component definition out of the parent component and pass data as props.","rocket-meals_rocket-meals:apps/frontend/app/components/FeedbackLabel/index.tsx",104
 "AZkUSvB4S4VhJojFFAQ6","Move this component definition out of the parent component and pass data as props.","rocket-meals_rocket-meals:apps/frontend/app/components/FeedbackLabel/index.tsx",127
@@ -814,7 +813,6 @@ Key,Message,Component,Line
 "AZkUSvuBS4VhJojFFCem","Complete the task associated to this ""TODO"" comment.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/forms-sync-hook/index.ts",393
 "AZkUSvgzS4VhJojFFCW-","Complete the task associated to this ""TODO"" comment.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/helpers/MyDatabaseHelper.ts",107
 "AZkUSvfzS4VhJojFFCWU","Expected a `for-of` loop instead of a `for` loop with this simple iteration.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/helpers/form/FormHelper.ts",38
-"AZkUSvGmS4VhJojFFAS_","Remove this useless assignment to variable ""handleRedirect"".","rocket-meals_rocket-meals:apps/frontend/app/components/Details/index.tsx",24
 "AZkUSvuBS4VhJojFFCeg","Redundant double negation.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/forms-sync-hook/index.ts",32
 "AZkUSvfpS4VhJojFFCWM","'any' overrides all other types in this union type.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/helpers/MyDatabaseHelperInterface.ts",17
 "AZkUSvfpS4VhJojFFCWN","Prefer using nullish coalescing operator (`??=`) instead of an assignment expression, as it is simpler to read.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/helpers/MyDatabaseHelperInterface.ts",26
