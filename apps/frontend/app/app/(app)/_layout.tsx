@@ -124,7 +124,6 @@ export default function Layout() {
 		selectCanteen();
 	}, [kioskMode, selectedCanteen]);
 
-
 	const fetchFields = async () => {
 		try {
 			const fieldResponse: any = await fetchSpecificField('foods');
