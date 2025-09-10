@@ -97,9 +97,7 @@ export const getTitleFromTranslation = (translations: Array<Translation | WikisT
 const getDescriptionFromTranslation = (translations: Array<Translation | MarkingsTranslations>, languageCode: string): string => {
 	if (!translations || translations.length === 0) return '';
 
-        const prioritizedTranslation = translations.find(
-                t => t.languages_code?.toString()?.split('-')[0] === languageCode && Boolean(t.description)
-        );
+	const prioritizedTranslation = translations.find(t => t.languages_code?.toString()?.split('-')[0] === languageCode && Boolean(t.description));
 
 	// Fall back to any translation matching the language code
 	const fallbackTranslation = translations.find(t => t.languages_code?.toString()?.split('-')[0] === languageCode);
