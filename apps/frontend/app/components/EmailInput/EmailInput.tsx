@@ -70,7 +70,7 @@ const EmailInput = ({ id, value, onChange, onError, error, isDisabled, custom_ty
 					</View>
 				)}
 			</View>
-			{error && <Text style={styles.errorText}>{error}</Text>}
+                        {Boolean(error) && <Text style={styles.errorText}>{error}</Text>}
 		</View>
 	);
 };

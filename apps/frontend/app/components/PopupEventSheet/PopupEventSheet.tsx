@@ -149,7 +149,7 @@ const PopupEventSheet: React.FC<PopupEventSheetProps> = ({ closeSheet, eventData
 						}}
 						alt={altText}
 					/>
-					{altText && (
+                                        {Boolean(altText) && (
 						<Text
 							style={{
 								padding: 8,
