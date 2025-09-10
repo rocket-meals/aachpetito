@@ -121,7 +121,7 @@ const DateWithTimeInput = ({ id, value, onChange, onError, error, isDisabled, cu
 					</View>
 				)}
 			</View>
-                        {Boolean(error) && <Text style={styles.errorText}>{error}</Text>}
+			{Boolean(error) && <Text style={styles.errorText}>{error}</Text>}
 		</View>
 	);
 };
@@ -229,7 +229,7 @@ const DateInput = ({ id, value, onChange, onError, error, isDisabled, custom_typ
 					</View>
 				)}
 			</View>
-                        {Boolean(error) && <Text style={styles.errorText}>{error}</Text>}
+			{Boolean(error) && <Text style={styles.errorText}>{error}</Text>}
 		</View>
 	);
 };
@@ -326,7 +326,7 @@ const TimeInput = ({ id, value, onChange, onError, error, isDisabled, custom_typ
 					</View>
 				)}
 			</View>
-                        {Boolean(error) && <Text style={styles.errorText}>{error}</Text>}
+			{Boolean(error) && <Text style={styles.errorText}>{error}</Text>}
 		</View>
 	);
 };
@@ -463,7 +463,7 @@ const PreciseTimestampInput = ({ id, value, onChange, onError, error, isDisabled
 					</View>
 				)}
 			</View>
-                        {Boolean(error) && <Text style={styles.errorText}>{error}</Text>}
+			{Boolean(error) && <Text style={styles.errorText}>{error}</Text>}
 		</View>
 	);
 };

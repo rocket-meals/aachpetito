@@ -77,7 +77,7 @@ const IBANInput = ({ id, value, onChange, onError, error, isDisabled, custom_typ
 					</View>
 				)}
 			</View>
-                        {Boolean(error) && <Text style={[styles.errorText, { color: 'red' }]}>{error}</Text>}
+			{Boolean(error) && <Text style={[styles.errorText, { color: 'red' }]}>{error}</Text>}
 		</View>
 	);
 };

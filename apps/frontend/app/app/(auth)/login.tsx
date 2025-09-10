@@ -203,7 +203,7 @@ export default function Login() {
 
 		return (
 			<View style={styles.detailedContentContainer}>
-                                {Boolean(imageUrl) && (
+				{Boolean(imageUrl) && (
 					<Image
 						source={{ uri: imageUrl }}
 						style={{

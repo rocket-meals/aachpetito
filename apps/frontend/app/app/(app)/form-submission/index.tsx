@@ -644,7 +644,7 @@ const Index = () => {
 												</Text>
 												{answer?.form_field?.is_required && <FontAwesome6 name="star-of-life" size={12} color={'red'} />}
 											</View>
-                                                                                        {Boolean(description) && (
+											{Boolean(description) && (
 												<View
 													style={{
 														...styles.descriptionContainer,
