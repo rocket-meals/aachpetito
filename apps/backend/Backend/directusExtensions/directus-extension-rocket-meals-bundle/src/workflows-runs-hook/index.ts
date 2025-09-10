@@ -5,6 +5,7 @@ import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { ActionInitFilterEventHelper } from '../helpers/ActionInitFilterEventHelper';
 import { PrimaryKey, ScheduleHandler } from '@directus/types';
 import { WorkflowRunJobInterface, WorkflowRunLogger } from './WorkflowRunJobInterface';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
 const SCHEDULE_NAME = 'workflows_hook';
@@ -307,9 +308,10 @@ async function handleActionRunningCreatedOrUpdatedWorkflow(payload: Partial<Data
 
             let result: Partial<DatabaseTypes.WorkflowsRuns> = workflowRun;
             let logger = new WorkflowRunLogger(workflowRun, myDatabaseHelper);
+            const context = new WorkflowRunContext(workflowRun, myDatabaseHelper, logger);
             try {
               //console.log("About to run job for workflowRun: "+workflowRun.id);
-              result = await workflowRunJobInterface.runJob(workflowRun, myDatabaseHelper, logger);
+              result = await workflowRunJobInterface.runJob(context);
             } catch (e: any) {
               console.log('Error while running workflow: ' + e.message);
               result = logger.getFinalLogWithStateAndParams({

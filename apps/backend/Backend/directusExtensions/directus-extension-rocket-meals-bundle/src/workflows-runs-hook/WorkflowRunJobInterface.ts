@@ -1,6 +1,7 @@
 import { DatabaseTypes } from 'repo-depkit-common';
 import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 
 export type ResultHandleWorkflowRunsWantToRun = {
   errorMessage: string | undefined;
@@ -59,7 +60,7 @@ export interface WorkflowRunJobInterface {
 
   handleWorkflowRunsWantToRun(modifiableInput: Partial<DatabaseTypes.WorkflowsRuns>, workflowruns: Partial<DatabaseTypes.WorkflowsRuns>[], alreadyRunningWorkflowruns: DatabaseTypes.WorkflowsRuns[]): ResultHandleWorkflowRunsWantToRun;
 
-  runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>>;
+  runJob(context: WorkflowRunContext): Promise<Partial<DatabaseTypes.WorkflowsRuns>>;
 }
 
 /**
@@ -104,7 +105,7 @@ export abstract class SingleWorkflowRun implements WorkflowRunJobInterface {
    * but they are left abstract so subclasses must implement them.
    */
   abstract getWorkflowId(): string;
-  abstract runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>>;
+  abstract runJob(context: WorkflowRunContext): Promise<Partial<DatabaseTypes.WorkflowsRuns>>;
 
   getDeleteFailedWorkflowRunsAfterDays(): number | undefined {
     return undefined;

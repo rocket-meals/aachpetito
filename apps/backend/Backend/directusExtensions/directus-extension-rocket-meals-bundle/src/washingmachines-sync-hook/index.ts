@@ -8,7 +8,8 @@ import { StudentenwerkOsnabrueckWashingmachineParser } from './osnabrueck/Studen
 import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { WorkflowScheduleHelper } from '../workflows-runs-hook';
 import { RegisterFunctions } from '@directus/extensions';
-import { SingleWorkflowRun, WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { SingleWorkflowRun } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
 function registerWashingmachinesFilterUpdate(apiContext: any, registerFunctions: RegisterFunctions) {
@@ -91,15 +92,15 @@ class WashingmachinesWorkflow extends SingleWorkflowRun {
     return 'washingmachines-parse';
   }
 
-  async runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
-    await logger.appendLog('Starting washingmachine parsing');
+  async runJob(context: WorkflowRunContext): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
+    await context.logger.appendLog('Starting washingmachine parsing');
 
-    const parseSchedule = new WashingmachineParseSchedule(workflowRun, myDatabaseHelper, logger, this.usedParser);
+    const parseSchedule = new WashingmachineParseSchedule(context, this.usedParser);
     try {
       return await parseSchedule.parse();
     } catch (err: any) {
-      await logger.appendLog('Error: ' + err.toString());
-      return logger.getFinalLogWithStateAndParams({
+      await context.logger.appendLog('Error: ' + err.toString());
+      return context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }

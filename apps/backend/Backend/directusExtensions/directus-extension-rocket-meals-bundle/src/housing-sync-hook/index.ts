@@ -5,7 +5,8 @@ import { EnvVariableHelper, SyncForCustomerEnum } from '../helpers/EnvVariableHe
 import { ApartmentParserInterface } from './ApartmentParserInterface';
 import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { WorkflowScheduleHelper } from '../workflows-runs-hook';
-import { SingleWorkflowRun, WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { SingleWorkflowRun } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 import { DatabaseTypes } from 'repo-depkit-common';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
@@ -21,14 +22,14 @@ class HousingSyncWorkflow extends SingleWorkflowRun {
     return 'housing-sync';
   }
 
-  async runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
-    await logger.appendLog('Starting sync housing parsing');
+  async runJob(context: WorkflowRunContext): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
+    await context.logger.appendLog('Starting sync housing parsing');
     try {
-      const parseSchedule = new ApartmentsParseSchedule(workflowRun, myDatabaseHelper, logger, this.parserInterface);
+      const parseSchedule = new ApartmentsParseSchedule(context, this.parserInterface);
       return await parseSchedule.parse();
     } catch (err: any) {
-      await logger.appendLog('Error: ' + err.toString());
-      return logger.getFinalLogWithStateAndParams({
+      await context.logger.appendLog('Error: ' + err.toString());
+      return context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }

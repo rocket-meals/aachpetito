@@ -1,45 +1,40 @@
 import { ApartmentParserInterface, ApartmentsForParser } from './ApartmentParserInterface';
-import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { DatabaseTypes } from 'repo-depkit-common';
-import { WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 
 export class ApartmentsParseSchedule {
+  private readonly context: WorkflowRunContext;
   private readonly parser: ApartmentParserInterface;
-  private readonly myDatabaseHelper: MyDatabaseHelper;
-  private readonly workflowRun: DatabaseTypes.WorkflowsRuns;
-  private readonly logger: WorkflowRunLogger;
 
-  constructor(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger, parser: ApartmentParserInterface) {
+  constructor(context: WorkflowRunContext, parser: ApartmentParserInterface) {
+    this.context = context;
     this.parser = parser;
-    this.myDatabaseHelper = myDatabaseHelper;
-    this.workflowRun = workflowRun;
-    this.logger = logger;
   }
 
   async parse() {
-    await this.logger.appendLog('Starting');
+    await this.context.logger.appendLog('Starting');
     try {
-      await this.logger.appendLog('Parsing apartments');
+      await this.context.logger.appendLog('Parsing apartments');
       let apartmentsJSONList = await this.parser.getApartmentList();
 
-      await this.logger.appendLog('Updating apartments');
+      await this.context.logger.appendLog('Updating apartments');
       await this.updateApartments(apartmentsJSONList);
 
-      await this.logger.appendLog('Finished');
-      return this.logger.getFinalLogWithStateAndParams({
+      await this.context.logger.appendLog('Finished');
+      return this.context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.SUCCESS,
       });
     } catch (err: any) {
-      await this.logger.appendLog('Error: ' + err.toString());
-      return this.logger.getFinalLogWithStateAndParams({
+      await this.context.logger.appendLog('Error: ' + err.toString());
+      return this.context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }
   }
 
   async findOrCreateApartment(apartmentForParser: ApartmentsForParser) {
-    const itemService = this.myDatabaseHelper.getApartmentsHelper();
+    const itemService = this.context.myDatabaseHelper.getApartmentsHelper();
     const external_idenfifier = apartmentForParser.basicData.external_identifier;
 
     const searchObject = {
@@ -59,7 +54,7 @@ export class ApartmentsParseSchedule {
   }
 
   async updateApartment(apartmentId: string, apartmentForParser: ApartmentsForParser) {
-    const itemService = this.myDatabaseHelper.getApartmentsHelper();
+    const itemService = this.context.myDatabaseHelper.getApartmentsHelper();
     await itemService.updateOne(apartmentId, apartmentForParser.basicData);
 
     const building_data = apartmentForParser.buildingData;
@@ -67,7 +62,7 @@ export class ApartmentsParseSchedule {
     const searchObject = {
       external_identifier: buildingExternalIdentifier,
     };
-    const buildingService = this.myDatabaseHelper.getBuildingsHelper();
+    const buildingService = this.context.myDatabaseHelper.getBuildingsHelper();
     const building = await buildingService.findOrCreateItem(searchObject, building_data);
     if (building) {
       const building_id = building.id;

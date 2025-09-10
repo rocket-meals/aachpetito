@@ -9,7 +9,8 @@ import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { FoodParserWithCustomerAdaptions } from './FoodParserWithCustomerAdaptions';
 import { EnvVariableHelper } from '../helpers/EnvVariableHelper';
 import { WorkflowScheduleHelper } from '../workflows-runs-hook';
-import { SingleWorkflowRun, WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { SingleWorkflowRun } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 import { DatabaseTypes } from 'repo-depkit-common';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
@@ -72,30 +73,30 @@ class FoodParseWorkflow extends SingleWorkflowRun {
     return 'food-sync';
   }
 
-  async runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
-    await logger.appendLog('Starting food parsing');
+  async runJob(context: WorkflowRunContext): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
+    await context.logger.appendLog('Starting food parsing');
 
     try {
       let usedFoodParser = getFoodParser();
 
       if (!usedFoodParser) {
-        await logger.appendLog('no food parser configured');
+        await context.logger.appendLog('no food parser configured');
       }
 
       let usedMarkingParser = getMarkingParser();
       if (!usedMarkingParser) {
-        await logger.appendLog('no marking parser configured');
+        await context.logger.appendLog('no marking parser configured');
       }
 
       console.log('Parse schedule now creating');
-      const parseSchedule = new ParseSchedule(workflowRun, myDatabaseHelper, logger, usedFoodParser, usedMarkingParser);
+      const parseSchedule = new ParseSchedule(context, usedFoodParser, usedMarkingParser);
       console.log('await parseSchedule.parse();');
       return await parseSchedule.parse();
     } catch (err: any) {
       console.log('Parse schedule now creating error');
       console.log('Error: ' + err.toString());
-      await logger.appendLog('Error: ' + err.toString());
-      return logger.getFinalLogWithStateAndParams({
+      await context.logger.appendLog('Error: ' + err.toString());
+      return context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }

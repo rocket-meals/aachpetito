@@ -2,7 +2,8 @@ import { defineHook } from '@directus/extensions-sdk';
 import { NotifySchedule } from './NotifySchedule';
 import { WorkflowScheduleHelper } from '../workflows-runs-hook';
 import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
-import { SingleWorkflowRun, WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { SingleWorkflowRun } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 import { DatabaseTypes } from 'repo-depkit-common';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
@@ -11,16 +12,16 @@ class FoodNotifyWorkflow extends SingleWorkflowRun {
     return 'food-notify';
   }
 
-  async runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
-    await logger.appendLog('Starting food parsing');
+  async runJob(context: WorkflowRunContext): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
+    await context.logger.appendLog('Starting food parsing');
 
     try {
-      const notifySchedule = new NotifySchedule(workflowRun, myDatabaseHelper, logger);
+      const notifySchedule = new NotifySchedule(context);
       let aboutMealsInDays = 1;
       return await notifySchedule.notify(aboutMealsInDays);
     } catch (err: any) {
-      await logger.appendLog('Error: ' + err.toString());
-      return logger.getFinalLogWithStateAndParams({
+      await context.logger.appendLog('Error: ' + err.toString());
+      return context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }
