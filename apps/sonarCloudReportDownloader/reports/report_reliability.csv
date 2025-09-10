@@ -1,24 +1,15 @@
 Key,Message,Component,Line
 "AZkUSvDUS4VhJojFFAR2","Correct one of the identical sub-expressions on both sides of operator ""&&""","rocket-meals_rocket-meals:apps/frontend/app/components/FoodItem/FoodItem.tsx",242
 "AZkUSvNxS4VhJojFFAZr","Unsafe usage of optional chaining. If it short-circuits with 'undefined' the evaluation will throw TypeError.","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/form-submission/index.tsx",612
-"AZkUSvE0S4VhJojFFASc","Convert the conditional to a boolean to avoid leaked value","rocket-meals_rocket-meals:apps/frontend/app/components/IBANInput/IBANInput.tsx",80
 "AZkUSvKWS4VhJojFFAV_","Unsafe usage of optional chaining. If it short-circuits with 'undefined' the evaluation will throw TypeError.","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/foodoffers/details/index.tsx",243
 "AZkUSvP-S4VhJojFFAcf","React Hook ""useEffect"" is called conditionally. React Hooks must be called in the exact same order in every component render.","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/_layout.tsx",143
 "AZkUSvP-S4VhJojFFAch","React Hook ""useEffect"" is called conditionally. React Hooks must be called in the exact same order in every component render.","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/_layout.tsx",507
 "AZkUSvMeS4VhJojFFAXV","Unsafe usage of optional chaining. If it short-circuits with 'undefined' the evaluation will throw TypeError.","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/form-categories/index.tsx",77
-"AZkUSvNxS4VhJojFFAZs","Convert the conditional to a boolean to avoid leaked value","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/form-submission/index.tsx",647
 "AZkUSvMHS4VhJojFFAXB","Unsafe usage of optional chaining. If it short-circuits with 'undefined' the evaluation will throw TypeError.","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/forms/index.tsx",78
-"AZkUSvToS4VhJojFFAhM","Convert the conditional to a boolean to avoid leaked value","rocket-meals_rocket-meals:apps/frontend/app/app/(auth)/login.tsx",206
 "AZkUSvSVS4VhJojFFAgP","Unsafe usage of optional chaining. If it short-circuits with 'undefined' the evaluation will throw TypeError.","rocket-meals_rocket-meals:apps/frontend/app/app/(monitor)/list-day-screen/index.tsx",862
 "AZkUSvC0S4VhJojFFARa","Unsafe usage of optional chaining. If it short-circuits with 'undefined' the evaluation will throw TypeError.","rocket-meals_rocket-meals:apps/frontend/app/components/CourseTimeTable/CourseTimetable.tsx",158
 "AZkUSvC0S4VhJojFFARb","Unsafe usage of optional chaining. If it short-circuits with 'undefined' the evaluation will throw TypeError.","rocket-meals_rocket-meals:apps/frontend/app/components/CourseTimeTable/CourseTimetable.tsx",158
-"AZkUSvG7S4VhJojFFATM","Convert the conditional to a boolean to avoid leaked value","rocket-meals_rocket-meals:apps/frontend/app/components/DateTimeInputs/index.tsx",124
-"AZkUSvG7S4VhJojFFATO","Convert the conditional to a boolean to avoid leaked value","rocket-meals_rocket-meals:apps/frontend/app/components/DateTimeInputs/index.tsx",232
-"AZkUSvG7S4VhJojFFATQ","Convert the conditional to a boolean to avoid leaked value","rocket-meals_rocket-meals:apps/frontend/app/components/DateTimeInputs/index.tsx",329
-"AZkUSvG7S4VhJojFFATT","Convert the conditional to a boolean to avoid leaked value","rocket-meals_rocket-meals:apps/frontend/app/components/DateTimeInputs/index.tsx",466
-"AZkUSvHJS4VhJojFFATV","Convert the conditional to a boolean to avoid leaked value","rocket-meals_rocket-meals:apps/frontend/app/components/EmailInput/EmailInput.tsx",73
 "AZkUSu_ZS4VhJojFFAPz","React Hook ""useDeviceLocaleCodesWithoutRegionCode"" cannot be called inside a callback. React Hooks must be called in a React function component or a custom React Hook function.","rocket-meals_rocket-meals:apps/frontend/app/components/Login/Header.tsx",55
-"AZkUSu5-S4VhJojFFAOU","Convert the conditional to a boolean to avoid leaked value","rocket-meals_rocket-meals:apps/frontend/app/components/PopupEventSheet/PopupEventSheet.tsx",152
 "AZkUSvT9S4VhJojFFAhT","React Hook ""useMemo"" is called in function ""getLighterOrDarkerColorByContrastWithOptions"" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word ""use"".","rocket-meals_rocket-meals:apps/frontend/app/helper/colorHelper.tsx",57
 "AZkUSvanS4VhJojFFCSx","Promise-returning function provided to return value where a void return was expected.","rocket-meals_rocket-meals:apps/frontend/app/redux/actions/User/User.ts",16
 "AZkUSvxcS4VhJojFFCib","Introduce a new variable or use its initial value before reassigning ""myDatabaseHelper"".","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/workflows-runs-hook/index.ts",286
