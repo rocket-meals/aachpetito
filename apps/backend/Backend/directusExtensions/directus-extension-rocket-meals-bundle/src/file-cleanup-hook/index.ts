@@ -56,11 +56,7 @@ export class FileCleanupWorkflow extends SingleWorkflowRun {
 
     await context.logger.appendLog('Current configuration:');
     await context.logger.appendLog(JSON.stringify(this.config, null, 2));
-    await context.logger.appendLog(
-      '- ' +
-        FileCleanupWorkflowConfigEnum.delete_unreferenced_files_when_older_than_ms +
-        ': time in ms to delete unreferenced files. -1 to disable.'
-    );
+    await context.logger.appendLog('- ' + FileCleanupWorkflowConfigEnum.delete_unreferenced_files_when_older_than_ms + ': time in ms to delete unreferenced files. -1 to disable.');
 
     const directusFiles_fieldname_is_unreferenced = 'is_unreferenced';
 
@@ -95,23 +91,13 @@ export class FileCleanupWorkflow extends SingleWorkflowRun {
         if (!!relationObj) {
           let collectionName = relationObj.collection;
           let fieldForDirectusFileId = relationObj.field;
-          await context.logger.appendLog(
-            `Checking relation progress: ${relation}/${amountRelations} - ${collectionName} - field ${fieldForDirectusFileId}`
-          );
+          await context.logger.appendLog(`Checking relation progress: ${relation}/${amountRelations} - ${collectionName} - field ${fieldForDirectusFileId}`);
           // search for related_collection is directus_files
           if (relationObj.related_collection === 'directus_files') {
             let collectionObj = schema.collections[collectionName];
             if (!!collectionObj) {
               let isSingleton = collectionObj.singleton;
-              await context.logger.appendLog(
-                '- Found relation to directus_files in collection: ' +
-                  collectionName +
-                  ' (singleton: ' +
-                  isSingleton +
-                  ', field: ' +
-                  fieldForDirectusFileId +
-                  ')'
-              );
+              await context.logger.appendLog('- Found relation to directus_files in collection: ' + collectionName + ' (singleton: ' + isSingleton + ', field: ' + fieldForDirectusFileId + ')');
               // define the SpecificCollection type
               type SpecificCollection = {
                 // the fieldForDirectusFileId is a string
@@ -259,7 +245,7 @@ export class FileCleanupWorkflow extends SingleWorkflowRun {
             let fileCreatedAt = file.created_on;
             let fileAge = Date.now() - new Date(fileCreatedAt).getTime();
             if (fileAge >= this.config[FileCleanupWorkflowConfigEnum.delete_unreferenced_files_when_older_than_ms]) {
-                await context.logger.appendLog('Deleting file: ' + fileId);
+              await context.logger.appendLog('Deleting file: ' + fileId);
               await filesHelper.deleteOne(fileId);
               this.statistics.filesDeletedAmount++;
               this.statistics.filesDeletedDiskSpace += fileSizeAsNumber;

@@ -30,20 +30,14 @@ export class ParseSchedule {
   //private previousMealOffersHash: string | null; // in multi instance environment this should be a field in the database
   //private finished: boolean; // in multi instance environment this should be a field in the database
 
-  constructor(
-    context: WorkflowRunContext,
-    foodParser: FoodParserInterface | null,
-    markingParser: MarkingParserInterface | null
-  ) {
+  constructor(context: WorkflowRunContext, foodParser: FoodParserInterface | null, markingParser: MarkingParserInterface | null) {
     this.context = context;
     this.foodParser = foodParser;
     this.markingParser = markingParser;
   }
 
   async getPreviousMealOffersHash() {
-    return await this.context.myDatabaseHelper
-      .getWorkflowsRunsHelper()
-      .getPreviousResultHash(this.context.workflowRun, this.context.logger);
+    return await this.context.myDatabaseHelper.getWorkflowsRunsHelper().getPreviousResultHash(this.context.workflowRun, this.context.logger);
   }
 
   async parse(): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
@@ -96,9 +90,7 @@ export class ParseSchedule {
         let isSameHash = currentMealOffersHash.isSame(previousMealOffersHash);
         if (noPreviousMealOffersHash || !isSameHash) {
           await this.context.logger.appendLog('Meal offers changed, start parsing');
-          await this.context.myDatabaseHelper
-            .getWorkflowsRunsHelper()
-            .updateOneItemWithoutHookTrigger(this.context.workflowRun, {
+          await this.context.myDatabaseHelper.getWorkflowsRunsHelper().updateOneItemWithoutHookTrigger(this.context.workflowRun, {
             result_hash: currentMealOffersHash.getHash(),
           });
 

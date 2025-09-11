@@ -51,9 +51,7 @@ export class ParseSchedule {
         //console.log("cached_cashregister_id: "+cached_cashregister_id);
         if (cached_cashregister_id === undefined) {
           //console.log("findOrCreateCashregister");
-          let cashRegister = await this.context.myDatabaseHelper.getCashregisterHelper().findOrCreateCashregister(
-            cashregister_external_id
-          );
+          let cashRegister = await this.context.myDatabaseHelper.getCashregisterHelper().findOrCreateCashregister(cashregister_external_id);
           if (!!cashRegister) {
             //console.log("cashRegister found: "+cashRegister.id);
             cached_cashregister_id = cashRegister?.id;
@@ -76,7 +74,7 @@ export class ParseSchedule {
         myTimer.setCurrentCount(i);
         let timerInformation = myTimer.calcTimeSpent();
         let totalTimeInformation = timerInformation.totalTimeInformation;
-          await this.context.logger.appendLog('Time spent: ' + totalTimeInformation);
+        await this.context.logger.appendLog('Time spent: ' + totalTimeInformation);
       }
 
       await this.context.logger.appendLog('Finished');
