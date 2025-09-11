@@ -2,7 +2,8 @@ import { ParseSchedule } from './ParseSchedule';
 import { defineHook } from '@directus/extensions-sdk';
 import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { WorkflowScheduleHelper } from '../workflows-runs-hook';
-import { SingleWorkflowRun, WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { SingleWorkflowRun } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 import { DatabaseTypes } from 'repo-depkit-common';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
@@ -11,15 +12,15 @@ class UtilizationCanteenCalculationWorkflow extends SingleWorkflowRun {
     return 'utilization-canteen-calculation';
   }
 
-  async runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
-    await logger.appendLog('Starting utilization canteen calculation');
+  async runJob(context: WorkflowRunContext): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
+    await context.logger.appendLog('Starting utilization canteen calculation');
 
     try {
-      const parseSchedule = new ParseSchedule(workflowRun, myDatabaseHelper, logger);
+      const parseSchedule = new ParseSchedule(context);
       return await parseSchedule.parse();
     } catch (err: any) {
-      await logger.appendLog('Error: ' + err.toString());
-      return logger.getFinalLogWithStateAndParams({
+      await context.logger.appendLog('Error: ' + err.toString());
+      return context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }

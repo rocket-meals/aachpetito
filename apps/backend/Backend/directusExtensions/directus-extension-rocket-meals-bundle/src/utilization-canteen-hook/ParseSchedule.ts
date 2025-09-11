@@ -1,41 +1,35 @@
-import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
-
 import { DatabaseTypes, DateHelper } from 'repo-depkit-common';
-import { WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 
 export class ParseSchedule {
-  private readonly myDatabaseHelper: MyDatabaseHelper;
-  private readonly workflowRun: DatabaseTypes.WorkflowsRuns;
-  private readonly logger: WorkflowRunLogger;
+  private readonly context: WorkflowRunContext;
 
-  constructor(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger) {
-    this.myDatabaseHelper = myDatabaseHelper;
-    this.workflowRun = workflowRun;
-    this.logger = logger;
+  constructor(context: WorkflowRunContext) {
+    this.context = context;
   }
 
   async parse(): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
-    await this.logger.appendLog('Starting');
-    await this.logger.appendLog('this.myDatabaseHelper.apiContext exists: ' + !!this.myDatabaseHelper.apiContext);
+    await this.context.logger.appendLog('Starting');
+    await this.context.logger.appendLog('this.context.myDatabaseHelper.apiContext exists: ' + !!this.context.myDatabaseHelper.apiContext);
 
     try {
       // Get all Canteens
       //console.log("UtilizationSchedule: load all canteens");
-      await this.logger.appendLog('Loading all canteens');
+      await this.context.logger.appendLog('Loading all canteens');
       let canteens = await this.getAllCanteens();
       // For every canteen, get all cashregisters
       for (let canteen of canteens) {
         await this.calcForecastForCanteen(canteen);
       }
 
-      await this.logger.appendLog('Finished');
-      return this.logger.getFinalLogWithStateAndParams({
+      await this.context.logger.appendLog('Finished');
+      return this.context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.SUCCESS,
       });
     } catch (err: any) {
-      await this.logger.appendLog('Error: ' + err.toString());
-      return this.logger.getFinalLogWithStateAndParams({
+      await this.context.logger.appendLog('Error: ' + err.toString());
+      return this.context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }
@@ -43,20 +37,20 @@ export class ParseSchedule {
 
   async calcForecastForCanteen(canteen: DatabaseTypes.Canteens) {
     //console.log("UtilizationSchedule: calc for canteen - label: "+canteen?.alias);
-    await this.logger.appendLog('Calculating forecast for canteen - label: ' + canteen?.alias);
+    await this.context.logger.appendLog('Calculating forecast for canteen - label: ' + canteen?.alias);
     //console.log(canteen);
 
     // for every canteen create a utilization group or find it
-    await this.logger.appendLog('- Finding or creating utilization group for canteen: ' + canteen?.alias);
+    await this.context.logger.appendLog('- Finding or creating utilization group for canteen: ' + canteen?.alias);
     let utilization_group_for_canteen = await this.findOrCreateOrUpdateUtilizationGroupForCanteen(canteen);
 
-    await this.logger.appendLog('- utilization_group_for_canteen: ' + utilization_group_for_canteen?.id);
+    await this.context.logger.appendLog('- utilization_group_for_canteen: ' + utilization_group_for_canteen?.id);
     if (utilization_group_for_canteen) {
       // delete all future utilization forecast entries for the canteen group
       //await this.deleteAllFutureUtilizationForecastEntries(utilization_group_for_canteen); Why should we delete all future entries? We should just update the existing ones
 
       // Have a list of all transactions
-      await this.logger.appendLog('- Getting all cashregisters for canteen: ' + canteen?.alias);
+      await this.context.logger.appendLog('- Getting all cashregisters for canteen: ' + canteen?.alias);
       let cashregisters = await this.getAllCashregistersForCanteen(canteen);
 
       // calculate the prediction using as input: the transactions in the last x days, the canteen business hours
@@ -73,7 +67,7 @@ export class ParseSchedule {
       }
 
       for (let date of dates) {
-        await this.logger.appendLog('- Calculating forecast for date: ' + date.toISOString());
+        await this.context.logger.appendLog('- Calculating forecast for date: ' + date.toISOString());
 
         await this.updateUtilizationEntryForCanteenAtDate(canteen, utilization_group_for_canteen, cashregisters, date, intervalMinutes);
       }
@@ -83,7 +77,7 @@ export class ParseSchedule {
   }
 
   async createUtilizationEntry(utilization_group: DatabaseTypes.UtilizationsGroups, date_start: Date, date_end: Date) {
-    let itemService = this.myDatabaseHelper.getUtilizationEntriesHelper();
+    let itemService = this.context.myDatabaseHelper.getUtilizationEntriesHelper();
     await itemService.createOne({
       utilization_group: utilization_group?.id,
       date_start: DateHelper.formatDateToIso8601WithoutTimezone(date_start),
@@ -93,7 +87,7 @@ export class ParseSchedule {
 
   async getUtilizationEntry(utilization_group: DatabaseTypes.UtilizationsGroups, date_start: Date, date_end: Date) {
     //console.log("getUtilizationEntry");
-    let itemService = this.myDatabaseHelper.getUtilizationEntriesHelper();
+    let itemService = this.context.myDatabaseHelper.getUtilizationEntriesHelper();
 
     let allFoundEntries = await itemService.readByQuery({
       filter: {
@@ -145,7 +139,7 @@ export class ParseSchedule {
     //console.log("countCashRegistersTransactionsForInterval")
     //console.log("cashregister_ids")
     //console.log("date_start: "+date_start.toString()+" date_end: "+date_end.toString());
-    let cashregisterHelper = this.myDatabaseHelper.getCashregisterHelper();
+    let cashregisterHelper = this.context.myDatabaseHelper.getCashregisterHelper();
 
     const realisticAverage = 6000;
     const assumedMaxLimit = realisticAverage * 10; // normally during a single day only 6000 transactions are realistic, we set a limit of 10 times that value
@@ -204,14 +198,14 @@ export class ParseSchedule {
           if (!utilization_group.all_time_high || (value_real > utilization_group.all_time_high && value_real !== 0)) {
             //console.log("new all_time_high: "+value_real)
             utilization_group.all_time_high = value_real;
-            let itemService = this.myDatabaseHelper.getUtilizationGroupsHelper();
+            let itemService = this.context.myDatabaseHelper.getUtilizationGroupsHelper();
             await itemService.updateOne(utilization_group.id, {
               all_time_high: value_real,
             });
           }
         }
 
-        let itemService = this.myDatabaseHelper.getUtilizationEntriesHelper();
+        let itemService = this.context.myDatabaseHelper.getUtilizationEntriesHelper();
         await itemService.updateOne(utilizationEntryCurrent.id, utilizationEntryCurrent);
       } else {
         console.log('Houston we got a problem');
@@ -275,21 +269,21 @@ export class ParseSchedule {
   }
 
   async getAllCanteens() {
-    let itemService = this.myDatabaseHelper.getCanteensHelper();
+    let itemService = this.context.myDatabaseHelper.getCanteensHelper();
     return await itemService.readByQuery({
       limit: -1,
     });
   }
 
   async getAllCashregistersForCanteen(canteen: DatabaseTypes.Canteens) {
-    return await this.myDatabaseHelper.getCashregisterHelper().getCashregistersForCanteen(canteen.id);
+    return await this.context.myDatabaseHelper.getCashregisterHelper().getCashregistersForCanteen(canteen.id);
   }
 
   async findOrCreateOrUpdateUtilizationGroupForCanteen(canteen: DatabaseTypes.Canteens) {
     //console.log("findOrCreateOrUpdateUtilizationGroupForCanteen")
-    const canteenItemService = this.myDatabaseHelper.getCanteensHelper();
+    const canteenItemService = this.context.myDatabaseHelper.getCanteensHelper();
     let utilization_group_id = canteen?.utilization_group;
-    let itemService = this.myDatabaseHelper.getUtilizationGroupsHelper();
+    let itemService = this.context.myDatabaseHelper.getUtilizationGroupsHelper();
     let foundOrCreatedGroup = null;
     if (utilization_group_id && typeof utilization_group_id === 'string') {
       // if group present, we have to update it

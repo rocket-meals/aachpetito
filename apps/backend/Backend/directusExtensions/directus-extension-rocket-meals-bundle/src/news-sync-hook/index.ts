@@ -7,7 +7,8 @@ import { StudentenwerkHannoverNews_Parser } from './hannover/StudentenwerkHannov
 import { StudentenwerkOsnabrueckNews_Parser } from './osnabrueck/StudentenwerkOsnabrueckNews_Parser';
 import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { WorkflowScheduleHelper } from '../workflows-runs-hook';
-import { SingleWorkflowRun, WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { SingleWorkflowRun } from '../workflows-runs-hook/WorkflowRunJobInterface';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 import { DatabaseTypes } from 'repo-depkit-common';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 
@@ -23,14 +24,14 @@ class NewsParseWorkflow extends SingleWorkflowRun {
     return 'news-sync';
   }
 
-  async runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
-    await logger.appendLog('Starting sync news parsing');
+  async runJob(context: WorkflowRunContext): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
+    await context.logger.appendLog('Starting sync news parsing');
     try {
-      const parseSchedule = new NewsParseSchedule(workflowRun, myDatabaseHelper, logger, this.newsParserInterface);
+      const parseSchedule = new NewsParseSchedule(context, this.newsParserInterface);
       return await parseSchedule.parse();
     } catch (err: any) {
-      await logger.appendLog('Error: ' + err.toString());
-      return logger.getFinalLogWithStateAndParams({
+      await context.logger.appendLog('Error: ' + err.toString());
+      return context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }

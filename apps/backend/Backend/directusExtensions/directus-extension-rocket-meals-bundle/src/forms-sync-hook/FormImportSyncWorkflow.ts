@@ -1,7 +1,7 @@
 import { SingleWorkflowRun, WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
 import { DatabaseTypes } from 'repo-depkit-common';
-import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 import { FormImportSyncFormSubmissions } from './FormImportTypes';
 import { WorkflowResultHash } from '../helpers/itemServiceHelpers/WorkflowsRunHelper';
 
@@ -16,30 +16,30 @@ export abstract class FormImportSyncWorkflow extends SingleWorkflowRun {
   abstract getFormInternalCustomId(): string;
   abstract getFormAlias(): string;
 
-  async runJob(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
-    const workflowRunHelper = myDatabaseHelper.getWorkflowsRunsHelper();
-    await logger.appendLog('Creating needed data.');
-    await this.createNeededData(logger);
+  async runJob(context: WorkflowRunContext): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
+    const workflowRunHelper = context.myDatabaseHelper.getWorkflowsRunsHelper();
+    await context.logger.appendLog('Creating needed data.');
+    await this.createNeededData(context.logger);
 
-    const lastResultHash = await workflowRunHelper.getPreviousResultHash(workflowRun, logger);
+    const lastResultHash = await workflowRunHelper.getPreviousResultHash(context.workflowRun, context.logger);
     if (WorkflowResultHash.isError(lastResultHash)) {
-      await logger.appendLog('Error getting previous result hash: ' + lastResultHash.message);
-      return logger.getFinalLogWithStateAndParams({
+      await context.logger.appendLog('Error getting previous result hash: ' + lastResultHash.message);
+      return context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }
-    await logger.appendLog('Last result hash: ' + lastResultHash.getHash());
+    await context.logger.appendLog('Last result hash: ' + lastResultHash.getHash());
 
     const currentResultHash = await this.getCurrentResultHash();
-    await logger.appendLog('Current Result Hash: ' + currentResultHash.getHash());
+    await context.logger.appendLog('Current Result Hash: ' + currentResultHash.getHash());
     if (currentResultHash.isSame(lastResultHash)) {
-      await logger.appendLog('No new data found. Skipping workflow run.');
-      return logger.getFinalLogWithStateAndParams({
+      await context.logger.appendLog('No new data found. Skipping workflow run.');
+      return context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.SKIPPED,
         result_hash: currentResultHash.getHash(),
       });
     } else {
-      await logger.appendLog('New data found. Running workflow.');
+      await context.logger.appendLog('New data found. Running workflow.');
 
       // Now that we have new housing protocols, we can synchronize them with the database
       const searchForm: Partial<DatabaseTypes.Forms> = {
@@ -50,16 +50,16 @@ export abstract class FormImportSyncWorkflow extends SingleWorkflowRun {
         alias: this.getFormAlias(),
       };
 
-      await logger.appendLog('Searching for form with internal_custom_id ' + this.getFormInternalCustomId());
-      let form = await myDatabaseHelper.getFormsHelper().findOrCreateItem(searchForm, createForm);
+      await context.logger.appendLog('Searching for form with internal_custom_id ' + this.getFormInternalCustomId());
+      let form = await context.myDatabaseHelper.getFormsHelper().findOrCreateItem(searchForm, createForm);
       if (!form) {
-        await logger.appendLog('Form not found and could not be created. Skipping workflow run.');
-        return logger.getFinalLogWithStateAndParams({
+        await context.logger.appendLog('Form not found and could not be created. Skipping workflow run.');
+        return context.logger.getFinalLogWithStateAndParams({
           state: WORKFLOW_RUN_STATE.FAILED,
         });
       } else {
-        await logger.appendLog('Form found or created with id ' + form.id);
-        let formFields = await myDatabaseHelper.getFormsFieldsHelper().findItems({
+        await context.logger.appendLog('Form found or created with id ' + form.id);
+        let formFields = await context.myDatabaseHelper.getFormsFieldsHelper().findItems({
           form: form.id,
         });
         let dictFormFieldExternalImportIdToFormFieldId: {
@@ -76,20 +76,20 @@ export abstract class FormImportSyncWorkflow extends SingleWorkflowRun {
         //await logger.appendLog(JSON.stringify(dictFormFieldExternalImportIdToFormFieldId, null, 2));
 
         // Now we can create the form submissions or search for existing ones
-        await logger.appendLog('Getting data.');
+        await context.logger.appendLog('Getting data.');
         let formSubmissions = await this.getData();
         const amountOfFormSubmissions = formSubmissions.length;
-        await logger.appendLog('Amount of form submissions: ' + amountOfFormSubmissions);
+        await context.logger.appendLog('Amount of form submissions: ' + amountOfFormSubmissions);
         let currentIndexOfFormSubmission = 0;
         for (let formSubmission of formSubmissions) {
           currentIndexOfFormSubmission++;
           let internal_custom_id = formSubmission.internal_custom_id;
-          await logger.appendLog('Processing (' + currentIndexOfFormSubmission + '/' + amountOfFormSubmissions + '): ' + internal_custom_id);
+          await context.logger.appendLog('Processing (' + currentIndexOfFormSubmission + '/' + amountOfFormSubmissions + '): ' + internal_custom_id);
           let searchFormSubmission: Partial<DatabaseTypes.FormSubmissions> = {
             form: form.id,
             internal_custom_id: internal_custom_id, // identifier for the housing contract for future reference
           };
-          let foundFormSubmission = await myDatabaseHelper.getFormsSubmissionsHelper().findFirstItem(searchFormSubmission);
+          let foundFormSubmission = await context.myDatabaseHelper.getFormsSubmissionsHelper().findFirstItem(searchFormSubmission);
           if (!foundFormSubmission) {
             //await logger.appendLog("- does not exist. Creating.");
             //await logger.appendLog(JSON.stringify(formSubmission, null, 2));
@@ -126,14 +126,14 @@ export abstract class FormImportSyncWorkflow extends SingleWorkflowRun {
               delete: [],
             };
 
-            await myDatabaseHelper.getFormsSubmissionsHelper().createOne(createFormSubmission);
+            await context.myDatabaseHelper.getFormsSubmissionsHelper().createOne(createFormSubmission);
           } else {
             //await logger.appendLog("- already exists. Skipping.");
           }
         }
-        await logger.appendLog('Finished processing all form submissions.');
+        await context.logger.appendLog('Finished processing all form submissions.');
 
-        return logger.getFinalLogWithStateAndParams({
+        return context.logger.getFinalLogWithStateAndParams({
           state: WORKFLOW_RUN_STATE.SUCCESS,
           result_hash: currentResultHash.getHash(),
         });

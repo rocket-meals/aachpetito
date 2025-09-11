@@ -3,13 +3,12 @@ import { TranslationHelper } from '../helpers/TranslationHelper';
 import { MarkingParserInterface, MarkingsTypeForParser } from './MarkingParserInterface';
 import { CollectionNames, DatabaseTypes, DateHelper } from 'repo-depkit-common';
 import { ListHelper } from '../helpers/ListHelper';
-import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { DictMarkingsExclusions, MarkingFilterHelper } from '../helpers/MarkingFilterHelper';
 import { MyTimer, MyTimers } from '../helpers/MyTimer';
-import { WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
 import { HashHelper } from '../helpers/HashHelper';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 import { WorkflowResultHash } from '../helpers/itemServiceHelpers/WorkflowsRunHelper';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 
 const SCHEDULE_NAME = 'FoodParseSchedule';
 
@@ -25,29 +24,31 @@ export type FoodCreationHelperObject = {
 };
 
 export class ParseSchedule {
+  private readonly context: WorkflowRunContext;
   private readonly foodParser: FoodParserInterface | null;
   private readonly markingParser: MarkingParserInterface | null;
   //private previousMealOffersHash: string | null; // in multi instance environment this should be a field in the database
   //private finished: boolean; // in multi instance environment this should be a field in the database
-  private readonly myDatabaseHelper: MyDatabaseHelper;
-  private readonly workflowRun: DatabaseTypes.WorkflowsRuns;
-  private readonly logger: WorkflowRunLogger;
 
-  constructor(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger, foodParser: FoodParserInterface | null, markingParser: MarkingParserInterface | null) {
-    this.myDatabaseHelper = myDatabaseHelper;
-    this.workflowRun = workflowRun;
-    this.logger = logger;
+  constructor(
+    context: WorkflowRunContext,
+    foodParser: FoodParserInterface | null,
+    markingParser: MarkingParserInterface | null
+  ) {
+    this.context = context;
     this.foodParser = foodParser;
     this.markingParser = markingParser;
   }
 
   async getPreviousMealOffersHash() {
-    return await this.myDatabaseHelper.getWorkflowsRunsHelper().getPreviousResultHash(this.workflowRun, this.logger);
+    return await this.context.myDatabaseHelper
+      .getWorkflowsRunsHelper()
+      .getPreviousResultHash(this.context.workflowRun, this.context.logger);
   }
 
   async parse(): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
     //console.log("Start ParseSchedule and setting first log");
-    await this.logger.appendLog('Starting');
+    await this.context.logger.appendLog('Starting');
     //console.log("Start ParseSchedule and setting first log - done");
 
     let markingsJSONList: MarkingsTypeForParser[] = [];
@@ -55,9 +56,9 @@ export class ParseSchedule {
     try {
       if (!!this.markingParser) {
         //console.log("Create Needed Data for MarkingParser");
-        await this.logger.appendLog('Create Needed Data for MarkingParser');
+        await this.context.logger.appendLog('Create Needed Data for MarkingParser');
         await this.markingParser.createNeededData();
-        await this.logger.appendLog('Update Markings');
+        await this.context.logger.appendLog('Update Markings');
         //console.log("Get Markings JSON List");
         markingsJSONList = await this.markingParser.getMarkingsJSONList();
         //console.log("Update Markings");
@@ -66,14 +67,14 @@ export class ParseSchedule {
 
       if (!!this.foodParser) {
         //console.log("Create Needed Data for FoodParser");
-        await this.logger.appendLog('Create Needed Data for FoodParser');
+        await this.context.logger.appendLog('Create Needed Data for FoodParser');
         await this.foodParser.createNeededData(markingsJSONList);
 
         let canteensJSONList = await this.foodParser.getCanteensList();
         let foodsJSONList = await this.foodParser.getFoodsListForParser();
         let foodofferListForParser = await this.foodParser.getFoodoffersForParser();
         let currentMealOffersHash = new WorkflowResultHash(HashHelper.hashFromObject(foodofferListForParser));
-        await this.logger.appendLog('Current meal offers hash: ' + currentMealOffersHash.getHash());
+        await this.context.logger.appendLog('Current meal offers hash: ' + currentMealOffersHash.getHash());
 
         //console.log("Get Previous Meal Offers Hash");
         let previousMealOffersHash = await this.getPreviousMealOffersHash();
@@ -81,40 +82,42 @@ export class ParseSchedule {
         // check if previousMealOffersHash is Error
         if (WorkflowResultHash.isError(previousMealOffersHash)) {
           console.log('Previous Meal Offers Hash is Error');
-          await this.logger.appendLog('Error: ' + previousMealOffersHash.toString());
-          return this.logger.getFinalLogWithStateAndParams({
+          await this.context.logger.appendLog('Error: ' + previousMealOffersHash.toString());
+          return this.context.logger.getFinalLogWithStateAndParams({
             state: WORKFLOW_RUN_STATE.FAILED,
           });
         }
 
-        await this.logger.appendLog('Previous meal offers hash: ' + previousMealOffersHash.getHash());
+        await this.context.logger.appendLog('Previous meal offers hash: ' + previousMealOffersHash.getHash());
 
-        const markingsExclusionsHelper = this.myDatabaseHelper.getMarkingsExclusionsHelper();
+        const markingsExclusionsHelper = this.context.myDatabaseHelper.getMarkingsExclusionsHelper();
 
         let noPreviousMealOffersHash = !previousMealOffersHash;
         let isSameHash = currentMealOffersHash.isSame(previousMealOffersHash);
         if (noPreviousMealOffersHash || !isSameHash) {
-          await this.logger.appendLog('Meal offers changed, start parsing');
-          await this.myDatabaseHelper.getWorkflowsRunsHelper().updateOneItemWithoutHookTrigger(this.workflowRun, {
+          await this.context.logger.appendLog('Meal offers changed, start parsing');
+          await this.context.myDatabaseHelper
+            .getWorkflowsRunsHelper()
+            .updateOneItemWithoutHookTrigger(this.context.workflowRun, {
             result_hash: currentMealOffersHash.getHash(),
           });
 
-          await this.logger.appendLog('Meal offers changed, start parsing');
+          await this.context.logger.appendLog('Meal offers changed, start parsing');
           await this.updateCanteens(canteensJSONList);
 
-          await this.logger.appendLog('Update Foodoffer Categories');
+          await this.context.logger.appendLog('Update Foodoffer Categories');
           await this.updateFoodofferCategories(foodofferListForParser);
           const foodofferCategoryExternalIdentifiersToFoodofferCategoriesDict = await this.getFoodofferCategoriesExternalIdentifiersToFoodofferCategoriesDict();
 
-          await this.logger.appendLog('Update Foods Categories');
+          await this.context.logger.appendLog('Update Foods Categories');
           await this.updateFoodsCategories(foodsJSONList);
           const foodCategoryExternalIdentifiersToFoodCategoriesDict = await this.getFoodCategoriesExternalIdentifiersToFoodCategoriesDict();
 
-          await this.logger.appendLog('Get all markings exlusions');
+          await this.context.logger.appendLog('Get all markings exlusions');
           let markingsExclusions = await markingsExclusionsHelper.readAllItems();
           const dictMarkingsExclusions: DictMarkingsExclusions = MarkingFilterHelper.getDictMarkingsExclusions(markingsExclusions);
 
-          await this.logger.appendLog('Update Food Attributes');
+          await this.context.logger.appendLog('Update Food Attributes');
           const dictExternalIdentifierToFoodAttributes = await this.updateFoodAttributesAndGetExternalIdentifierToFoodAttributes(foodsJSONList);
 
           let helperObject: FoodCreationHelperObject = {
@@ -124,37 +127,37 @@ export class ParseSchedule {
             foodofferCategoryExternalIdentifiersToFoodofferCategoriesDict,
           };
 
-          await this.logger.appendLog('Update Foods');
+          await this.context.logger.appendLog('Update Foods');
           await this.updateFoods(foodsJSONList, helperObject);
 
-          await this.logger.appendLog('Delete specific food offers');
+          await this.context.logger.appendLog('Delete specific food offers');
           await this.deleteRequiredFoodOffersForTheirCanteens(foodofferListForParser);
 
-          await this.logger.appendLog('Create food offers');
+          await this.context.logger.appendLog('Create food offers');
           await this.createFoodOffers(foodofferListForParser, helperObject);
 
-          return this.logger.getFinalLogWithStateAndParams({
+          return this.context.logger.getFinalLogWithStateAndParams({
             state: WORKFLOW_RUN_STATE.SUCCESS,
             result_hash: currentMealOffersHash.getHash(),
           });
         } else {
-          await this.logger.appendLog('Meal offers did not change, skip parsing');
-          return this.logger.getFinalLogWithStateAndParams({
+          await this.context.logger.appendLog('Meal offers did not change, skip parsing');
+          return this.context.logger.getFinalLogWithStateAndParams({
             state: WORKFLOW_RUN_STATE.SKIPPED,
             result_hash: currentMealOffersHash.getHash(), // for the  skipped run it is the same result hash
           });
         }
       }
 
-      await this.logger.appendLog('Finished');
-      return this.logger.getFinalLogWithStateAndParams({
+      await this.context.logger.appendLog('Finished');
+      return this.context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.SUCCESS,
       });
     } catch (err: any) {
       console.log('FoodParseSchedule error');
       console.log(err.toString());
-      await this.logger.appendLog('Error: ' + err.toString());
-      return this.logger.getFinalLogWithStateAndParams({
+      await this.context.logger.appendLog('Error: ' + err.toString());
+      return this.context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.FAILED,
       });
     }
@@ -186,7 +189,7 @@ export class ParseSchedule {
         alias: externalIdentifier,
         external_identifier: externalIdentifier,
       };
-      let foodAttribute = await this.myDatabaseHelper.getFoodsAttributesHelper().findOrCreateItem(searchJSON, createJSON);
+      let foodAttribute = await this.context.myDatabaseHelper.getFoodsAttributesHelper().findOrCreateItem(searchJSON, createJSON);
       if (!!foodAttribute) {
         externalIdentifiersToFoodAttributesDict[externalIdentifier] = foodAttribute;
       }
@@ -211,12 +214,12 @@ export class ParseSchedule {
         alias: categoryExternalIdentifier,
         external_identifier: categoryExternalIdentifier,
       };
-      await this.myDatabaseHelper.getFoodsCategoriesHelper().findOrCreateItem(searchJSON, createJSON);
+      await this.context.myDatabaseHelper.getFoodsCategoriesHelper().findOrCreateItem(searchJSON, createJSON);
     }
   }
 
   async getFoodCategoriesExternalIdentifiersToFoodCategoriesDict() {
-    let foodCategories = await this.myDatabaseHelper.getFoodsCategoriesHelper().readAllItems();
+    let foodCategories = await this.context.myDatabaseHelper.getFoodsCategoriesHelper().readAllItems();
     let dict: DictFoodsCategoryExternalIdentifierToFoodsCategory = {};
     for (let foodCategory of foodCategories) {
       const externalIdentifier = foodCategory.external_identifier;
@@ -244,12 +247,12 @@ export class ParseSchedule {
         alias: categoryExternalIdentifier,
         external_identifier: categoryExternalIdentifier,
       };
-      await this.myDatabaseHelper.getFoodofferCategoriesHelper().findOrCreateItem(searchJSON, createJSON);
+      await this.context.myDatabaseHelper.getFoodofferCategoriesHelper().findOrCreateItem(searchJSON, createJSON);
     }
   }
 
   async getFoodofferCategoriesExternalIdentifiersToFoodofferCategoriesDict() {
-    let foodofferCategories = await this.myDatabaseHelper.getFoodofferCategoriesHelper().readAllItems();
+    let foodofferCategories = await this.context.myDatabaseHelper.getFoodofferCategoriesHelper().readAllItems();
     let dict: DictFoodofferCategoriesExternalIdentifiersToFoodofferCategories = {};
     for (let foodofferCategory of foodofferCategories) {
       const externalIdentifier = foodofferCategory.external_identifier;
@@ -261,7 +264,7 @@ export class ParseSchedule {
   }
 
   async getFoodsService() {
-    return await this.myDatabaseHelper.getFoodsHelper();
+    return await this.context.myDatabaseHelper.getFoodsHelper();
   }
 
   getFoodofferDatesFromRawFoodofferJSONList(foodoffersForParser: FoodoffersTypeForParser[]): FoodofferDateType[] {
@@ -290,7 +293,7 @@ export class ParseSchedule {
 
     let canteenExternalIdentifiers = Object.keys(foodoffersForParserGroupedByCanteen);
     for (let canteenExternalIdentifier of canteenExternalIdentifiers) {
-      await this.logger.appendLog('Delete required foodoffers for canteen: ' + canteenExternalIdentifier);
+      await this.context.logger.appendLog('Delete required foodoffers for canteen: ' + canteenExternalIdentifier);
       let canteen = await this.findOrCreateCanteenByExternalIdentifier(canteenExternalIdentifier);
       if (!!canteen) {
         // first delete all food offers for canteen without dates
@@ -308,7 +311,7 @@ export class ParseSchedule {
   }
 
   async deleteAllFoodoffersForCanteenWithoutDates(canteen: DatabaseTypes.Canteens) {
-    let itemService = await this.myDatabaseHelper.getFoodoffersHelper();
+    let itemService = await this.context.myDatabaseHelper.getFoodoffersHelper();
     let itemsToDelete = await itemService.readByQuery({
       filter: {
         canteen: {
@@ -350,13 +353,13 @@ export class ParseSchedule {
       //    await this.deleteAllFoodOffersNewerOrEqualThanDate(latestPlusOneDayIso8601StringDate);
       //}
 
-      await this.logger.appendLog('Delete food offers newer or equal than date: ' + oldestFoodofferDate);
+      await this.context.logger.appendLog('Delete food offers newer or equal than date: ' + oldestFoodofferDate);
       await this.deleteAllFoodOffersNewerOrEqualThanDateForCanteen(oldestFoodofferDate, canteen);
     }
   }
 
   async deleteFoodOffers(foodoffers: DatabaseTypes.Foodoffers[], notice: string) {
-    let itemService = await this.myDatabaseHelper.getFoodoffersHelper();
+    let itemService = await this.context.myDatabaseHelper.getFoodoffersHelper();
     let idsToDelete = foodoffers.map(item => item.id);
 
     // Step 2: Delete the items using their IDs
@@ -364,21 +367,21 @@ export class ParseSchedule {
       await itemService
         .deleteMany(idsToDelete)
         .then(async () => {
-          await this.logger.appendLog(`Foodoffers deleted: ${idsToDelete.length} - ${notice}`);
+          await this.context.logger.appendLog(`Foodoffers deleted: ${idsToDelete.length} - ${notice}`);
         })
         .catch(async error => {
-          await this.logger.appendLog(`Foodoffers delete error: ${notice}: ${error}`);
+          await this.context.logger.appendLog(`Foodoffers delete error: ${notice}: ${error}`);
         });
     } else {
-      await this.logger.appendLog(`No foodoffers given to delete - ${notice}`);
+      await this.context.logger.appendLog(`No foodoffers given to delete - ${notice}`);
     }
   }
 
   async deleteAllFoodOffersNewerOrEqualThanDateForCanteen(iso8601StringDate: FoodofferDateType, canteen: DatabaseTypes.Canteens) {
     const directusDateOnlyString = DateHelper.foodofferDateTypeToString(iso8601StringDate);
-    await this.logger.appendLog('Delete food offers newer or equal than date: ' + directusDateOnlyString + ' for canteen: ' + canteen.id);
+    await this.context.logger.appendLog('Delete food offers newer or equal than date: ' + directusDateOnlyString + ' for canteen: ' + canteen.id);
 
-    let itemService = await this.myDatabaseHelper.getFoodoffersHelper();
+    let itemService = await this.context.myDatabaseHelper.getFoodoffersHelper();
     //await itemService.deleteByQuery()
     // TODO: Überprüfen ob deleteByQuery funktioniert und ob es dadurch schneller geht bzw. es zu einem Blockieren der Datenbank kommt
 
@@ -412,14 +415,14 @@ export class ParseSchedule {
       alias: marking_external_identifier,
       external_identifier: marking_external_identifier,
     };
-    return this.myDatabaseHelper.getMarkingsHelper().findOrCreateItem(searchJSON, createJSON);
+    return this.context.myDatabaseHelper.getMarkingsHelper().findOrCreateItem(searchJSON, createJSON);
   }
 
   async findMarkingByExternalIdentifier(marking_external_identifier: string) {
     let searchJSON = {
       external_identifier: marking_external_identifier,
     };
-    return await this.myDatabaseHelper.getMarkingsHelper().findFirstItem(searchJSON);
+    return await this.context.myDatabaseHelper.getMarkingsHelper().findFirstItem(searchJSON);
   }
 
   async updateCanteens(canteenList: CanteensTypeForParser[]): Promise<void> {
@@ -427,10 +430,10 @@ export class ParseSchedule {
     let currentCanteen = 0;
     for (let canteen of canteenList) {
       currentCanteen++;
-      await this.logger.appendLog('Update Canteen ' + currentCanteen + ' / ' + amountOfCanteens);
+      await this.context.logger.appendLog('Update Canteen ' + currentCanteen + ' / ' + amountOfCanteens);
       let canteenFoundOrCreated = await this.findOrCreateCanteen(canteen);
       if (!!canteenFoundOrCreated) {
-        let canteensHelper = this.myDatabaseHelper.getCanteensHelper();
+        let canteensHelper = this.context.myDatabaseHelper.getCanteensHelper();
         await canteensHelper.updateOne(canteenFoundOrCreated.id, canteen);
       }
     }
@@ -445,7 +448,7 @@ export class ParseSchedule {
       const searchJSON = food_marking_json;
       const createJSON = food_marking_json;
 
-      const foodMarkingsHelper = this.myDatabaseHelper.getItemsServiceHelper<DatabaseTypes.FoodsMarkings>(tablename);
+      const foodMarkingsHelper = this.context.myDatabaseHelper.getItemsServiceHelper<DatabaseTypes.FoodsMarkings>(tablename);
       await foodMarkingsHelper.findOrCreateItem(searchJSON, createJSON);
     }
   }
@@ -460,18 +463,18 @@ export class ParseSchedule {
         foodoffers_id: foodoffer.id,
         markings_id: marking.id,
       };
-      const foodMarkingsHelper = this.myDatabaseHelper.getItemsServiceHelper<DatabaseTypes.FoodoffersMarkings>(tablename);
+      const foodMarkingsHelper = this.context.myDatabaseHelper.getItemsServiceHelper<DatabaseTypes.FoodoffersMarkings>(tablename);
       await foodMarkingsHelper.createOne(foodoffer_marking_json);
     }
   }
 
   async updateFoodBasicFields(food: FoodWithBasicData) {
-    return this.myDatabaseHelper.getFoodsHelper().updateOne(food.id, food);
+    return this.context.myDatabaseHelper.getFoodsHelper().updateOne(food.id, food);
   }
 
   async updateFoodsAttributesValues(food: DatabaseTypes.Foods, new_attribute_values: FoodParseFoodAttributesType, dictExternalIdentifierToFoodAttributes: DictFoodsAttributesExternalIdentifiersToFoodsAttributes) {
     let foodWithOnlySetAttributesFields = this.getFoodsOrFoodoffersWithOnlySetAttributesFields(food, new_attribute_values, dictExternalIdentifierToFoodAttributes, { isFood: true, isFoodoffer: false });
-    await this.myDatabaseHelper.getFoodsHelper().updateOne(food.id, foodWithOnlySetAttributesFields, {
+    await this.context.myDatabaseHelper.getFoodsHelper().updateOne(food.id, foodWithOnlySetAttributesFields, {
       disableEventEmit: true,
     });
   }
@@ -525,12 +528,12 @@ export class ParseSchedule {
   }
 
   async updateFoodTranslations(foundFoodWithTranslations: DatabaseTypes.Foods, foodsInformationForParser: FoodsInformationTypeForParser) {
-    await TranslationHelper.updateItemTranslationsForItemWithTranslationsFetched<DatabaseTypes.Foods, DatabaseTypes.FoodsTranslations>(foundFoodWithTranslations, foodsInformationForParser.translations, 'foods_id', CollectionNames.FOODS, this.myDatabaseHelper);
+    await TranslationHelper.updateItemTranslationsForItemWithTranslationsFetched<DatabaseTypes.Foods, DatabaseTypes.FoodsTranslations>(foundFoodWithTranslations, foodsInformationForParser.translations, 'foods_id', CollectionNames.FOODS, this.context.myDatabaseHelper);
   }
 
   async getOrCreateFoodsOnlyWithTranslations(foodsInformationForParserList: FoodsInformationTypeForParser[]) {
     const myTimer = new MyTimer(SCHEDULE_NAME + ' - getOrCreateFoodsOnly');
-    const foodsHelper = this.myDatabaseHelper.getFoodsHelper();
+    const foodsHelper = this.context.myDatabaseHelper.getFoodsHelper();
     const foodsDict: Record<string, DatabaseTypes.Foods> = {};
 
     let index = 0;
@@ -549,7 +552,7 @@ export class ParseSchedule {
     }
 
     myTimer.printElapsedTime();
-    await this.logger.appendLog(`[Step 1] - Found or created ${Object.keys(foodsDict).length} foods.`);
+    await this.context.logger.appendLog(`[Step 1] - Found or created ${Object.keys(foodsDict).length} foods.`);
     return foodsDict;
   }
 
@@ -623,7 +626,7 @@ export class ParseSchedule {
       }
     }
 
-    await this.logger.appendLog('Finished Update Foods');
+    await this.context.logger.appendLog('Finished Update Foods');
   }
 
   async assignFoodCategoryToFood(food: DatabaseTypes.Foods, foodsInformationForParser: FoodsInformationTypeForParser, foodCategoryExternalIdentifiersToFoodCategoriesDict: DictFoodsCategoryExternalIdentifierToFoodsCategory) {
@@ -633,7 +636,7 @@ export class ParseSchedule {
       const foodCategory_id = foodCategory?.id;
       const foodsFoodsCategory_id = food.food_category;
       if (foodCategory_id !== foodsFoodsCategory_id) {
-        await this.myDatabaseHelper.getFoodsHelper().updateOne(food.id, { food_category: foodCategory_id });
+        await this.context.myDatabaseHelper.getFoodsHelper().updateOne(food.id, { food_category: foodCategory_id });
       }
     }
   }
@@ -643,7 +646,7 @@ export class ParseSchedule {
       external_identifier: canteen.external_identifier,
     };
     let createJSON = canteen;
-    return await this.myDatabaseHelper.getCanteensHelper().findOrCreateItem(searchJSON, createJSON);
+    return await this.context.myDatabaseHelper.getCanteensHelper().findOrCreateItem(searchJSON, createJSON);
   }
 
   async findOrCreateCanteenByExternalIdentifier(external_identifier: string) {
@@ -696,7 +699,7 @@ export class ParseSchedule {
 
   async createFoodOffers(foodofferListForParser: FoodoffersTypeForParser[], helperObject: FoodCreationHelperObject) {
     const amountOfRawMealOffers = foodofferListForParser.length;
-    await this.logger.appendLog('Create Food Offers');
+    await this.context.logger.appendLog('Create Food Offers');
 
     const dictCanteenExternalIdentifierToCanteen: Record<string, DatabaseTypes.Canteens | null> = {};
     const dictMarkingExternalIdentifierToMarking: Record<string, DatabaseTypes.Markings | null> = {};
@@ -787,13 +790,13 @@ export class ParseSchedule {
         let foodOfferToCreate = this.getFoodofferToCreate(foodofferForParser, canteen, filteredMarkings, food, foodofferCategory, helperObject);
         foodoffersToCreate.push(foodOfferToCreate);
       } else {
-        await this.logger.appendLog('Error Foodoffer ' + (index + 1) + ' / ' + amountOfRawMealOffers + ' - canteenFound: ' + canteenFound + ' - markingsAllFound: ' + markingsAllFound + ' - foodFound: ' + foodFound);
+        await this.context.logger.appendLog('Error Foodoffer ' + (index + 1) + ' / ' + amountOfRawMealOffers + ' - canteenFound: ' + canteenFound + ' - markingsAllFound: ' + markingsAllFound + ' - foodFound: ' + foodFound);
       }
     }
 
     const batchSize = 10;
 
-    const myFoodOffersService = await this.myDatabaseHelper.getFoodoffersHelper();
+    const myFoodOffersService = await this.context.myDatabaseHelper.getFoodoffersHelper();
 
     const myTimer = new MyTimer(SCHEDULE_NAME + ' - Create Food Offers');
     const myTimersEmitEvents = new MyTimers('disableEventEmit_TRUE', 'disableEventEmit_FALSE');
@@ -802,7 +805,7 @@ export class ParseSchedule {
     const amountOfBatches = Math.ceil(foodoffersToCreate.length / batchSize);
     for (let i = 0; i < foodoffersToCreate.length; i += batchSize) {
       const batch = foodoffersToCreate.slice(i, i + batchSize);
-      await this.logger.appendLog('Create Food Offers Batch ' + batchIndex + ' / ' + amountOfBatches);
+      await this.context.logger.appendLog('Create Food Offers Batch ' + batchIndex + ' / ' + amountOfBatches);
 
       let disableEventEmit = true;
       await myFoodOffersService.createManyItems(batch, {
@@ -814,7 +817,7 @@ export class ParseSchedule {
   }
 
   async updateMarkings(markingsJSONList: MarkingsTypeForParser[]) {
-    let itemService = await this.myDatabaseHelper.getMarkingsHelper();
+    let itemService = await this.context.myDatabaseHelper.getMarkingsHelper();
 
     markingsJSONList = ListHelper.removeDuplicatesFromJsonList(markingsJSONList, 'external_identifier'); // Remove duplicates https://github.com/rocket-meals/rocket-meals/issues/151
 
@@ -822,8 +825,8 @@ export class ParseSchedule {
     let currentMarking = 0;
     for (let markingJSON of markingsJSONList) {
       currentMarking++;
-      await this.logger.appendLog('Update Marking ' + currentMarking + ' / ' + amountOfMarkings);
-      await this.logger.appendLog(JSON.stringify(markingJSON, null, 2));
+      await this.context.logger.appendLog('Update Marking ' + currentMarking + ' / ' + amountOfMarkings);
+      await this.context.logger.appendLog(JSON.stringify(markingJSON, null, 2));
 
       let markingJSONCopy = JSON.parse(JSON.stringify(markingJSON));
       delete markingJSONCopy.translations; // Remove meals translations, add it later
@@ -857,6 +860,6 @@ export class ParseSchedule {
   }
 
   async updateMarkingTranslations(marking: DatabaseTypes.Markings, markingJSON: MarkingsTypeForParser) {
-    await TranslationHelper.updateItemTranslations<DatabaseTypes.Markings, DatabaseTypes.MarkingsTranslations>(marking, markingJSON.translations, 'markings_id', CollectionNames.MARKINGS, this.myDatabaseHelper);
+    await TranslationHelper.updateItemTranslations<DatabaseTypes.Markings, DatabaseTypes.MarkingsTranslations>(marking, markingJSON.translations, 'markings_id', CollectionNames.MARKINGS, this.context.myDatabaseHelper);
   }
 }

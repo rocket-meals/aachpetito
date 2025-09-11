@@ -1,45 +1,40 @@
 import { NewsParserInterface, NewsTypeForParser } from './NewsParserInterface';
 import { TranslationHelper } from '../helpers/TranslationHelper';
-import { MyDatabaseHelper } from '../helpers/MyDatabaseHelper';
 import { CollectionNames, DatabaseTypes } from 'repo-depkit-common';
-import { WorkflowRunLogger } from '../workflows-runs-hook/WorkflowRunJobInterface';
 import { WORKFLOW_RUN_STATE } from '../helpers/itemServiceHelpers/WorkflowsRunEnum';
 import { WorkflowResultHash } from '../helpers/itemServiceHelpers/WorkflowsRunHelper';
 import { HashHelper } from '../helpers/HashHelper';
+import { WorkflowRunContext } from '../helpers/WorkflowRunContext';
 
 export class NewsParseSchedule {
   //TODO stringfiy and cache results to reduce dublicate removing from foodOffers and Meals ...
+  private readonly context: WorkflowRunContext;
   private readonly parser: NewsParserInterface;
-  private readonly myDatabaseHelper: MyDatabaseHelper;
-  private readonly logger: WorkflowRunLogger;
-  private readonly workflowRun: DatabaseTypes.WorkflowsRuns;
 
-  constructor(workflowRun: DatabaseTypes.WorkflowsRuns, myDatabaseHelper: MyDatabaseHelper, logger: WorkflowRunLogger, parser: NewsParserInterface) {
-    this.workflowRun = workflowRun;
-    this.myDatabaseHelper = myDatabaseHelper;
-    this.logger = logger;
+  constructor(context: WorkflowRunContext, parser: NewsParserInterface) {
+    this.context = context;
     this.parser = parser;
   }
 
   async getPreviousHash() {
-    return await this.myDatabaseHelper.getWorkflowsRunsHelper().getPreviousResultHash(this.workflowRun, this.logger);
+    return await this.context.myDatabaseHelper.getWorkflowsRunsHelper().getPreviousResultHash(this.context.workflowRun, this.context.logger);
   }
 
   async parse(): Promise<Partial<DatabaseTypes.WorkflowsRuns>> {
-    await this.logger.appendLog('Starting sync news parsing');
+    await this.context.logger.appendLog('Starting sync news parsing');
 
     try {
-      await this.logger.appendLog('Getting news items');
-      let newsJSONList = await this.parser.getNewsItems(this.workflowRun, this.logger);
-      await this.logger.appendLog('Found ' + newsJSONList.length + ' news items');
+      await this.context.logger.appendLog('Getting news items');
+      let newsJSONList = await this.parser.getNewsItems(this.context.workflowRun, this.context.logger);
+      await this.context.logger.appendLog('Found ' + newsJSONList.length + ' news items');
 
       let currentHash = new WorkflowResultHash(HashHelper.hashFromObject(newsJSONList));
 
       let previousMealOffersHash = await this.getPreviousHash();
       if (WorkflowResultHash.isError(previousMealOffersHash)) {
         console.log('Previous Hash is Error');
-        await this.logger.appendLog('Error: ' + previousMealOffersHash.toString());
-        return this.logger.getFinalLogWithStateAndParams({
+        await this.context.logger.appendLog('Error: ' + previousMealOffersHash.toString());
+        return this.context.logger.getFinalLogWithStateAndParams({
           state: WORKFLOW_RUN_STATE.FAILED,
         });
       }
@@ -50,21 +45,21 @@ export class NewsParseSchedule {
         await this.updateNews(newsJSONList);
       }
 
-      await this.logger.appendLog('Finished');
-      return await this.logger.getFinalLogWithStateAndParams({
+      await this.context.logger.appendLog('Finished');
+      return await this.context.logger.getFinalLogWithStateAndParams({
         state: WORKFLOW_RUN_STATE.SUCCESS,
         result_hash: currentHash.getHash(),
       });
     } catch (err: any) {
-      await this.logger.appendLog('Error: ' + err.toString());
+      await this.context.logger.appendLog('Error: ' + err.toString());
     }
-    return await this.logger.getFinalLogWithStateAndParams({
+    return await this.context.logger.getFinalLogWithStateAndParams({
       state: WORKFLOW_RUN_STATE.FAILED,
     });
   }
 
   async findOrCreateSingleNews(newsJSON: NewsTypeForParser) {
-    let itemService = await this.myDatabaseHelper.getNewsHelper();
+    let itemService = await this.context.myDatabaseHelper.getNewsHelper();
 
     const searchJson = {
       external_identifier: newsJSON?.basicNews.external_identifier,
@@ -74,19 +69,19 @@ export class NewsParseSchedule {
   }
 
   async updateNewsTranslations(item: DatabaseTypes.News, newsJSON: NewsTypeForParser) {
-    await TranslationHelper.updateItemTranslations(item, newsJSON.translations, 'news_id', CollectionNames.NEWS, this.myDatabaseHelper);
+    await TranslationHelper.updateItemTranslations(item, newsJSON.translations, 'news_id', CollectionNames.NEWS, this.context.myDatabaseHelper);
   }
 
   async updateOtherFields(item: DatabaseTypes.News, newsJSON: NewsTypeForParser) {
-    let itemService = this.myDatabaseHelper.getNewsHelper();
+    let itemService = this.context.myDatabaseHelper.getNewsHelper();
     await itemService.updateOne(item?.id, newsJSON.basicNews);
   }
 
   async updateNews(newsJSONList: NewsTypeForParser[]) {
-    await this.logger.appendLog('Updating news items');
+    await this.context.logger.appendLog('Updating news items');
     for (let index = 0; index < newsJSONList.length; index++) {
       let newsJSON = newsJSONList[index] as NewsTypeForParser;
-      await this.logger.appendLog(`Processing news item ${index + 1} of ${newsJSONList.length}`);
+      await this.context.logger.appendLog(`Processing news item ${index + 1} of ${newsJSONList.length}`);
       let news = await this.findOrCreateSingleNews(newsJSON);
       if (!!news && news?.id) {
         await this.updateOtherFields(news, newsJSON);
