@@ -83,7 +83,7 @@ async function main() {
       adminEmail = process.env.ADMIN_EMAIL;
       adminPassword = process.env.ADMIN_PASSWORD;
 
-      if(!pathToDataDirectusSync){
+      if (!pathToDataDirectusSync) {
         let folderOfEnvFile = path.dirname(envFilePath || '');
         pathToDataDirectusSync = path.join(folderOfEnvFile, DockerDirectusHelper.getRelativePathToDirectusSyncFromProjectRoot());
       }

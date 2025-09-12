@@ -15,5 +15,4 @@ export class DockerDirectusHelper {
   public static getRelativePathToDirectusSyncFromProjectRoot(): string {
     return 'data/directus-sync-data';
   }
-
 }
