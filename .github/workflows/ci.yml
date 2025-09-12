@@ -137,7 +137,7 @@ jobs:
         with:
           node-version: "22.16.0"
       - name: "🩺 Analyse data clumps"
-        uses: NilsBaumgartner1994/data-clumps-doctor/.github/actions/analyse-data-clumps@main
+        uses: NilsBaumgartner1994/data-clumps-doctor/.github/actions/analyse-data-clumps@master
         with:
           path-to-source: .
           output-path: reports/data-clumps-doctor/data-clumps.json
