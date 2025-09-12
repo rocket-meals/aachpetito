@@ -1,4 +1,5 @@
 Key,Message,Component,Line
+"AZk9YZG1aIsz3rzM5ofo","This always evaluates to truthy. Consider refactoring this code.","rocket-meals_rocket-meals:apps/backend-sync/src/index.ts",87
 "AZk5yCoWcqWn87Mc_lJR","Refactor this function to reduce its Cognitive Complexity from 129 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/file-cleanup-hook/index.ts",47
 "AZk5yCoWcqWn87Mc_lJS","Redundant double negation.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/file-cleanup-hook/index.ts",50
 "AZk5yChRcqWn87Mc_lJG","Unexpected `await` of a non-Promise (non-""Thenable"") value.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/food-sync-hook/ParseSchedule.ts",259
@@ -70,7 +71,7 @@ Key,Message,Component,Line
 "AZkUSv2NS4VhJojFFCr2","Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend-sync/src/DockerContainerManager.ts",14
 "AZkUSv2NS4VhJojFFCr3","Handle this exception or don't catch it at all.","rocket-meals_rocket-meals:apps/backend-sync/src/DockerContainerManager.ts",129
 "AZkUSv2ES4VhJojFFCrz","Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend-sync/src/DockerDirectusPingHelper.ts",6
-"AZkUSv17S4VhJojFFCry","Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend-sync/src/index.ts",49
+"AZkUSv17S4VhJojFFCry","Refactor this function to reduce its Cognitive Complexity from 22 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend-sync/src/index.ts",49
 "AZkUSv2fS4VhJojFFCr_","Remove this commented out code.","rocket-meals_rocket-meals:apps/backend-sync/src/DirectusDatabaseSync.ts",55
 "AZkUSv2fS4VhJojFFCsA","Remove this commented out code.","rocket-meals_rocket-meals:apps/backend-sync/src/DirectusDatabaseSync.ts",64
 "AZkUSv2fS4VhJojFFCsB","Remove this commented out code.","rocket-meals_rocket-meals:apps/backend-sync/src/DirectusDatabaseSync.ts",129
