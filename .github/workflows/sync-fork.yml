@@ -76,7 +76,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PRIVATE_ACCESS_TOKEN }}
         run: |
           echo "🚀 Triggering Combined CI workflow after successful sync..."
-          gh workflow run combined-ci.yml --ref master
+          gh workflow run ci.yml --ref master
           echo "✅ Combined CI workflow triggered!"
 
       - name: ⏭️ Skip Fork Sync - No Updates
