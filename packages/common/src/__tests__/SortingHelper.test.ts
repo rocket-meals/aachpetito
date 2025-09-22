@@ -57,6 +57,20 @@ describe('SortingHelper', () => {
     expect(sorted.map((o: any) => o.id)).toEqual(['1', '3', '2']);
   });
 
+  test('sortByEatingHabits moves mixed liked and disliked offers to the end', () => {
+    const offers: any = [
+      { id: '1', markings: [{ markings_id: 'm1' }] },
+      { id: '2', markings: [{ markings_id: 'm1' }, { markings_id: 'm2' }] },
+      { id: '3', markings: [{ markings_id: 'm2' }] },
+    ];
+    const profile = [
+      { markings_id: 'm1', like: true },
+      { markings_id: 'm2', like: false },
+    ];
+    const sorted = sortByEatingHabits(offers, profile);
+    expect(sorted.map((o: any) => o.id)).toEqual(['1', '2', '3']);
+  });
+
   test('sortBySortField sorts numerically and keeps missing at end', () => {
     const items = [{ id: 'a', sort: 3 }, { id: 'b', sort: 1 }, { id: 'c' }];
     const sorted = sortBySortField(items);
