@@ -287,10 +287,10 @@ export function sortByEatingHabits(foodOffers: DatabaseTypes.Foodoffers[], profi
       }
     }
 
-    if (isLiked) {
-      liked.push(offer);
-    } else if (isDisliked) {
+    if (isDisliked) {
       disliked.push(offer);
+    } else if (isLiked) {
+      liked.push(offer);
     } else {
       neutral.push(offer);
     }
