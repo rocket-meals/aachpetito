@@ -3,7 +3,7 @@ import LottieView from 'lottie-react-native';
 import { Dimensions, Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { styles } from './styles';
+import styles from './styles';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useDispatch, useSelector } from 'react-redux';
