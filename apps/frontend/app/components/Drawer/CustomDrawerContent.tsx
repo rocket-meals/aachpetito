@@ -366,7 +366,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = ({ navigation
 						wikis?.map((wiki: any, index: number) => {
 							if (wiki?.custom_id && !wiki?.url && wiki?.show_in_drawer_as_bottom_item) {
 								return (
-									<>
+									<React.Fragment key={index}>
 										<TouchableOpacity
 											onPress={() =>
 												router.push({
@@ -378,7 +378,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = ({ navigation
 											<Text style={{ ...styles.link, color: theme.drawer.link }}>{getTitleFromTranslation(wiki?.translations, language)}</Text>
 										</TouchableOpacity>
 										{index + 1 < wikis?.length - 1 && <Text style={{ ...styles.bar, color: theme.drawer.link }}>|</Text>}
-									</>
+									</React.Fragment>
 								);
 							}
 						})}
