@@ -433,9 +433,9 @@ export default function FoodDetailsScreen() {
 											<Image
 												style={styles.featuredImage}
 												source={
-													(foodDetails?.image_remote_url || foodDetails?.image)
-														?   {
-																uri: (foodDetails?.image_remote_url || getImageUrl(foodDetails?.image)),
+													foodDetails?.image_remote_url || foodDetails?.image
+														? {
+																uri: foodDetails?.image_remote_url || getImageUrl(foodDetails?.image),
 															}
 														: { uri: defaultImage }
 												}
