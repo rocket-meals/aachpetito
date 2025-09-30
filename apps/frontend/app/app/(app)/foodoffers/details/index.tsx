@@ -429,7 +429,7 @@ export default function FoodDetailsScreen() {
 											height: screenWidth > 1000 ? 400 : Dimensions.get('window').width - 40,
 										}}
 									>
-										<TouchableOpacity onPress={openFullScreenImage} activeOpacity={0.9}>
+										<TouchableOpacity onPress={openFullScreenImage} activeOpacity={0.9} style={styles.featuredImage}>
 											<Image
 												style={styles.featuredImage}
 												source={
@@ -464,10 +464,10 @@ export default function FoodDetailsScreen() {
 												<Text
 													style={{
 														...styles.totalRating,
-														color: '#fff',
+														color: theme.screen.text,
 													}}
 												>
-													{(foodDetails?.rating_average || foodDetails?.rating_average_legacy) && numToOneDecimal(foodDetails.rating_average || foodDetails?.rating_average_legacy)}
+													{(foodDetails?.rating_average || foodDetails?.rating_average_legacy) && numToOneDecimal(foodDetails?.rating_average || foodDetails?.rating_average_legacy)}
 												</Text>
 											</View>
 										)}
@@ -523,7 +523,7 @@ export default function FoodDetailsScreen() {
 						</>
 					) : (
 						<View style={styles.mobileImageContainer}>
-							<TouchableOpacity onPress={openFullScreenImage} activeOpacity={0.9}>
+							<TouchableOpacity onPress={openFullScreenImage} activeOpacity={0.9} style={styles.mobileFeaturedImage}>
 								<Image
 									source={
 										foodDetails?.image_remote_url || foodDetails?.image
@@ -550,10 +550,10 @@ export default function FoodDetailsScreen() {
 												<Text
 													style={{
 														...styles.mobileTotalRating,
-														color: '#fff',
+														color: theme.screen.text,
 													}}
 												>
-													{(foodDetails?.rating_average || foodDetails?.rating_average_legacy) && numToOneDecimal(foodDetails.rating_average || foodDetails?.rating_average_legacy)}
+													{(foodDetails?.rating_average || foodDetails?.rating_average_legacy) && numToOneDecimal(foodDetails?.rating_average || foodDetails?.rating_average_legacy)}
 												</Text>
 											</View>
 										)}

@@ -43,7 +43,7 @@ export interface SettingsState {
 	appSettings: DatabaseTypes.AppSettings;
 	language: string;
 	firstDayOfTheWeek: { id: string; name: string };
-	drawerPosition: 'left' | 'right';
+	drawerPosition: 'left' | 'right' | 'system';
 	wikisPages: any[];
 	wikis: DatabaseTypes.Wikis[];
 	nickNameLocal: string;
