@@ -3,14 +3,7 @@ import { Appearance, Linking, Text, useWindowDimensions, View } from 'react-nati
 import { FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import MarkdownIt from 'markdown-it';
 import { darkTheme, lightTheme } from '@/styles/themes';
-import RenderHtml, {
-	CustomBlockRenderer,
-	CustomMixedRenderer,
-	CustomTextualRenderer,
-	HTMLContentModel,
-	HTMLElementModel,
-	defaultSystemFonts,
-} from 'react-native-render-html';
+import RenderHtml, { CustomBlockRenderer, CustomMixedRenderer, CustomTextualRenderer, HTMLContentModel, HTMLElementModel, defaultSystemFonts } from 'react-native-render-html';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/reducer';
 import ProjectButton from '../ProjectButton';
@@ -36,16 +29,7 @@ export const replaceLinebreaks = (sourceContent: string) => {
 	return sourceContent;
 };
 
-const MARKDOWN_SYSTEM_FONTS = Array.from(
-	new Set([
-		...defaultSystemFonts,
-		'Poppins_300Light',
-		'Poppins_400Regular',
-		'Poppins_500Medium',
-		'Poppins_600SemiBold',
-		'Poppins_700Bold',
-	]),
-);
+const MARKDOWN_SYSTEM_FONTS = Array.from(new Set([...defaultSystemFonts, 'Poppins_300Light', 'Poppins_400Regular', 'Poppins_500Medium', 'Poppins_600SemiBold', 'Poppins_700Bold']));
 
 const MyMarkdown: React.FC<MyMarkdownProps> = ({ content, textColor: textColorProp }) => {
 	const { primaryColor, selectedTheme } = useSelector((state: RootState) => state.settings);
@@ -166,7 +150,7 @@ const MyMarkdown: React.FC<MyMarkdownProps> = ({ content, textColor: textColorPr
 			fontStyle: 'normal' as const,
 			fontFamily: 'Poppins_400Regular',
 		}),
-		[textColor],
+		[textColor]
 	);
 
 	const customRenderers: Record<string, CustomBlockRenderer | CustomTextualRenderer | CustomMixedRenderer> = {
@@ -215,26 +199,13 @@ const MyMarkdown: React.FC<MyMarkdownProps> = ({ content, textColor: textColorPr
 		sup: (props: any) => {
 			const { data } = props.tnode;
 			const text = data || props.children[0]?.data;
-			return (
-				<Text style={{ fontSize, verticalAlign: 'super', color: textColor, fontFamily: 'Poppins_400Regular' }}>
-					{text}
-				</Text>
-			);
+			return <Text style={{ fontSize, verticalAlign: 'super', color: textColor, fontFamily: 'Poppins_400Regular' }}>{text}</Text>;
 		},
 	};
 
 	return (
 		<View>
-			<RenderHtml
-				contentWidth={width}
-				baseStyle={baseTextStyle}
-				renderers={customRenderers}
-				defaultTextProps={{ selectable: true }}
-				customHTMLElementModels={customHTMLElementModels}
-				tagsStyles={tagsStyles}
-				systemFonts={MARKDOWN_SYSTEM_FONTS}
-				source={source}
-			/>
+			<RenderHtml contentWidth={width} baseStyle={baseTextStyle} renderers={customRenderers} defaultTextProps={{ selectable: true }} customHTMLElementModels={customHTMLElementModels} tagsStyles={tagsStyles} systemFonts={MARKDOWN_SYSTEM_FONTS} source={source} />
 		</View>
 	);
 };

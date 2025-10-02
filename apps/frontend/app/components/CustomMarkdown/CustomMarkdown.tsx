@@ -131,20 +131,20 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({ content, backgroundColo
 						continue;
 					}
 
-                                        if (contentPatterns.link.test(trimmedForMatch)) {
-                                                flushTextContent();
-                                                const match = trimmedForMatch.match(contentPatterns.link);
-                                                const rawUrl = match?.[2] || '';
-                                                const { resolvedHref } = resolveLocationHref(rawUrl);
-                                                const normalizedUrl = resolvedHref ?? rawUrl;
-                                                stack[stack.length - 1].items.push({
-                                                        type: 'link',
-                                                        displayText: match?.[1],
-                                                        url: normalizedUrl,
-                                                        indent: indentLength,
-                                                });
-                                                continue;
-                                        }
+					if (contentPatterns.link.test(trimmedForMatch)) {
+						flushTextContent();
+						const match = trimmedForMatch.match(contentPatterns.link);
+						const rawUrl = match?.[2] || '';
+						const { resolvedHref } = resolveLocationHref(rawUrl);
+						const normalizedUrl = resolvedHref ?? rawUrl;
+						stack[stack.length - 1].items.push({
+							type: 'link',
+							displayText: match?.[1],
+							url: normalizedUrl,
+							indent: indentLength,
+						});
+						continue;
+					}
 
 					currentParagraph.push({
 						text: trimmedLine,
@@ -269,22 +269,22 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({ content, backgroundColo
 							</View>
 						);
 
-                                        case 'link':
-                                                return (
-                                                        <View key={`link-${level}-${index}`} style={{ marginLeft: calculateMarginLeft(level, item.indent || 0), marginBottom: 10 }}>
-                                                                <RedirectButton
-                                                                        type="link"
-                                                                        label={item.displayText || item.url}
-                                                                        onClick={() => {
-                                                                                if (item.url) {
-                                                                                        void CommonSystemActionHelper.openExternalURL(item.url, true);
-                                                                                }
-                                                                        }}
-                                                                        backgroundColor={backgroundColor || ''}
-                                                                        color={contrastColor}
-                                                                />
-                                                        </View>
-                                                );
+					case 'link':
+						return (
+							<View key={`link-${level}-${index}`} style={{ marginLeft: calculateMarginLeft(level, item.indent || 0), marginBottom: 10 }}>
+								<RedirectButton
+									type="link"
+									label={item.displayText || item.url}
+									onClick={() => {
+										if (item.url) {
+											void CommonSystemActionHelper.openExternalURL(item.url, true);
+										}
+									}}
+									backgroundColor={backgroundColor || ''}
+									color={contrastColor}
+								/>
+							</View>
+						);
 
 					case 'image':
 						return <ImageContent key={`image-${level}-${index}`} url={item.url} altText={item.altText} level={level} indent={item.indent || 0} />;
