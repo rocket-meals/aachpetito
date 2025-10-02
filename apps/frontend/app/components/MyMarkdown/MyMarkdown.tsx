@@ -35,22 +35,22 @@ const MyMarkdown: React.FC<MyMarkdownProps> = ({ content, textColor: textColorPr
 	const theme = selectedTheme === 'systematic' ? (colorScheme === 'dark' ? darkTheme : lightTheme) : selectedTheme === 'dark' ? darkTheme : lightTheme;
 
 	const { width } = useWindowDimensions();
-        const md = new MarkdownIt({ html: true });
+	const md = new MarkdownIt({ html: true });
 
-        const defaultValidateLink = md.validateLink.bind(md);
-        md.validateLink = (url: string | null | undefined) => {
-                if (!url) {
-                        return false;
-                }
+	const defaultValidateLink = md.validateLink.bind(md);
+	md.validateLink = (url: string | null | undefined) => {
+		if (!url) {
+			return false;
+		}
 
-                const normalizedUrl = url.toLowerCase();
+		const normalizedUrl = url.toLowerCase();
 
-                if (normalizedUrl.startsWith('latlon:')) {
-                        return true;
-                }
+		if (normalizedUrl.startsWith('latlon:')) {
+			return true;
+		}
 
-                return defaultValidateLink(url);
-        };
+		return defaultValidateLink(url);
+	};
 
 	let sourceContent = content || '';
 	const option_find_linebreaks = true;
@@ -125,14 +125,14 @@ const MyMarkdown: React.FC<MyMarkdownProps> = ({ content, textColor: textColorPr
 				iconLeft = <Ionicons name="navigate" size={24} color={contrastColor} />;
 			}
 
-                        console.log('[MyMarkdown] Rendering link', {
-                                href,
-                                finalHref,
-                                text,
-                        });
+			console.log('[MyMarkdown] Rendering link', {
+				href,
+				finalHref,
+				text,
+			});
 
-                        return <ProjectButton text={text} onPress={handlePress} iconLeft={iconLeft} />;
-                },
+			return <ProjectButton text={text} onPress={handlePress} iconLeft={iconLeft} />;
+		},
 		sub: (props: any) => {
 			const { data } = props.tnode;
 			const text = data || props.children[0]?.data;
