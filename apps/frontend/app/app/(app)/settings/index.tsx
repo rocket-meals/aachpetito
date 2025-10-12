@@ -351,37 +351,13 @@ const Settings = () => {
 						<Text style={{ ...styles.heading, color: theme.drawerHeading }}>{ServerInfoHelper.getServerName(serverInfo)}</Text>
 					</TouchableOpacity>
 					{isManagement && isDevMode && <Text style={{ ...styles.devModeText, color: theme.screen.text }}>{translate(TranslationKeys.developerModeActive)}</Text>}
-                                        {isManagement && isDevMode && (
-                                                <>
-                                                        <SettingsList
-                                                                iconBgColor={primaryColor}
-                                                                leftIcon={<MaterialCommunityIcons name="server" size={24} color={theme.screen.icon} />}
-                                                                label={translate(TranslationKeys.backend_server)}
-                                                                value={serverInfo?.info?.project?.project_name}
-                                                                rightIcon={<Octicons name="chevron-right" size={24} color={theme.screen.icon} />}
-                                                                handleFunction={openServerSheet}
-                                                                groupPosition="top"
-                                                        />
-                                                        <SettingsList
-                                                                iconBgColor={primaryColor}
-                                                                leftIcon={<MaterialCommunityIcons name="clock-outline" size={24} color={theme.screen.icon} />}
-                                                                label={translate(TranslationKeys.foodoffers_next_day_time)}
-                                                                value={(foodOffersNextDayThreshold || '23:59').toString()}
-                                                                rightIcon={<Octicons name="chevron-right" size={24} color={theme.screen.icon} />}
-                                                                handleFunction={openFoodOffersTimeSheet}
-                                                                groupPosition="middle"
-                                                        />
-                                                        <SettingsList
-                                                                iconBgColor={primaryColor}
-                                                                leftIcon={<MaterialIcons name="image" size={24} color={theme.screen.icon} />}
-                                                                label="Use WebP images"
-                                                                value={useWebpForAssets ? 'WebP' : 'Default'}
-                                                                rightIcon={<Octicons name="chevron-right" size={24} color={theme.screen.icon} />}
-                                                                handleFunction={toggleWebpForAssets}
-                                                                groupPosition="bottom"
-                                                        />
-                                                </>
-                                        )}
+					{isManagement && isDevMode && (
+						<>
+							<SettingsList iconBgColor={primaryColor} leftIcon={<MaterialCommunityIcons name="server" size={24} color={theme.screen.icon} />} label={translate(TranslationKeys.backend_server)} value={serverInfo?.info?.project?.project_name} rightIcon={<Octicons name="chevron-right" size={24} color={theme.screen.icon} />} handleFunction={openServerSheet} groupPosition="top" />
+							<SettingsList iconBgColor={primaryColor} leftIcon={<MaterialCommunityIcons name="clock-outline" size={24} color={theme.screen.icon} />} label={translate(TranslationKeys.foodoffers_next_day_time)} value={(foodOffersNextDayThreshold || '23:59').toString()} rightIcon={<Octicons name="chevron-right" size={24} color={theme.screen.icon} />} handleFunction={openFoodOffersTimeSheet} groupPosition="middle" />
+							<SettingsList iconBgColor={primaryColor} leftIcon={<MaterialIcons name="image" size={24} color={theme.screen.icon} />} label="Use WebP images" value={useWebpForAssets ? 'WebP' : 'Default'} rightIcon={<Octicons name="chevron-right" size={24} color={theme.screen.icon} />} handleFunction={toggleWebpForAssets} groupPosition="bottom" />
+						</>
+					)}
 					<SettingsList iconBgColor={primaryColor} leftIcon={<MaterialCommunityIcons name="numeric" size={24} color={theme.screen.icon} />} label="Version" value={getVersionInternalForAppsettingsScreen().toString()} handleFunction={() => {}} />
 				</View>
 			</ScrollView>
@@ -508,53 +484,53 @@ const Settings = () => {
 							}}
 						/>
 					</BaseBottomSheet>
-                                        <BaseBottomSheet
-                                                ref={drawerSheetRef}
-                                                index={-1}
-                                                backgroundStyle={{
-                                                        ...styles.sheetBackground,
-                                                        backgroundColor: theme.sheet.sheetBg,
-                                                }}
-                                                enablePanDownToClose
-                                                handleComponent={null}
-                                                onClose={closeDrawerSheet}
-                                        >
-                                                <DrawerPositionSheet
-                                                        closeSheet={closeDrawerSheet}
-                                                        selectedPosition={drawerPosition}
-                                                        onSelect={position => {
-                                                                handleDrawerPosition(position);
-                                                        }}
-                                                />
-                                        </BaseBottomSheet>
-                                        <BaseBottomSheet
-                                                ref={foodOffersTimeSheetRef}
-                                                index={-1}
-                                                backgroundStyle={{
-                                                        ...styles.sheetBackground,
-                                                        backgroundColor: theme.sheet.sheetBg,
-                                                }}
-                                                enablePanDownToClose
-                                                handleComponent={null}
-                                                onClose={closeFoodOffersTimeSheet}
-                                        >
-                                                <FoodOffersNextDayTimeSheet
-                                                        closeSheet={closeFoodOffersTimeSheet}
-                                                        initialValue={foodOffersNextDayThreshold}
-                                                        onSave={value => {
-                                                                dispatch({
-                                                                        type: SET_FOODOFFERS_NEXT_DAY_THRESHOLD,
-                                                                        payload: value,
-                                                                });
-                                                                closeFoodOffersTimeSheet();
-                                                        }}
-                                                />
-                                        </BaseBottomSheet>
-                                        <BaseBottomSheet
-                                                ref={serverSheetRef}
-                                                index={-1}
-                                                backgroundStyle={{
-                                                        ...styles.sheetBackground,
+					<BaseBottomSheet
+						ref={drawerSheetRef}
+						index={-1}
+						backgroundStyle={{
+							...styles.sheetBackground,
+							backgroundColor: theme.sheet.sheetBg,
+						}}
+						enablePanDownToClose
+						handleComponent={null}
+						onClose={closeDrawerSheet}
+					>
+						<DrawerPositionSheet
+							closeSheet={closeDrawerSheet}
+							selectedPosition={drawerPosition}
+							onSelect={position => {
+								handleDrawerPosition(position);
+							}}
+						/>
+					</BaseBottomSheet>
+					<BaseBottomSheet
+						ref={foodOffersTimeSheetRef}
+						index={-1}
+						backgroundStyle={{
+							...styles.sheetBackground,
+							backgroundColor: theme.sheet.sheetBg,
+						}}
+						enablePanDownToClose
+						handleComponent={null}
+						onClose={closeFoodOffersTimeSheet}
+					>
+						<FoodOffersNextDayTimeSheet
+							closeSheet={closeFoodOffersTimeSheet}
+							initialValue={foodOffersNextDayThreshold}
+							onSave={value => {
+								dispatch({
+									type: SET_FOODOFFERS_NEXT_DAY_THRESHOLD,
+									payload: value,
+								});
+								closeFoodOffersTimeSheet();
+							}}
+						/>
+					</BaseBottomSheet>
+					<BaseBottomSheet
+						ref={serverSheetRef}
+						index={-1}
+						backgroundStyle={{
+							...styles.sheetBackground,
 							backgroundColor: theme.sheet.sheetBg,
 						}}
 						enablePanDownToClose

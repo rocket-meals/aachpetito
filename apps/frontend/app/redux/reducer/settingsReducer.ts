@@ -17,8 +17,8 @@ const initialState = {
 	wikis: [],
 	nickNameLocal: '',
 	amountColumnsForcard: 0,
-        useWebpForAssets: true,
-        foodOffersNextDayThreshold: '23:59',
+	useWebpForAssets: true,
+	foodOffersNextDayThreshold: '23:59',
 };
 
 const settingReducer = (state = initialState, actions: any) => {
@@ -113,18 +113,18 @@ const settingReducer = (state = initialState, actions: any) => {
 				amountColumnsForcard: actions.payload,
 			};
 		}
-                case SET_USE_WEBP_FOR_ASSETS: {
-                        return {
-                                ...state,
-                                useWebpForAssets: actions.payload,
-                        };
-                }
-                case SET_FOODOFFERS_NEXT_DAY_THRESHOLD: {
-                        return {
-                                ...state,
-                                foodOffersNextDayThreshold: actions.payload,
-                        };
-                }
+		case SET_USE_WEBP_FOR_ASSETS: {
+			return {
+				...state,
+				useWebpForAssets: actions.payload,
+			};
+		}
+		case SET_FOODOFFERS_NEXT_DAY_THRESHOLD: {
+			return {
+				...state,
+				foodOffersNextDayThreshold: actions.payload,
+			};
+		}
 		case CLEAR_SETTINGS: {
 			return {
 				...initialState,
