@@ -54,38 +54,35 @@ const FoodOffersNextDayTimeSheet: React.FC<FoodOffersNextDayTimeSheetProps> = ({
 
 	const disableSave = !value || Boolean(error);
 
-        return (
-                <BottomSheetView style={{ ...styles.sheetView, backgroundColor: theme.sheet.sheetBg }}>
-                        <KeyboardAvoidingView
-                                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                                style={styles.keyboardAvoidingView}
-                        >
-                                <View style={styles.sheetHeader}>
-                                        <Text style={{ ...styles.sheetHeading, color: theme.sheet.text }}>{translate(TranslationKeys.foodoffers_next_day_time)}</Text>
-                                </View>
-                                <Text style={{ ...styles.description, color: theme.sheet.text, opacity: 0.75 }}>{translate(TranslationKeys.foodoffers_next_day_time_description)}</Text>
-                                <View style={styles.inputContainer}>
-                                        <TimeInput id="foodoffers-next-day-threshold" value={value} onChange={handleChange} onError={handleError} error={error} isDisabled={false} custom_type="time" prefix={null} suffix={null} />
-                                </View>
-                                <View style={styles.buttonContainer}>
-                                        <TouchableOpacity onPress={closeSheet} style={{ ...styles.cancelButton, borderColor: primaryColor }}>
-                                                <Text style={{ ...styles.buttonText, color: theme.sheet.text }}>{translate(TranslationKeys.cancel)}</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                                onPress={handleSave}
-                                                style={{
-                                                        ...styles.saveButton,
-                                                        backgroundColor: primaryColor,
-                                                        opacity: disableSave ? 0.6 : 1,
-                                                }}
-                                                disabled={disableSave}
-                                        >
-                                                <Text style={{ ...styles.buttonText, color: contrastColor }}>{translate(TranslationKeys.save)}</Text>
-                                        </TouchableOpacity>
-                                </View>
-                        </KeyboardAvoidingView>
-                </BottomSheetView>
-        );
+	return (
+		<BottomSheetView style={{ ...styles.sheetView, backgroundColor: theme.sheet.sheetBg }}>
+			<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardAvoidingView}>
+				<View style={styles.sheetHeader}>
+					<Text style={{ ...styles.sheetHeading, color: theme.sheet.text }}>{translate(TranslationKeys.foodoffers_next_day_time)}</Text>
+				</View>
+				<Text style={{ ...styles.description, color: theme.sheet.text, opacity: 0.75 }}>{translate(TranslationKeys.foodoffers_next_day_time_description)}</Text>
+				<View style={styles.inputContainer}>
+					<TimeInput id="foodoffers-next-day-threshold" value={value} onChange={handleChange} onError={handleError} error={error} isDisabled={false} custom_type="time" prefix={null} suffix={null} />
+				</View>
+				<View style={styles.buttonContainer}>
+					<TouchableOpacity onPress={closeSheet} style={{ ...styles.cancelButton, borderColor: primaryColor }}>
+						<Text style={{ ...styles.buttonText, color: theme.sheet.text }}>{translate(TranslationKeys.cancel)}</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={handleSave}
+						style={{
+							...styles.saveButton,
+							backgroundColor: primaryColor,
+							opacity: disableSave ? 0.6 : 1,
+						}}
+						disabled={disableSave}
+					>
+						<Text style={{ ...styles.buttonText, color: contrastColor }}>{translate(TranslationKeys.save)}</Text>
+					</TouchableOpacity>
+				</View>
+			</KeyboardAvoidingView>
+		</BottomSheetView>
+	);
 };
 
 export default FoodOffersNextDayTimeSheet;
