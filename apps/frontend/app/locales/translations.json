@@ -149,6 +149,36 @@
     "tr": "Geliştirici Modu Aktif",
     "zh": "开发者模式已启用"
   },
+  "foodoffers_next_day_time": {
+    "de": "Zeit für Wechsel auf nächsten Tag",
+    "en": "Time to switch to next day",
+    "ar": "وقت التبديل إلى اليوم التالي",
+    "es": "Hora para cambiar al día siguiente",
+    "fr": "Heure de bascule vers le lendemain",
+    "ru": "Время переключения на следующий день",
+    "tr": "Ertesi güne geçiş saati",
+    "zh": "切换到下一天的时间"
+  },
+  "foodoffers_next_day_time_description": {
+    "de": "Nach dieser Uhrzeit wird im Speiseangebot standardmäßig der nächste Tag angezeigt.",
+    "en": "After this time the food offers screen defaults to the next day.",
+    "ar": "بعد هذا الوقت يتم عرض اليوم التالي افتراضياً في عروض الطعام.",
+    "es": "Después de esta hora, la pantalla de ofertas de comida muestra por defecto el día siguiente.",
+    "fr": "Après cette heure, l'écran des offres de repas affiche par défaut le lendemain.",
+    "ru": "После этого времени экран предложений пищи по умолчанию показывает следующий день.",
+    "tr": "Bu saatten sonra yemek teklifleri ekranı varsayılan olarak ertesi günü gösterir.",
+    "zh": "在此时间之后，餐饮优惠界面将默认显示第二天的内容。"
+  },
+  "invalid_time_format": {
+    "de": "Ungültiges Zeitformat (z. B. HH:MM)",
+    "en": "Invalid time format (e.g., HH:MM)",
+    "ar": "تنسيق وقت غير صالح (مثال: HH:MM)",
+    "es": "Formato de hora no válido (p. ej., HH:MM)",
+    "fr": "Format d'heure invalide (ex. : HH:MM)",
+    "ru": "Неверный формат времени (например, ЧЧ:ММ)",
+    "tr": "Geçersiz saat formatı (örn. SS:DD)",
+    "zh": "时间格式无效（例如 HH:MM）"
+  },
   "backend_server": {
     "de": "Backend-Server",
     "en": "Backend Server",

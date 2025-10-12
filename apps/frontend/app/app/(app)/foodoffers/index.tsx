@@ -46,6 +46,7 @@ import useSetPageTitle from '@/hooks/useSetPageTitle';
 import CustomMarkdown from '@/components/CustomMarkdown/CustomMarkdown';
 import { RootState } from '@/redux/reducer';
 import MarkingBottomSheet from '@/components/MarkingBottomSheet';
+import useFoodOffersDefaultDate from '@/hooks/useFoodOffersDefaultDate';
 
 export const SHEET_COMPONENTS = {
 	canteen: CanteenSelectionSheet,
@@ -94,6 +95,7 @@ const Index: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
 	const { appElements } = useSelector((state: RootState) => state.appElements);
 	const { selectedCanteenFoodOffers, canteenFeedbackLabels } = useSelector((state: RootState) => state.canteenReducer);
 	const selectedCanteen = useSelectedCanteen();
+	useFoodOffersDefaultDate();
 	const kioskMode = useKioskMode();
 	const [prefetchedFoodOffers, setPrefetchedFoodOffers] = useState<Record<string, Record<string, DatabaseTypes.Foodoffers[]>>>({});
 	const foods_area_color = appSettings?.foods_area_color ? appSettings?.foods_area_color : primaryColor;
