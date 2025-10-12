@@ -45,10 +45,11 @@ export interface SettingsState {
 	firstDayOfTheWeek: { id: string; name: string };
 	drawerPosition: 'left' | 'right' | 'system';
 	wikisPages: any[];
-	wikis: DatabaseTypes.Wikis[];
-	nickNameLocal: string;
-	amountColumnsForcard: number;
-	useWebpForAssets: boolean;
+        wikis: DatabaseTypes.Wikis[];
+        nickNameLocal: string;
+        amountColumnsForcard: number;
+        useWebpForAssets: boolean;
+        foodOffersNextDayThreshold: string;
 }
 
 export interface FoodState {
