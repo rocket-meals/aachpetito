@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/reducer';
 import { SET_SELECTED_DATE } from '@/redux/Types/types';
 
-const DEFAULT_THRESHOLD = '23:59';
+const DEFAULT_THRESHOLD = '18:00';
 
 const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
 const parseThreshold = (value: string) => {
 	const match = /^(\d{2}):(\d{2})$/.exec(value || '');
 	if (!match) {
-		return { hours: 23, minutes: 59 };
+		return { hours: 18, minutes: 0 };
 	}
 
 	const hours = Math.min(23, Math.max(0, Number(match[1])));

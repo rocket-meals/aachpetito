@@ -41,28 +41,22 @@ export default StyleSheet.create({
 		marginTop: 20,
 	},
 	buttonContainer: {
-		width: '70%',
+		width: '100%',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		marginTop: 28,
 	},
-	cancelButton: {
+	buttonBase: {
 		flex: 1,
 		height: 50,
 		justifyContent: 'center',
 		alignItems: 'center',
 		borderRadius: 50,
+	},
+	secondaryButton: {
 		borderWidth: 1,
-		marginRight: 10,
 	},
-	saveButton: {
-		flex: 1,
-		height: 50,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderRadius: 50,
-		marginLeft: 10,
-	},
+	primaryButton: {},
 	buttonText: {
 		fontSize: 16,
 		fontFamily: 'Poppins_700Bold',

@@ -18,7 +18,7 @@ const initialState = {
 	nickNameLocal: '',
 	amountColumnsForcard: 0,
 	useWebpForAssets: true,
-	foodOffersNextDayThreshold: '23:59',
+	foodOffersNextDayThreshold: null,
 };
 
 const settingReducer = (state = initialState, actions: any) => {

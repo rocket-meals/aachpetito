@@ -12,7 +12,7 @@ import { TimeInput } from '@/components/DateTimeInputs';
 import styles from './styles';
 import { FoodOffersNextDayTimeSheetProps } from './types';
 
-const DEFAULT_THRESHOLD = '23:59';
+const DEFAULT_THRESHOLD = '18:00';
 
 const FoodOffersNextDayTimeSheet: React.FC<FoodOffersNextDayTimeSheetProps> = ({ closeSheet, initialValue, onSave }) => {
 	const { theme } = useTheme();
@@ -21,11 +21,11 @@ const FoodOffersNextDayTimeSheet: React.FC<FoodOffersNextDayTimeSheetProps> = ({
 	const { bottom: bottomInset } = useSafeAreaInsets();
 	const contrastColor = useMemo(() => myContrastColor(primaryColor, theme, mode === 'dark'), [mode, primaryColor, theme]);
 
-	const [value, setValue] = useState(initialValue ?? DEFAULT_THRESHOLD);
+	const [value, setValue] = useState(initialValue || DEFAULT_THRESHOLD);
 	const [error, setError] = useState('');
 
 	useEffect(() => {
-		setValue(initialValue ?? DEFAULT_THRESHOLD);
+		setValue(initialValue || DEFAULT_THRESHOLD);
 		setError('');
 	}, [initialValue]);
 
@@ -54,7 +54,12 @@ const FoodOffersNextDayTimeSheet: React.FC<FoodOffersNextDayTimeSheetProps> = ({
 		onSave(sanitizedValue);
 	}, [onSave, translate, value]);
 
+	const handleReset = useCallback(() => {
+		onSave(null);
+	}, [onSave]);
+
 	const disableSave = !value || Boolean(error);
+	const disableReset = !initialValue && value === DEFAULT_THRESHOLD;
 
 	return (
 		<BottomSheetView style={{ ...styles.sheetView, backgroundColor: theme.sheet.sheetBg }}>
@@ -67,16 +72,37 @@ const FoodOffersNextDayTimeSheet: React.FC<FoodOffersNextDayTimeSheetProps> = ({
 					<TimeInput id="foodoffers-next-day-threshold" value={value} onChange={handleChange} onError={handleError} error={error} isDisabled={false} custom_type="time" prefix={null} suffix={null} />
 				</View>
 				<View style={styles.buttonContainer}>
-					<TouchableOpacity onPress={closeSheet} style={{ ...styles.cancelButton, borderColor: primaryColor }}>
+					<TouchableOpacity
+						onPress={closeSheet}
+						style={[styles.buttonBase, styles.secondaryButton, { borderColor: primaryColor, marginRight: 12 }]}
+					>
 						<Text style={{ ...styles.buttonText, color: theme.sheet.text }}>{translate(TranslationKeys.cancel)}</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
+						onPress={handleReset}
+						style={[
+							styles.buttonBase,
+							styles.secondaryButton,
+							{
+								borderColor: primaryColor,
+								marginRight: 12,
+								opacity: disableReset ? 0.6 : 1,
+							},
+						]}
+						disabled={disableReset}
+					>
+						<Text style={{ ...styles.buttonText, color: theme.sheet.text }}>{translate(TranslationKeys.reset)}</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
 						onPress={handleSave}
-						style={{
-							...styles.saveButton,
-							backgroundColor: primaryColor,
-							opacity: disableSave ? 0.6 : 1,
-						}}
+						style={[
+							styles.buttonBase,
+							styles.primaryButton,
+							{
+								backgroundColor: primaryColor,
+								opacity: disableSave ? 0.6 : 1,
+							},
+						]}
 						disabled={disableSave}
 					>
 						<Text style={{ ...styles.buttonText, color: contrastColor }}>{translate(TranslationKeys.save)}</Text>
