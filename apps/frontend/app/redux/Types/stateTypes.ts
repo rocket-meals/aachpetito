@@ -49,7 +49,7 @@ export interface SettingsState {
 	nickNameLocal: string;
 	amountColumnsForcard: number;
 	useWebpForAssets: boolean;
-	foodOffersNextDayThreshold: string;
+	foodOffersNextDayThreshold: string | null;
 }
 
 export interface FoodState {
