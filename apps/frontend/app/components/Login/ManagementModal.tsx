@@ -12,10 +12,10 @@ import { RootState } from '@/redux/reducer';
 import { myContrastColor } from '@/helper/ColorHelper';
 
 const ManagementModal: React.FC<ManagementModalProps> = ({ isVisible, setIsVisible, handleLogin, loading }) => {
-        const { theme } = useTheme();
-        const { translate } = useLanguage();
-        const { primaryColor, selectedTheme: mode } = useSelector((state: RootState) => state.settings);
-        const contrastColor = myContrastColor(primaryColor, theme, mode === 'dark');
+	const { theme } = useTheme();
+	const { translate } = useLanguage();
+	const { primaryColor, selectedTheme: mode } = useSelector((state: RootState) => state.settings);
+	const contrastColor = myContrastColor(primaryColor, theme, mode === 'dark');
 
 	const [formState, setFormState] = useState({
 		email: '',
@@ -158,18 +158,18 @@ const ManagementModal: React.FC<ManagementModalProps> = ({ isVisible, setIsVisib
 					disabled={!isFormValid}
 					onPress={() => handleLogin(undefined, formState.email, formState.password)}
 				>
-                                        {loading ? (
-                                                <ActivityIndicator size="large" color={theme.screen.text} />
-                                        ) : (
-                                                <Text
-                                                        style={{
-                                                                ...styles.loginLabel,
-                                                                color: isFormValid ? contrastColor : theme.screen.text,
-                                                        }}
-                                                >
-                                                        {translate(TranslationKeys.sign_in)}
-                                                </Text>
-                                        )}
+					{loading ? (
+						<ActivityIndicator size="large" color={theme.screen.text} />
+					) : (
+						<Text
+							style={{
+								...styles.loginLabel,
+								color: isFormValid ? contrastColor : theme.screen.text,
+							}}
+						>
+							{translate(TranslationKeys.sign_in)}
+						</Text>
+					)}
 				</TouchableOpacity>
 			</View>
 		</Modal>
