@@ -4,7 +4,7 @@ import { CSVExportParser } from '../../../food-sync-hook/CSVExportParser';
 import { HashHelper } from '../../../helpers/HashHelper';
 import iconv from 'iconv-lite';
 import { WorkflowRunLogger } from '../../../workflows-runs-hook/WorkflowRunJobInterface';
-import { DateHelper, DateHelperTimezone, StringHelper } from 'repo-depkit-common';
+import {DateHelper, DateHelperTimezone, FormCommonHelper, StringHelper} from 'repo-depkit-common';
 
 // VONUMMER: Haus-Wohnung-Wohnungsnummer
 // 420-01-05-51-6
@@ -350,21 +350,24 @@ export class HannoverTL1HousingFileReader implements HannoverHousingFileReaderIn
   }
 
   getAlias(housingContract: ImportHousingContract): string {
-    let id = this.getHousingContractInternalCustomId(housingContract);
+    let FOLDER_SEPERATOR = FormCommonHelper.FORM_VISUAL_FOLDER_SEPARATOR;
 
     let partialIds: (string | null)[] = [];
 
     let wohnheimname = housingContract[ROCKET_MEALS_HANNOVER_HOUSING_CONTRACT_FORM_FIELDS.WOHNUNGSNAME];
     partialIds.push(wohnheimname);
-    let nachname = housingContract[ROCKET_MEALS_HANNOVER_HOUSING_CONTRACT_FORM_FIELDS.MIETER_PERSON_NACHNAME];
-    partialIds.push(nachname);
+
     let mietendeRaw = housingContract[ROCKET_MEALS_HANNOVER_HOUSING_CONTRACT_FORM_FIELDS.MIETER_MIETENDE];
     let mietende: string | null = null;
     if (mietendeRaw) {
       let date = new Date(mietendeRaw);
       mietende = DateHelper.getHumanReadableDate(date, false);
     }
-    partialIds.push(mietende);
+
+    let nachname = housingContract[ROCKET_MEALS_HANNOVER_HOUSING_CONTRACT_FORM_FIELDS.MIETER_PERSON_NACHNAME];
+
+    let dateAndMieter = mietende+"-"+nachname;
+    partialIds.push(dateAndMieter);
 
     // if any partial id is missing, return id
     let allPartialIdsDefined = true;
@@ -378,8 +381,9 @@ export class HannoverTL1HousingFileReader implements HannoverHousingFileReaderIn
     }
 
     if (allPartialIdsDefined) {
-      return partialIds.join(' ');
+      return partialIds.join(FOLDER_SEPERATOR);
     } else {
+      let id = this.getHousingContractInternalCustomId(housingContract);
       return id || '';
     }
   }
