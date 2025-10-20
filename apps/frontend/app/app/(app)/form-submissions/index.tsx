@@ -19,18 +19,18 @@ import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { RootState } from '@/redux/reducer';
 
 type FormSubmissionListRow =
-	| {
-			type: 'header';
-			id: string;
-			title: string;
-	  }
-	| {
-			type: 'item';
-			id: string;
-			title: string;
-			submission: DatabaseTypes.FormSubmissions;
-			depth: number;
-	  };
+        | {
+                        type: 'folder';
+                        id: string;
+                        title: string;
+                        path: string[];
+          }
+        | {
+                        type: 'submission';
+                        id: string;
+                        title: string;
+                        submission: DatabaseTypes.FormSubmissions;
+          };
 
 const Index = () => {
 	useSetPageTitle(TranslationKeys.select_a_form_submission);
@@ -45,92 +45,133 @@ const Index = () => {
 	const formsSubmissionsHelper = new FormsSubmissionsHelper();
 	const [formSubmissions, setFormSubmissions] = useState<DatabaseTypes.FormSubmissions[]>([]);
 	const [selectedOption, setSelectedOption] = useState<string>('draft');
-	const { drawerPosition } = useSelector((state: RootState) => state.settings);
+        const { drawerPosition } = useSelector((state: RootState) => state.settings);
+        const [currentPath, setCurrentPath] = useState<string[]>([]);
 
-	const listData = useMemo<FormSubmissionListRow[]>(() => {
-		if (!formSubmissions || formSubmissions.length === 0) {
-			return [];
-		}
+        const folderPrefixes = useMemo(() => {
+                const prefixes = new Set<string>();
 
-		const grouped = new Map<
-			string,
-			{
-				firstIndex: number;
-				children: Array<{
-					submission: DatabaseTypes.FormSubmissions;
-					title: string;
-					depth: number;
-				}>;
-			}
-		>();
-		const singles: Array<{ order: number; row: FormSubmissionListRow }> = [];
+                if (!formSubmissions || formSubmissions.length === 0) {
+                        return prefixes;
+                }
 
-		formSubmissions.forEach((submission, index) => {
-			const alias = submission.alias || '';
-			const segments = alias.split('/').filter(Boolean);
+                formSubmissions.forEach(submission => {
+                        const alias = submission.alias || '';
+                        const segments = alias
+                                .split('/')
+                                .map(segment => segment.trim())
+                                .filter(Boolean);
 
-			if (segments.length > 1) {
-				const parent = segments[0];
-				const childTitle = segments.slice(1).join('/');
+                        for (let index = 0; index < segments.length - 1; index += 1) {
+                                const prefix = segments.slice(0, index + 1).join('/');
+                                prefixes.add(prefix);
+                        }
+                });
 
-				if (!grouped.has(parent)) {
-					grouped.set(parent, {
-						firstIndex: index,
-						children: [],
-					});
-				}
+                return prefixes;
+        }, [formSubmissions]);
 
-				grouped.get(parent)?.children.push({
-					submission,
-					title: childTitle || alias,
-					depth: Math.max(segments.length - 1, 1),
-				});
-			} else {
-				singles.push({
-					order: index,
-					row: {
-						type: 'item',
-						id: submission.id.toString(),
-						title: alias,
-						submission,
-						depth: 0,
-					},
-				});
-			}
-		});
+        const listData = useMemo<FormSubmissionListRow[]>(() => {
+                if (!formSubmissions || formSubmissions.length === 0) {
+                        return [];
+                }
 
-		const combined: Array<{ order: number; rows: FormSubmissionListRow[] }> = singles.map(single => ({
-			order: single.order,
-			rows: [single.row],
-		}));
+                const rows: FormSubmissionListRow[] = [];
+                const seenFolders = new Set<string>();
+                const fallbackTitle = translate(TranslationKeys.no_value);
 
-		grouped.forEach((value, key) => {
-			const sanitizedId = key.replace(/\s+/g, '-').replace(/\//g, '-');
-			const rows: FormSubmissionListRow[] = [
-				{
-					type: 'header',
-					id: `header-${sanitizedId}`,
-					title: key,
-				},
-				...value.children.map(child => ({
-					type: 'item',
-					id: child.submission.id.toString(),
-					title: child.title,
-					submission: child.submission,
-					depth: child.depth,
-				})),
-			];
+                formSubmissions.forEach(submission => {
+                        const alias = submission.alias || '';
+                        const segments = alias
+                                .split('/')
+                                .map(segment => segment.trim())
+                                .filter(Boolean);
 
-			combined.push({
-				order: value.firstIndex,
-				rows,
-			});
-		});
+                        if (currentPath.length === 0) {
+                                if (segments.length === 0) {
+                                        rows.push({
+                                                type: 'submission',
+                                                id: submission.id.toString(),
+                                                title: alias || fallbackTitle,
+                                                submission,
+                                        });
 
-		combined.sort((a, b) => a.order - b.order);
+                                        return;
+                                }
 
-		return combined.flatMap(entry => entry.rows);
-	}, [formSubmissions]);
+                                const folderPath = segments[0];
+                                const folderKey = folderPath;
+
+                                if (segments.length > 1 || folderPrefixes.has(folderKey)) {
+                                        if (!seenFolders.has(folderKey)) {
+                                                seenFolders.add(folderKey);
+                                                rows.push({
+                                                        type: 'folder',
+                                                        id: `folder-${encodeURIComponent(folderKey)}`,
+                                                        title: folderPath,
+                                                        path: [folderPath],
+                                                });
+                                        }
+                                } else {
+                                        rows.push({
+                                                type: 'submission',
+                                                id: submission.id.toString(),
+                                                title: segments[0] || alias || fallbackTitle,
+                                                submission,
+                                        });
+                                }
+
+                                return;
+                        }
+
+                        if (segments.length < currentPath.length) {
+                                return;
+                        }
+
+                        const matchesPath = currentPath.every((segment, index) => segments[index] === segment);
+
+                        if (!matchesPath) {
+                                return;
+                        }
+
+                        if (segments.length === currentPath.length) {
+                                rows.push({
+                                        type: 'submission',
+                                        id: submission.id.toString(),
+                                        title: segments[segments.length - 1] || alias || fallbackTitle,
+                                        submission,
+                                });
+                                return;
+                        }
+
+                        const remainder = segments.slice(currentPath.length);
+                        const nextFolder = remainder[0];
+                        const folderPath = [...currentPath, nextFolder];
+                        const folderKey = folderPath.join('/');
+
+                        if (remainder.length === 1 && !folderPrefixes.has(folderKey)) {
+                                rows.push({
+                                        type: 'submission',
+                                        id: submission.id.toString(),
+                                        title: remainder[0] || alias || fallbackTitle,
+                                        submission,
+                                });
+                                return;
+                        }
+
+                        if (!seenFolders.has(folderKey)) {
+                                seenFolders.add(folderKey);
+                                rows.push({
+                                        type: 'folder',
+                                        id: `folder-${encodeURIComponent(folderKey)}`,
+                                        title: nextFolder,
+                                        path: folderPath,
+                                });
+                        }
+                });
+
+                return rows;
+        }, [formSubmissions, currentPath, folderPrefixes, translate]);
 
 	const openFilterSheet = () => {
 		sheetRef.current?.expand();
@@ -187,54 +228,79 @@ const Index = () => {
 		}, [])
 	);
 
-	useEffect(() => {
-		const handleResize = () => {
-			setScreenWidth(Dimensions.get('window').width);
-		};
+        useEffect(() => {
+                const handleResize = () => {
+                        setScreenWidth(Dimensions.get('window').width);
+                };
 
-		const subscription = Dimensions.addEventListener('change', handleResize);
+                const subscription = Dimensions.addEventListener('change', handleResize);
 
-		return () => subscription?.remove();
-	}, []);
+                return () => subscription?.remove();
+        }, []);
 
-	const renderItem = useCallback(
-		({ item }: { item: FormSubmissionListRow }) => {
-			if (item.type === 'header') {
-				return (
-					<View
-						style={{
-							...styles.groupHeader,
-							backgroundColor: theme.screen.iconBg,
-							borderColor: theme.screen.placeholder,
-						}}
-					>
-						<Text style={{ ...styles.groupHeaderText, color: theme.screen.text }}>{item.title}</Text>
-					</View>
-				);
-			}
+        useEffect(() => {
+                if (currentPath.length === 0) {
+                        return;
+                }
 
-			return (
-				<TouchableOpacity
-					style={{
-						...styles.formCategory,
-						backgroundColor: theme.screen.iconBg,
-						marginLeft: item.depth > 0 ? item.depth * 12 : 0,
-						paddingLeft: item.depth > 0 ? 20 + item.depth * 4 : 10,
-					}}
-					onPress={() => {
-						router.push({
-							pathname: '/form-submission',
-							params: { form_submission_id: item?.submission?.id },
-						});
-					}}
-				>
-					<Text style={{ ...styles.body, color: theme.screen.text }}>{item.title || item.submission?.alias}</Text>
-					<Entypo name="chevron-small-right" color={theme.screen.icon} size={24} />
-				</TouchableOpacity>
-			);
-		},
-		[router, theme.screen.icon, theme.screen.iconBg, theme.screen.placeholder, theme.screen.text]
-	);
+                const pathExists = formSubmissions.some(submission => {
+                        const alias = submission.alias || '';
+                        const segments = alias
+                                .split('/')
+                                .map(segment => segment.trim())
+                                .filter(Boolean);
+
+                        if (segments.length < currentPath.length) {
+                                return false;
+                        }
+
+                        return currentPath.every((segment, index) => segments[index] === segment);
+                });
+
+                if (!pathExists) {
+                        setCurrentPath([]);
+                }
+        }, [currentPath, formSubmissions]);
+
+        const renderItem = useCallback(
+                ({ item }: { item: FormSubmissionListRow }) => {
+                        const baseStyle = {
+                                ...styles.formCategory,
+                                backgroundColor: theme.screen.iconBg,
+                                paddingLeft: 10 + currentPath.length * 8,
+                        };
+
+                        if (item.type === 'folder') {
+                                return (
+                                        <TouchableOpacity
+                                                style={baseStyle}
+                                                onPress={() => {
+                                                        setCurrentPath(item.path);
+                                                }}
+                                        >
+                                                <Text style={{ ...styles.body, color: theme.screen.text }}>{item.title}</Text>
+                                                <Entypo name="chevron-small-right" color={theme.screen.icon} size={24} />
+                                        </TouchableOpacity>
+                                );
+                        }
+
+                        return (
+                                <TouchableOpacity
+                                        style={baseStyle}
+                                        onPress={() => {
+                                                router.push({
+                                                        pathname: '/form-submission',
+                                                        params: { form_submission_id: item?.submission?.id },
+                                                });
+                                        }}
+                                >
+                                        <Text style={{ ...styles.body, color: theme.screen.text }}>{item.title || item.submission?.alias}</Text>
+                                        <Entypo name="chevron-small-right" color={theme.screen.icon} size={24} />
+                                </TouchableOpacity>
+                        );
+                },
+                [currentPath.length, router, theme.screen.icon, theme.screen.iconBg, theme.screen.text]
+        );
 
 	return (
 		<View
@@ -274,9 +340,18 @@ const Index = () => {
 							},
 						]}
 					>
-						<TouchableOpacity onPress={() => router.navigate('/form-categories')} style={{ padding: 10 }}>
-							<Ionicons name="arrow-back" size={26} color={theme.header.text} />
-						</TouchableOpacity>
+                                                <TouchableOpacity
+                                                        onPress={() => {
+                                                                if (currentPath.length > 0) {
+                                                                        setCurrentPath(prev => prev.slice(0, -1));
+                                                                } else {
+                                                                        router.navigate('/form-categories');
+                                                                }
+                                                        }}
+                                                        style={{ padding: 10 }}
+                                                >
+                                                        <Ionicons name="arrow-back" size={26} color={theme.header.text} />
+                                                </TouchableOpacity>
 						<Text style={{ ...styles.heading, color: theme.header.text }}>{excerpt(translate(TranslationKeys.select_a_form_submission), screenWidth > 900 ? 100 : screenWidth > 700 ? 80 : 22)}</Text>
 					</View>
 					<View style={{ ...styles.col2, gap: isWeb ? 30 : 15 }}>
