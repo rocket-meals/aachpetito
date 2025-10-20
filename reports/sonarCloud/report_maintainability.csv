@@ -1,4 +1,5 @@
 Key,Message,Component,Line
+"AZoBN6Ntk_XXN4xGiRR3","Make this public static property readonly.","rocket-meals_rocket-meals:packages/common/src/FormCommonHelper.ts",2
 "AZoBL7nV8mOm1nvWUhPk","Use `for…of` instead of `.forEach(…)`.","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/form-submissions/index.tsx",58
 "AZoBL7nV8mOm1nvWUhPl","Use `for…of` instead of `.forEach(…)`.","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/form-submissions/index.tsx",83
 "AZoBL7nV8mOm1nvWUhPm","Prefer `.at(…)` over `[….length - index]`.","rocket-meals_rocket-meals:apps/frontend/app/app/(app)/form-submissions/index.tsx",141
@@ -192,7 +193,7 @@ Key,Message,Component,Line
 "AZkUSvq9S4VhJojFFCbH","Rename class ""FoodTL1Parser_RawReportTestReaderOsnabrueck"" to match the regular expression ^[A-Z][a-zA-Z0-9]*$.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/food-sync-hook/osnabrueck/FoodTL1Parser_RawReportTestReaderOsnabrueck.ts",3
 "AZkUSvtsS4VhJojFFCeU","Refactor this function to reduce its Cognitive Complexity from 32 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/forms-sync-hook/FormImportSyncWorkflow.ts",19
 "AZkUSvt1S4VhJojFFCeb","Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/forms-sync-hook/RegisterHookCreateFormSubmissionsFormAnswers.ts",13
-"AZkUSvtiS4VhJojFFCeS","Move this array ""sort"" operation to a separate statement or replace it with ""toSorted"".","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/forms-sync-hook/customers/hannover/HannoverTL1HousingFileReader.ts",404
+"AZkUSvtiS4VhJojFFCeS","Move this array ""sort"" operation to a separate statement or replace it with ""toSorted"".","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/forms-sync-hook/customers/hannover/HannoverTL1HousingFileReader.ts",408
 "AZkUSvuBS4VhJojFFCeh","Refactor this function to reduce its Cognitive Complexity from 26 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/forms-sync-hook/index.ts",60
 "AZkUSvuBS4VhJojFFCek","Refactor this function to reduce its Cognitive Complexity from 93 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/forms-sync-hook/index.ts",149
 "AZkUSvjtS4VhJojFFCYE","Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed.","rocket-meals_rocket-meals:apps/backend/Backend/directusExtensions/directus-extension-rocket-meals-bundle/src/helpers/AssetHelperDirectusBackend.ts",46
@@ -952,9 +953,9 @@ Key,Message,Component,Line
 "AZkUSva0S4VhJojFFCTB","Remove this commented out code.","rocket-meals_rocket-meals:apps/frontend/app/redux/actions/FoodFeedbacks/FoodFeedbacks.ts",91
 "AZkUSvanS4VhJojFFCS6","Remove this commented out code.","rocket-meals_rocket-meals:apps/frontend/app/redux/actions/User/User.ts",66
 "AZkUSvanS4VhJojFFCS9","Remove this commented out code.","rocket-meals_rocket-meals:apps/frontend/app/redux/actions/User/User.ts",82
-"AZlykADB0YdgFOBafBPM","Prefer `Number.parseInt` over `parseInt`.","rocket-meals_rocket-meals:packages/common/src/DateHelper.ts",656
-"AZlykADB0YdgFOBafBPN","Prefer `Number.parseInt` over `parseInt`.","rocket-meals_rocket-meals:packages/common/src/DateHelper.ts",657
-"AZlykADB0YdgFOBafBPO","Prefer `Number.parseInt` over `parseInt`.","rocket-meals_rocket-meals:packages/common/src/DateHelper.ts",658
+"AZlykADB0YdgFOBafBPM","Prefer `Number.parseInt` over `parseInt`.","rocket-meals_rocket-meals:packages/common/src/DateHelper.ts",673
+"AZlykADB0YdgFOBafBPN","Prefer `Number.parseInt` over `parseInt`.","rocket-meals_rocket-meals:packages/common/src/DateHelper.ts",674
+"AZlykADB0YdgFOBafBPO","Prefer `Number.parseInt` over `parseInt`.","rocket-meals_rocket-meals:packages/common/src/DateHelper.ts",675
 "AZkUSv3FS4VhJojFFCsQ","Make this public static property readonly.","rocket-meals_rocket-meals:packages/common/src/DateHelper.ts",35
 "AZlykADB0YdgFOBafBPH","Prefer `Number.isNaN` over `isNaN`.","rocket-meals_rocket-meals:packages/common/src/DateHelper.ts",47
 "AZlykADB0YdgFOBafBPL","Unexpected negated condition.","rocket-meals_rocket-meals:packages/common/src/DateHelper.ts",56
