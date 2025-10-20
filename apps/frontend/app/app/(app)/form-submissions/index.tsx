@@ -19,18 +19,18 @@ import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { RootState } from '@/redux/reducer';
 
 type FormSubmissionListRow =
-        | {
-                        type: 'folder';
-                        id: string;
-                        title: string;
-                        path: string[];
-          }
-        | {
-                        type: 'submission';
-                        id: string;
-                        title: string;
-                        submission: DatabaseTypes.FormSubmissions;
-          };
+	| {
+			type: 'folder';
+			id: string;
+			title: string;
+			path: string[];
+	  }
+	| {
+			type: 'submission';
+			id: string;
+			title: string;
+			submission: DatabaseTypes.FormSubmissions;
+	  };
 
 const Index = () => {
 	useSetPageTitle(TranslationKeys.select_a_form_submission);
@@ -45,133 +45,133 @@ const Index = () => {
 	const formsSubmissionsHelper = new FormsSubmissionsHelper();
 	const [formSubmissions, setFormSubmissions] = useState<DatabaseTypes.FormSubmissions[]>([]);
 	const [selectedOption, setSelectedOption] = useState<string>('draft');
-        const { drawerPosition } = useSelector((state: RootState) => state.settings);
-        const [currentPath, setCurrentPath] = useState<string[]>([]);
+	const { drawerPosition } = useSelector((state: RootState) => state.settings);
+	const [currentPath, setCurrentPath] = useState<string[]>([]);
 
-        const folderPrefixes = useMemo(() => {
-                const prefixes = new Set<string>();
+	const folderPrefixes = useMemo(() => {
+		const prefixes = new Set<string>();
 
-                if (!formSubmissions || formSubmissions.length === 0) {
-                        return prefixes;
-                }
+		if (!formSubmissions || formSubmissions.length === 0) {
+			return prefixes;
+		}
 
-                formSubmissions.forEach(submission => {
-                        const alias = submission.alias || '';
-                        const segments = alias
-                                .split('/')
-                                .map(segment => segment.trim())
-                                .filter(Boolean);
+		formSubmissions.forEach(submission => {
+			const alias = submission.alias || '';
+			const segments = alias
+				.split('/')
+				.map(segment => segment.trim())
+				.filter(Boolean);
 
-                        for (let index = 0; index < segments.length - 1; index += 1) {
-                                const prefix = segments.slice(0, index + 1).join('/');
-                                prefixes.add(prefix);
-                        }
-                });
+			for (let index = 0; index < segments.length - 1; index += 1) {
+				const prefix = segments.slice(0, index + 1).join('/');
+				prefixes.add(prefix);
+			}
+		});
 
-                return prefixes;
-        }, [formSubmissions]);
+		return prefixes;
+	}, [formSubmissions]);
 
-        const listData = useMemo<FormSubmissionListRow[]>(() => {
-                if (!formSubmissions || formSubmissions.length === 0) {
-                        return [];
-                }
+	const listData = useMemo<FormSubmissionListRow[]>(() => {
+		if (!formSubmissions || formSubmissions.length === 0) {
+			return [];
+		}
 
-                const rows: FormSubmissionListRow[] = [];
-                const seenFolders = new Set<string>();
-                const fallbackTitle = translate(TranslationKeys.no_value);
+		const rows: FormSubmissionListRow[] = [];
+		const seenFolders = new Set<string>();
+		const fallbackTitle = translate(TranslationKeys.no_value);
 
-                formSubmissions.forEach(submission => {
-                        const alias = submission.alias || '';
-                        const segments = alias
-                                .split('/')
-                                .map(segment => segment.trim())
-                                .filter(Boolean);
+		formSubmissions.forEach(submission => {
+			const alias = submission.alias || '';
+			const segments = alias
+				.split('/')
+				.map(segment => segment.trim())
+				.filter(Boolean);
 
-                        if (currentPath.length === 0) {
-                                if (segments.length === 0) {
-                                        rows.push({
-                                                type: 'submission',
-                                                id: submission.id.toString(),
-                                                title: alias || fallbackTitle,
-                                                submission,
-                                        });
+			if (currentPath.length === 0) {
+				if (segments.length === 0) {
+					rows.push({
+						type: 'submission',
+						id: submission.id.toString(),
+						title: alias || fallbackTitle,
+						submission,
+					});
 
-                                        return;
-                                }
+					return;
+				}
 
-                                const folderPath = segments[0];
-                                const folderKey = folderPath;
+				const folderPath = segments[0];
+				const folderKey = folderPath;
 
-                                if (segments.length > 1 || folderPrefixes.has(folderKey)) {
-                                        if (!seenFolders.has(folderKey)) {
-                                                seenFolders.add(folderKey);
-                                                rows.push({
-                                                        type: 'folder',
-                                                        id: `folder-${encodeURIComponent(folderKey)}`,
-                                                        title: folderPath,
-                                                        path: [folderPath],
-                                                });
-                                        }
-                                } else {
-                                        rows.push({
-                                                type: 'submission',
-                                                id: submission.id.toString(),
-                                                title: segments[0] || alias || fallbackTitle,
-                                                submission,
-                                        });
-                                }
+				if (segments.length > 1 || folderPrefixes.has(folderKey)) {
+					if (!seenFolders.has(folderKey)) {
+						seenFolders.add(folderKey);
+						rows.push({
+							type: 'folder',
+							id: `folder-${encodeURIComponent(folderKey)}`,
+							title: folderPath,
+							path: [folderPath],
+						});
+					}
+				} else {
+					rows.push({
+						type: 'submission',
+						id: submission.id.toString(),
+						title: segments[0] || alias || fallbackTitle,
+						submission,
+					});
+				}
 
-                                return;
-                        }
+				return;
+			}
 
-                        if (segments.length < currentPath.length) {
-                                return;
-                        }
+			if (segments.length < currentPath.length) {
+				return;
+			}
 
-                        const matchesPath = currentPath.every((segment, index) => segments[index] === segment);
+			const matchesPath = currentPath.every((segment, index) => segments[index] === segment);
 
-                        if (!matchesPath) {
-                                return;
-                        }
+			if (!matchesPath) {
+				return;
+			}
 
-                        if (segments.length === currentPath.length) {
-                                rows.push({
-                                        type: 'submission',
-                                        id: submission.id.toString(),
-                                        title: segments[segments.length - 1] || alias || fallbackTitle,
-                                        submission,
-                                });
-                                return;
-                        }
+			if (segments.length === currentPath.length) {
+				rows.push({
+					type: 'submission',
+					id: submission.id.toString(),
+					title: segments[segments.length - 1] || alias || fallbackTitle,
+					submission,
+				});
+				return;
+			}
 
-                        const remainder = segments.slice(currentPath.length);
-                        const nextFolder = remainder[0];
-                        const folderPath = [...currentPath, nextFolder];
-                        const folderKey = folderPath.join('/');
+			const remainder = segments.slice(currentPath.length);
+			const nextFolder = remainder[0];
+			const folderPath = [...currentPath, nextFolder];
+			const folderKey = folderPath.join('/');
 
-                        if (remainder.length === 1 && !folderPrefixes.has(folderKey)) {
-                                rows.push({
-                                        type: 'submission',
-                                        id: submission.id.toString(),
-                                        title: remainder[0] || alias || fallbackTitle,
-                                        submission,
-                                });
-                                return;
-                        }
+			if (remainder.length === 1 && !folderPrefixes.has(folderKey)) {
+				rows.push({
+					type: 'submission',
+					id: submission.id.toString(),
+					title: remainder[0] || alias || fallbackTitle,
+					submission,
+				});
+				return;
+			}
 
-                        if (!seenFolders.has(folderKey)) {
-                                seenFolders.add(folderKey);
-                                rows.push({
-                                        type: 'folder',
-                                        id: `folder-${encodeURIComponent(folderKey)}`,
-                                        title: nextFolder,
-                                        path: folderPath,
-                                });
-                        }
-                });
+			if (!seenFolders.has(folderKey)) {
+				seenFolders.add(folderKey);
+				rows.push({
+					type: 'folder',
+					id: `folder-${encodeURIComponent(folderKey)}`,
+					title: nextFolder,
+					path: folderPath,
+				});
+			}
+		});
 
-                return rows;
-        }, [formSubmissions, currentPath, folderPrefixes, translate]);
+		return rows;
+	}, [formSubmissions, currentPath, folderPrefixes, translate]);
 
 	const openFilterSheet = () => {
 		sheetRef.current?.expand();
@@ -228,79 +228,79 @@ const Index = () => {
 		}, [])
 	);
 
-        useEffect(() => {
-                const handleResize = () => {
-                        setScreenWidth(Dimensions.get('window').width);
-                };
+	useEffect(() => {
+		const handleResize = () => {
+			setScreenWidth(Dimensions.get('window').width);
+		};
 
-                const subscription = Dimensions.addEventListener('change', handleResize);
+		const subscription = Dimensions.addEventListener('change', handleResize);
 
-                return () => subscription?.remove();
-        }, []);
+		return () => subscription?.remove();
+	}, []);
 
-        useEffect(() => {
-                if (currentPath.length === 0) {
-                        return;
-                }
+	useEffect(() => {
+		if (currentPath.length === 0) {
+			return;
+		}
 
-                const pathExists = formSubmissions.some(submission => {
-                        const alias = submission.alias || '';
-                        const segments = alias
-                                .split('/')
-                                .map(segment => segment.trim())
-                                .filter(Boolean);
+		const pathExists = formSubmissions.some(submission => {
+			const alias = submission.alias || '';
+			const segments = alias
+				.split('/')
+				.map(segment => segment.trim())
+				.filter(Boolean);
 
-                        if (segments.length < currentPath.length) {
-                                return false;
-                        }
+			if (segments.length < currentPath.length) {
+				return false;
+			}
 
-                        return currentPath.every((segment, index) => segments[index] === segment);
-                });
+			return currentPath.every((segment, index) => segments[index] === segment);
+		});
 
-                if (!pathExists) {
-                        setCurrentPath([]);
-                }
-        }, [currentPath, formSubmissions]);
+		if (!pathExists) {
+			setCurrentPath([]);
+		}
+	}, [currentPath, formSubmissions]);
 
-        const renderItem = useCallback(
-                ({ item }: { item: FormSubmissionListRow }) => {
-                        const baseStyle = {
-                                ...styles.formCategory,
-                                backgroundColor: theme.screen.iconBg,
-                                paddingLeft: 10 + currentPath.length * 8,
-                        };
+	const renderItem = useCallback(
+		({ item }: { item: FormSubmissionListRow }) => {
+			const baseStyle = {
+				...styles.formCategory,
+				backgroundColor: theme.screen.iconBg,
+				paddingLeft: 10 + currentPath.length * 8,
+			};
 
-                        if (item.type === 'folder') {
-                                return (
-                                        <TouchableOpacity
-                                                style={baseStyle}
-                                                onPress={() => {
-                                                        setCurrentPath(item.path);
-                                                }}
-                                        >
-                                                <Text style={{ ...styles.body, color: theme.screen.text }}>{item.title}</Text>
-                                                <Entypo name="chevron-small-right" color={theme.screen.icon} size={24} />
-                                        </TouchableOpacity>
-                                );
-                        }
+			if (item.type === 'folder') {
+				return (
+					<TouchableOpacity
+						style={baseStyle}
+						onPress={() => {
+							setCurrentPath(item.path);
+						}}
+					>
+						<Text style={{ ...styles.body, color: theme.screen.text }}>{item.title}</Text>
+						<Entypo name="chevron-small-right" color={theme.screen.icon} size={24} />
+					</TouchableOpacity>
+				);
+			}
 
-                        return (
-                                <TouchableOpacity
-                                        style={baseStyle}
-                                        onPress={() => {
-                                                router.push({
-                                                        pathname: '/form-submission',
-                                                        params: { form_submission_id: item?.submission?.id },
-                                                });
-                                        }}
-                                >
-                                        <Text style={{ ...styles.body, color: theme.screen.text }}>{item.title || item.submission?.alias}</Text>
-                                        <Entypo name="chevron-small-right" color={theme.screen.icon} size={24} />
-                                </TouchableOpacity>
-                        );
-                },
-                [currentPath.length, router, theme.screen.icon, theme.screen.iconBg, theme.screen.text]
-        );
+			return (
+				<TouchableOpacity
+					style={baseStyle}
+					onPress={() => {
+						router.push({
+							pathname: '/form-submission',
+							params: { form_submission_id: item?.submission?.id },
+						});
+					}}
+				>
+					<Text style={{ ...styles.body, color: theme.screen.text }}>{item.title || item.submission?.alias}</Text>
+					<Entypo name="chevron-small-right" color={theme.screen.icon} size={24} />
+				</TouchableOpacity>
+			);
+		},
+		[currentPath.length, router, theme.screen.icon, theme.screen.iconBg, theme.screen.text]
+	);
 
 	return (
 		<View
@@ -340,18 +340,18 @@ const Index = () => {
 							},
 						]}
 					>
-                                                <TouchableOpacity
-                                                        onPress={() => {
-                                                                if (currentPath.length > 0) {
-                                                                        setCurrentPath(prev => prev.slice(0, -1));
-                                                                } else {
-                                                                        router.navigate('/form-categories');
-                                                                }
-                                                        }}
-                                                        style={{ padding: 10 }}
-                                                >
-                                                        <Ionicons name="arrow-back" size={26} color={theme.header.text} />
-                                                </TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => {
+								if (currentPath.length > 0) {
+									setCurrentPath(prev => prev.slice(0, -1));
+								} else {
+									router.navigate('/form-categories');
+								}
+							}}
+							style={{ padding: 10 }}
+						>
+							<Ionicons name="arrow-back" size={26} color={theme.header.text} />
+						</TouchableOpacity>
 						<Text style={{ ...styles.heading, color: theme.header.text }}>{excerpt(translate(TranslationKeys.select_a_form_submission), screenWidth > 900 ? 100 : screenWidth > 700 ? 80 : 22)}</Text>
 					</View>
 					<View style={{ ...styles.col2, gap: isWeb ? 30 : 15 }}>
