@@ -1,5 +1,4 @@
 Key,Message,Component,Line
-"AZoaejUj1U31H35B1z82","Remove this useless assignment to variable ""startTime"".","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",18
 "AZoLUygtmNeJeYyPTRxF","Remove this unused import of 'getDescriptionFromTranslation'.","rocket-meals_rocket-meals:apps/frontend/app/components/FoodItem/FoodItem.tsx",10
 "AZoFqp9qKXdq3X4vuPHv","Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.","rocket-meals_rocket-meals:apps/frontend/app/components/DropdownInput/DropdownInput.tsx",37
 "AZoFqp9qKXdq3X4vuPHw","Extract this nested ternary operation into an independent statement.","rocket-meals_rocket-meals:apps/frontend/app/components/DropdownInput/DropdownInput.tsx",101
@@ -859,8 +858,8 @@ Key,Message,Component,Line
 "AZkUSveRS4VhJojFFCVq","Make this public static property readonly.","rocket-meals_rocket-meals:apps/frontend/app/constants/IconNames.ts",160
 "AZkUSveRS4VhJojFFCVr","Make this public static property readonly.","rocket-meals_rocket-meals:apps/frontend/app/constants/IconNames.ts",162
 "AZkUSveRS4VhJojFFCVs","Make this public static property readonly.","rocket-meals_rocket-meals:apps/frontend/app/constants/IconNames.ts",163
-"AZkUSvT9S4VhJojFFAhS","Redundant double negation.","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",20
-"AZlyj_n00YdgFOBafBMS","Unexpected negated condition.","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",20
+"AZkUSvT9S4VhJojFFAhS","Redundant double negation.","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",19
+"AZlyj_n00YdgFOBafBMS","Unexpected negated condition.","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",19
 "AZkUSvU7S4VhJojFFAiF","Expected a `for-of` loop instead of a `for` loop with this simple iteration.","rocket-meals_rocket-meals:apps/frontend/app/helper/DeviceHelper.ts",85
 "AZkUSvUHS4VhJojFFAhW","Make this public static property readonly.","rocket-meals_rocket-meals:apps/frontend/app/helper/SystemActionHelper.ts",13
 "AZkUSvUHS4VhJojFFAhX","Make this public static property readonly.","rocket-meals_rocket-meals:apps/frontend/app/helper/SystemActionHelper.ts",14
@@ -1317,9 +1316,9 @@ Key,Message,Component,Line
 "AZkUSvelS4VhJojFFCVy","Complete the task associated to this ""TODO"" comment.","rocket-meals_rocket-meals:apps/frontend/app/constants/UrlHelper.ts",11
 "AZkUSvelS4VhJojFFCVz","Complete the task associated to this ""TODO"" comment.","rocket-meals_rocket-meals:apps/frontend/app/constants/UrlHelper.ts",26
 "AZkUSvT9S4VhJojFFAhR","Complete the task associated to this ""TODO"" comment.","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",5
-"AZkUSvT9S4VhJojFFAhU","Remove this useless assignment to variable ""isDark"".","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",64
-"AZlyj_n00YdgFOBafBMT","Don't use a zero fraction in the number.","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",102
-"AZlyj_n00YdgFOBafBMU","Don't use a zero fraction in the number.","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",103
+"AZkUSvT9S4VhJojFFAhU","Remove this useless assignment to variable ""isDark"".","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",63
+"AZlyj_n00YdgFOBafBMT","Don't use a zero fraction in the number.","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",101
+"AZlyj_n00YdgFOBafBMU","Don't use a zero fraction in the number.","rocket-meals_rocket-meals:apps/frontend/app/helper/ColorHelper.tsx",102
 "AZkUSvU7S4VhJojFFAiE","Remove this useless assignment to variable ""widthScaled"".","rocket-meals_rocket-meals:apps/frontend/app/helper/DeviceHelper.ts",79
 "AZkUSvVPS4VhJojFFAiH","Remove this commented out code.","rocket-meals_rocket-meals:apps/frontend/app/helper/NotificationHelper.ts",9
 "AZkUSvVPS4VhJojFFAiI","Handle this exception or don't catch it at all.","rocket-meals_rocket-meals:apps/frontend/app/helper/NotificationHelper.ts",98
