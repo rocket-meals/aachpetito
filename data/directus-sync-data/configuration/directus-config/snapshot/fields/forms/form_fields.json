@@ -10,7 +10,7 @@
     "field": "form_fields",
     "group": null,
     "hidden": false,
-    "interface": "list-o2m",
+    "interface": "list-o2m-tree-view",
     "note": null,
     "options": {
       "enableLink": true,
