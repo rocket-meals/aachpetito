@@ -26,9 +26,14 @@ COPY packages/common-backend/package.json ./packages/common-backend/
 # Install dependencies during build time - focused on backend-sync
 RUN yarn workspaces focus backend-sync
 
-# Copy the entire project for building
-# The files in "data" are ignored completely except for the directus-sync-data subdirectory
-COPY . .
+# Copy only the necessary source files to keep the build context small
+# Instead of `COPY . .` (which sends die komplette Repo), kopiere nur das, was für den build nötig ist.
+COPY apps/backend-sync ./apps/backend-sync
+COPY packages/common ./packages/common
+COPY packages/common-backend ./packages/common-backend
+COPY tsconfig.json ./tsconfig.json
+COPY yarn.lock ./yarn.lock
+COPY package.json ./package.json
 
 # Copy only the directus-sync-data subdirectory from data folder
 COPY data/directus-sync-data ./data/directus-sync-data
