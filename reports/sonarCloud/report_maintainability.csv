@@ -1,4 +1,5 @@
 Key,Message,Component,Line
+"AZo0ZcP7EtrT4MmkGYXR","Consider removing 'undefined' type or '?' specifier, one of them is redundant.","rocket-meals_rocket-meals:apps/frontend/app/components/TriStateCheckbox/TriStateCheckbox.tsx",17
 "AZowOBKDl8CDMcNN1djm","Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.","rocket-meals_rocket-meals:apps/frontend/app/components/DropdownInput/DropdownInput.tsx",36
 "AZowOBJzl8CDMcNN1djl","Remove this useless assignment to variable ""appSettings"".","rocket-meals_rocket-meals:apps/frontend/app/components/ImageUpload/ImageUpload.tsx",21
 "AZowOBEll8CDMcNN1djj","Remove this unused import of 'isWeb'.","rocket-meals_rocket-meals:apps/frontend/app/components/SingleLineInput/SingleLineInput.tsx",7
@@ -440,7 +441,6 @@ Key,Message,Component,Line
 "AZkUSvJTS4VhJojFFAUD","Use the ""RegExp.exec()"" method instead.","rocket-meals_rocket-meals:apps/frontend/app/components/RssFeed/index.tsx",25
 "AZkUSvIaS4VhJojFFATz","Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed.","rocket-meals_rocket-meals:apps/frontend/app/components/StatisticsCard/StatisticsCard.tsx",12
 "AZkUSvFkS4VhJojFFASv","Refactor this function to reduce its Cognitive Complexity from 30 to the 15 allowed.","rocket-meals_rocket-meals:apps/frontend/app/components/TimeTable/TimeTableList.tsx",10
-"AZkUSvBnS4VhJojFFAQx","Extract this nested ternary operation into an independent statement.","rocket-meals_rocket-meals:apps/frontend/app/components/TriStateCheckbox/TriStateCheckbox.tsx",45
 "AZkUSvD7S4VhJojFFASF","This assertion is unnecessary since it does not change the type of the expression.","rocket-meals_rocket-meals:apps/frontend/app/components/VerticalImageScroll/index.tsx",38
 "AZkUSvBIS4VhJojFFAQh","This assertion is unnecessary since it does not change the type of the expression.","rocket-meals_rocket-meals:apps/frontend/app/components/VerticalScrollTopFood/index.tsx",38
 "AZkUSvEFS4VhJojFFASI","Prefer using an optional chain expression instead, as it's more concise and easier to read.","rocket-meals_rocket-meals:apps/frontend/app/components/WashingMachines/index.tsx",160
