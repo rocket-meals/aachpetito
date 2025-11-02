@@ -77,6 +77,18 @@ export const studiFutterConfig: CustomerConfig = {
 	server_url: ServerHelper.STUDI_FUTTER_SERVER_CONFIG.server_url,
 };
 
+export const mendusaConfig: CustomerConfig = {
+	projectName: 'MenDusa',
+	projectSlug: 'rocket-meals-mendusa',
+	easUpdateId: 'ec84dfb0-6470-4845-8822-c8d299846aa8',
+	easProjectId: 'ec84dfb0-6470-4845-8822-c8d299846aa8',
+	appScheme: 'app-rocket-meals-mendusa',
+	bundleIdIos: 'de.baumgartner-software.mendusa',
+	bundleIdAndroid: 'com.baumgartner_software.mendusa',
+	baseUrl: '/mendusa',
+	server_url: ServerHelper.MENDUSA_SERVER_CONFIG.server_url,
+};
+
 export function getCustomerConfig(): CustomerConfig {
 	return devConfig;
 }
