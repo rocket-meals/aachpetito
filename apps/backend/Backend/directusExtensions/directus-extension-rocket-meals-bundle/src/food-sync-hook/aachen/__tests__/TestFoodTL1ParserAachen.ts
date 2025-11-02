@@ -27,9 +27,7 @@ describe('FoodTL1ParserAachen', () => {
     await parser.createNeededData();
     const foodOffers = await parser.getFoodoffersForParser();
 
-    const soupOffer = foodOffers.find(offer =>
-      offer.basicFoodofferData.alias?.includes('Rauchige schwarze Bohnensuppe')
-    );
+    const soupOffer = foodOffers.find(offer => offer.basicFoodofferData.alias?.includes('Rauchige schwarze Bohnensuppe'));
     expect(soupOffer).toBeDefined();
     if (!soupOffer) {
       return;
@@ -37,9 +35,7 @@ describe('FoodTL1ParserAachen', () => {
 
     expect(soupOffer.date).toEqual({ day: 29, month: 10, year: 2025 });
     expect(soupOffer.basicFoodofferData.price_student).toBeCloseTo(1.6, 2);
-    expect(soupOffer.marking_external_identifiers).toEqual(
-      expect.arrayContaining(['B', 'A', 'A1', 'A3', 'A5'])
-    );
+    expect(soupOffer.marking_external_identifiers).toEqual(expect.arrayContaining(['B', 'A', 'A1', 'A3', 'A5']));
     expect(soupOffer.marking_external_identifiers).toContain('menu_line_Tellergericht vegetarisch');
   });
 

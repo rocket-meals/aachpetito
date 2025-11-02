@@ -59,11 +59,7 @@ export class FoodTL1ParserAachen extends FoodTL1Parser {
     return datePart;
   }
 
-  private static createRawFoodofferFromRow(
-    $: CheerioAPI,
-    row: any,
-    context: { date: string; dayIndex: number; rowIndex: number }
-  ): RawTL1FoodofferType | null {
+  private static createRawFoodofferFromRow($: CheerioAPI, row: any, context: { date: string; dayIndex: number; rowIndex: number }): RawTL1FoodofferType | null {
     const category = $(row).find('.menue-category').first().text().trim();
     const descriptionSegments = FoodTL1ParserAachen.extractDescriptionSegments($, row);
     if (descriptionSegments.length === 0) {
