@@ -1,4 +1,5 @@
 Key,Message,Component,Line
+"AZpEi9Z-Hkx8kMtRu94F","Make this public static property readonly.","rocket-meals_rocket-meals:packages/common/src/ServerHelper.ts",18
 "AZo0ZcP7EtrT4MmkGYXR","Consider removing 'undefined' type or '?' specifier, one of them is redundant.","rocket-meals_rocket-meals:apps/frontend/app/components/TriStateCheckbox/TriStateCheckbox.tsx",17
 "AZowOBKDl8CDMcNN1djm","Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.","rocket-meals_rocket-meals:apps/frontend/app/components/DropdownInput/DropdownInput.tsx",36
 "AZowOBJzl8CDMcNN1djl","Remove this useless assignment to variable ""appSettings"".","rocket-meals_rocket-meals:apps/frontend/app/components/ImageUpload/ImageUpload.tsx",21
