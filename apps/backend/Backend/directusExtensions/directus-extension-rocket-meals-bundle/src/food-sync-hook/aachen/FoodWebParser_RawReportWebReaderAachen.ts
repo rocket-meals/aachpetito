@@ -1,12 +1,10 @@
-import {FoodWebParserAachenReadHtmlFiles} from "./FoodWebParserAachenReadHtmlFiles";
-import {CanteenNamesToHtmlFileDict} from "./FoodAndMarkingWebParserAachen";
+import { FoodWebParserAachenReadHtmlFiles } from './FoodWebParserAachenReadHtmlFiles';
+import { CanteenNamesToHtmlFileDict } from './FoodAndMarkingWebParserAachen';
 
 export class FoodWebParser_RawReportWebReaderAachen implements FoodWebParserAachenReadHtmlFiles {
   private readonly reportToReturn: string | undefined;
 
-  constructor(reportToReturn?: string | undefined) {
-
-  }
+  constructor(reportToReturn?: string | undefined) {}
 
   static CanteensToUrlsMap: { [canteenAlias: string]: string } = {
     "Mensa Academica": "https://www.studierendenwerk-aachen.de/speiseplaene/academica-w.html",
