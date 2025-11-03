@@ -91,7 +91,7 @@ export const aachenConfig: CustomerConfig = {
 };
 
 export function getCustomerConfig(): CustomerConfig {
-	return devConfig;
+	return aachenConfig;
 }
 
 export function getFinalConfig(config?: any) {
