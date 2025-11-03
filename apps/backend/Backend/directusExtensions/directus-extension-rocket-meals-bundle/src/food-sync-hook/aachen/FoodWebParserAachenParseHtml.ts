@@ -135,6 +135,11 @@ export class FoodWebParserAachenParseHtml {
     const aliasParts = alias.split('|').map((part: string) => part.trim());
     alias = aliasParts.join(' | ');
 
+    if(alias == "Geschlossen") {  // skip closed food categories
+        // Happend at 03.11.2025 for Mensa Academica
+        return null;
+    }
+
     // price
     const priceText = tr.find('.menue-item.menue-price').first().text().trim();
     let priceStudent: number | null = null;

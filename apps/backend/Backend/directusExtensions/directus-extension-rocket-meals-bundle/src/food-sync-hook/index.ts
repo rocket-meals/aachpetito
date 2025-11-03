@@ -56,6 +56,12 @@ function getFoodParser(): FoodParserInterface | null {
 }
 
 function getMarkingParser(): MarkingParserInterface | null {
+  switch (EnvVariableHelper.getSyncForCustomer()) {
+    case SyncForCustomerEnum.AACHEN:
+      let parser: FoodAndMarkingWebParserAachen = new FoodAndMarkingWebParserAachen();
+      return parser;
+  }
+
   const MARKING_SYNC_MODE = EnvVariableHelper.getMarkingSyncMode();
 
   switch (MARKING_SYNC_MODE) {
