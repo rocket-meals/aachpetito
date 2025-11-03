@@ -13,7 +13,7 @@ export class FoodWebParser_RawReportWebReaderAachen implements FoodWebParserAach
     "Mensa Ahornstraße": "https://www.studierendenwerk-aachen.de/speiseplaene/ahornstrasse-w.html",
     "Bistro Tempelgraben": "https://www.studierendenwerk-aachen.de/speiseplaene/templergraben-w.html",
     "Mensa Bayernallee": "https://www.studierendenwerk-aachen.de/speiseplaene/bayernallee-w.html",
-    "Mensa Eupener Straße": "https://www.studierendenwerk-aachen.de/speiseplaene/eupener-strasse-w.html",
+    "Mensa Eupener Straße": "https://www.studierendenwerk-aachen.de/speiseplaene/eupenerstrasse-w.html",
     "Mensa KMAC": "https://www.studierendenwerk-aachen.de/speiseplaene/goethestrasse-w.html",
     "Mensa Südpark": "https://www.studierendenwerk-aachen.de/speiseplaene/suedpark-w.html",
     "Mensa Vita": "https://www.studierendenwerk-aachen.de/speiseplaene/vita-w.html",
