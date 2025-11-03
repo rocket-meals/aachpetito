@@ -41,6 +41,7 @@ export class FoodWebParserAachenParseHtml {
       if (code && description) {
         const marking: MarkingsTypeForParser = {
           external_identifier: code,
+          alias: description,
           translations: {
             [LanguageCodes.DE]: {
               [MarkingTranslationFields.TRANSLATION_FIELD_NAME]: description,
