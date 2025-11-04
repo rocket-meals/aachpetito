@@ -246,8 +246,8 @@ type Subscription {
   chats_mutated(event: EventEnum): chats_mutated
   foodoffers_components_mutated(event: EventEnum): foodoffers_components_mutated
   app_elements_mutated(event: EventEnum): app_elements_mutated
-  app_settings_mutated(event: EventEnum): app_settings_mutated
   app_settings_housing_translations_mutated(event: EventEnum): app_settings_housing_translations_mutated
+  app_settings_mutated(event: EventEnum): app_settings_mutated
   app_settings_login_screen_translations_mutated(event: EventEnum): app_settings_login_screen_translations_mutated
   buildings_attributes_mutated(event: EventEnum): buildings_attributes_mutated
   buildings_businesshours_mutated(event: EventEnum): buildings_businesshours_mutated
@@ -295,7 +295,6 @@ type Subscription {
   directus_users_mutated(event: EventEnum): directus_users_mutated
   directus_revisions_mutated(event: EventEnum): directus_revisions_mutated
   chat_messages_mutated(event: EventEnum): chat_messages_mutated
-  foods_mutated(event: EventEnum): foods_mutated
   foodoffers_mutated(event: EventEnum): foodoffers_mutated
   foodoffers_markings_mutated(event: EventEnum): foodoffers_markings_mutated
   foods_attributes_groups_mutated(event: EventEnum): foods_attributes_groups_mutated
@@ -306,6 +305,7 @@ type Subscription {
   foods_categories_translations_mutated(event: EventEnum): foods_categories_translations_mutated
   foods_feedbacks_mutated(event: EventEnum): foods_feedbacks_mutated
   foods_feedbacks_foods_feedbacks_labels_mutated(event: EventEnum): foods_feedbacks_foods_feedbacks_labels_mutated
+  foods_mutated(event: EventEnum): foods_mutated
   foodoffers_categories_mutated(event: EventEnum): foodoffers_categories_mutated
   foods_attributes_mutated(event: EventEnum): foods_attributes_mutated
   foods_feedbacks_labels_translations_mutated(event: EventEnum): foods_feedbacks_labels_translations_mutated
@@ -525,8 +525,6 @@ type app_feedbacks_mutated {
 }
 
 type app_settings {
-  notifications_android_enabled: Boolean
-
   """Zeigt in der App den Bereich News an"""
   news_enabled: Boolean
 
@@ -586,6 +584,10 @@ type app_settings {
   redirect_whitelist_func: count_functions
   notifications_ios_enabled: Boolean
   notifications_email_enabled: Boolean
+  notifications_android_enabled: Boolean
+
+  """KI generierte Bilder für Speisen ohne Fotos erstellen?"""
+  foods_image_ai_generation_enabled: Boolean
   id: ID!
   maintenance_start: Date
   maintenance_start_func: datetime_functions
@@ -609,10 +611,10 @@ type app_settings {
   housing_before_element(filter: app_elements_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): app_elements
   balance_translations(filter: app_settings_balance_translations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [app_settings_balance_translations]
   balance_translations_func: count_functions
-  login_screen_translations(filter: app_settings_login_screen_translations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [app_settings_login_screen_translations]
-  login_screen_translations_func: count_functions
   housing_translations(filter: app_settings_housing_translations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [app_settings_housing_translations]
   housing_translations_func: count_functions
+  login_screen_translations(filter: app_settings_login_screen_translations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [app_settings_login_screen_translations]
+  login_screen_translations_func: count_functions
 }
 
 type app_settings_balance_translations {
@@ -1028,8 +1030,8 @@ type canteens_feedbacks_labels_mutated {
 }
 
 type canteens_feedbacks_labels_translations {
-  let_be_translated: Boolean
   be_source_for_translations: Boolean
+  let_be_translated: Boolean
   id: ID!
   canteens_feedbacks_labels_id(filter: canteens_feedbacks_labels_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): canteens_feedbacks_labels
   text: String
@@ -1511,9 +1513,9 @@ type directus_comments_mutated {
 }
 
 type directus_dashboards {
+  icon: String
   date_created: Date
   date_created_func: datetime_functions
-  icon: String
   user_created(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
   color: String
   name: String!
@@ -1531,8 +1533,8 @@ type directus_dashboards_aggregated {
 }
 
 type directus_dashboards_aggregated_count {
-  date_created: Int
   icon: Int
+  date_created: Int
   user_created: Int
   color: Int
   name: Int
@@ -2722,6 +2724,7 @@ type foodoffers_mutated {
 }
 
 type foods {
+  image_generated: Boolean
   image_remote_url: String
   id: ID!
   extra: String
@@ -2742,14 +2745,14 @@ type foods {
   date_updated: Date
   date_updated_func: datetime_functions
   food_category(filter: foods_categories_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): foods_categories
-  feedbacks(filter: foods_feedbacks_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [foods_feedbacks]
-  feedbacks_func: count_functions
-  translations(filter: foods_translations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [foods_translations]
-  translations_func: count_functions
-  markings(filter: foods_markings_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [foods_markings]
-  markings_func: count_functions
   attribute_values(filter: foods_attributes_values_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [foods_attributes_values]
   attribute_values_func: count_functions
+  translations(filter: foods_translations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [foods_translations]
+  translations_func: count_functions
+  feedbacks(filter: foods_feedbacks_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [foods_feedbacks]
+  feedbacks_func: count_functions
+  markings(filter: foods_markings_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [foods_markings]
+  markings_func: count_functions
 }
 
 type foods_attributes {
@@ -4230,7 +4233,6 @@ input app_settings_balance_translations_quantifier_filter {
 }
 
 input app_settings_filter {
-  notifications_android_enabled: boolean_filter_operators
   news_enabled: boolean_filter_operators
   map_enabled: boolean_filter_operators
   housing_enabled: boolean_filter_operators
@@ -4263,6 +4265,8 @@ input app_settings_filter {
   redirect_whitelist_func: count_function_filter_operators
   notifications_ios_enabled: boolean_filter_operators
   notifications_email_enabled: boolean_filter_operators
+  notifications_android_enabled: boolean_filter_operators
+  foods_image_ai_generation_enabled: boolean_filter_operators
   id: number_filter_operators
   maintenance_start: date_filter_operators
   maintenance_start_func: datetime_function_filter_operators
@@ -4286,10 +4290,10 @@ input app_settings_filter {
   housing_before_element: app_elements_filter
   balance_translations: app_settings_balance_translations_quantifier_filter
   balance_translations_func: count_function_filter_operators
-  login_screen_translations: app_settings_login_screen_translations_quantifier_filter
-  login_screen_translations_func: count_function_filter_operators
   housing_translations: app_settings_housing_translations_quantifier_filter
   housing_translations_func: count_function_filter_operators
+  login_screen_translations: app_settings_login_screen_translations_quantifier_filter
+  login_screen_translations_func: count_function_filter_operators
   _and: [app_settings_filter]
   _or: [app_settings_filter]
 }
@@ -4619,8 +4623,8 @@ input canteens_feedbacks_labels_filter {
 }
 
 input canteens_feedbacks_labels_translations_filter {
-  let_be_translated: boolean_filter_operators
   be_source_for_translations: boolean_filter_operators
+  let_be_translated: boolean_filter_operators
   id: number_filter_operators
   canteens_feedbacks_labels_id: canteens_feedbacks_labels_filter
   text: string_filter_operators
@@ -4631,8 +4635,8 @@ input canteens_feedbacks_labels_translations_filter {
 
 """"""
 input canteens_feedbacks_labels_translations_quantifier_filter {
-  let_be_translated: boolean_filter_operators
   be_source_for_translations: boolean_filter_operators
+  let_be_translated: boolean_filter_operators
   id: number_filter_operators
   canteens_feedbacks_labels_id: canteens_feedbacks_labels_filter
   text: string_filter_operators
@@ -5076,8 +5080,8 @@ input create_directus_comments_input {
 }
 
 input create_directus_dashboards_input {
-  date_created: Date
   icon: String
+  date_created: Date
   user_created: create_directus_users_input
   color: String
   name: String!
@@ -5499,6 +5503,7 @@ input create_foods_feedbacks_input {
 }
 
 input create_foods_input {
+  image_generated: Boolean
   image_remote_url: String
   id: ID!
   extra: String
@@ -5517,10 +5522,10 @@ input create_foods_input {
   rating_amount_legacy: Int
   date_updated: Date
   food_category: create_foods_categories_input
-  feedbacks: [create_foods_feedbacks_input]
-  translations: [create_foods_translations_input]
-  markings: [create_foods_markings_input]
   attribute_values: [create_foods_attributes_values_input]
+  translations: [create_foods_translations_input]
+  feedbacks: [create_foods_feedbacks_input]
+  markings: [create_foods_markings_input]
 }
 
 input create_foods_markings_input {
@@ -5877,9 +5882,9 @@ input directus_comments_filter {
 }
 
 input directus_dashboards_filter {
+  icon: string_filter_operators
   date_created: date_filter_operators
   date_created_func: datetime_function_filter_operators
-  icon: string_filter_operators
   user_created: directus_users_filter
   color: string_filter_operators
   name: string_filter_operators
@@ -6766,6 +6771,7 @@ input foods_feedbacks_quantifier_filter {
 }
 
 input foods_filter {
+  image_generated: boolean_filter_operators
   image_remote_url: string_filter_operators
   id: string_filter_operators
   extra: string_filter_operators
@@ -6786,14 +6792,14 @@ input foods_filter {
   date_updated: date_filter_operators
   date_updated_func: datetime_function_filter_operators
   food_category: foods_categories_filter
-  feedbacks: foods_feedbacks_quantifier_filter
-  feedbacks_func: count_function_filter_operators
-  translations: foods_translations_quantifier_filter
-  translations_func: count_function_filter_operators
-  markings: foods_markings_quantifier_filter
-  markings_func: count_function_filter_operators
   attribute_values: foods_attributes_values_quantifier_filter
   attribute_values_func: count_function_filter_operators
+  translations: foods_translations_quantifier_filter
+  translations_func: count_function_filter_operators
+  feedbacks: foods_feedbacks_quantifier_filter
+  feedbacks_func: count_function_filter_operators
+  markings: foods_markings_quantifier_filter
+  markings_func: count_function_filter_operators
   _and: [foods_filter]
   _or: [foods_filter]
 }
@@ -7977,8 +7983,8 @@ input update_directus_comments_input {
 }
 
 input update_directus_dashboards_input {
-  date_created: Date
   icon: String
+  date_created: Date
   user_created: update_directus_users_input
   color: String
   name: String
@@ -8454,6 +8460,7 @@ input update_foods_feedbacks_input {
 }
 
 input update_foods_input {
+  image_generated: Boolean
   image_remote_url: String
   id: ID
   extra: String
@@ -8472,10 +8479,10 @@ input update_foods_input {
   rating_amount_legacy: Int
   date_updated: Date
   food_category: update_foods_categories_input
-  feedbacks: [update_foods_feedbacks_input]
-  translations: [update_foods_translations_input]
-  markings: [update_foods_markings_input]
   attribute_values: [update_foods_attributes_values_input]
+  translations: [update_foods_translations_input]
+  feedbacks: [update_foods_feedbacks_input]
+  markings: [update_foods_markings_input]
 }
 
 input update_foods_markings_input {

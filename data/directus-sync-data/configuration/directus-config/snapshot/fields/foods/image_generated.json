@@ -1,25 +1,23 @@
 {
-  "collection": "app_settings",
-  "field": "foodoffers_list_after_element",
-  "type": "uuid",
+  "collection": "foods",
+  "field": "image_generated",
+  "type": "boolean",
   "meta": {
-    "collection": "app_settings",
+    "collection": "foods",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "foodoffers_list_after_element",
-    "group": "foods_settings",
+    "field": "image_generated",
+    "group": null,
     "hidden": false,
-    "interface": "select-dropdown-m2o",
+    "interface": "boolean",
     "note": null,
-    "options": {
-      "enableLink": true
-    },
+    "options": null,
     "readonly": false,
     "required": false,
-    "sort": 9,
+    "sort": 12,
     "special": [
-      "m2o"
+      "cast-boolean"
     ],
     "translations": null,
     "validation": null,
@@ -27,10 +25,10 @@
     "width": "full"
   },
   "schema": {
-    "name": "foodoffers_list_after_element",
-    "table": "app_settings",
-    "data_type": "uuid",
-    "default_value": null,
+    "name": "image_generated",
+    "table": "foods",
+    "data_type": "boolean",
+    "default_value": false,
     "max_length": null,
     "numeric_precision": null,
     "numeric_scale": null,
@@ -41,7 +39,7 @@
     "is_generated": false,
     "generation_expression": null,
     "has_auto_increment": false,
-    "foreign_key_table": "app_elements",
-    "foreign_key_column": "id"
+    "foreign_key_table": null,
+    "foreign_key_column": null
   }
 }
