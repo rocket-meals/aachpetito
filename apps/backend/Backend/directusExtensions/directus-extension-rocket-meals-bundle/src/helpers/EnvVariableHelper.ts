@@ -77,6 +77,10 @@ export class EnvVariableHelper {
     return this.getEnvVariable('FOOD_IMAGE_SYNC_SWOSY_API_SERVER_URL');
   }
 
+  static getOpenAiToken() {
+    return this.getEnvVariable('OPENAI_API_KEY');
+  }
+
   static getMarkingSyncMode() {
     return this.getEnvVariable('MARKING_SYNC_MODE'); // Options: "TL1CSV", "TL1WEB", "SWOSY"
   }

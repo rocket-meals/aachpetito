@@ -93,6 +93,9 @@ services:
 
       HOUSING_CONTRACT_SYNC_TL1FILE_EXPORT_CSV_FILE_PATH: "${HOUSING_CONTRACT_SYNC_TL1FILE_EXPORT_CSV_FILE_PATH}" # So in directus we know if the host system has a file to sync, but we will use the directus internal file path: /directus/tl1/housingContracts.csv
 
+      # OpenAI configuration
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
+
       # Directus Database configuration
       KEY: "${DATABASE_KEY}"
       SECRET: "${DATABASE_SECRET}"
