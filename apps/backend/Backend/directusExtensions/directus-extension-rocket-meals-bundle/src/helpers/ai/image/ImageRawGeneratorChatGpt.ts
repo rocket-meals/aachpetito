@@ -85,7 +85,7 @@ export class ImageRawGeneratorChatGpt implements ImageRawGeneratorInterface{
    * @param food_description
    */
   async generateImage(prompt: string): Promise<Buffer<ArrayBuffer>> {
-      let model = this.props.model || ChatGptImage_MODEL.GPT_IMAGE_1;
+      let model = this.props.model || ChatGptImage_MODEL.GPT_IMAGE_1_MINI;
       const quality = this.props.quality || ChatGptImageQuality.MEDIUM;
 
     const result = await this.openai.images.generate({

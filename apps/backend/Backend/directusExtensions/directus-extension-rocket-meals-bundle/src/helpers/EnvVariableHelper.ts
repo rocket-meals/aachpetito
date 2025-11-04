@@ -78,7 +78,7 @@ export class EnvVariableHelper {
   }
 
   static getOpenAiToken() {
-    return this.getEnvVariable('OPEN_AI_TOKEN');
+    return this.getEnvVariable('OPENAI_API_KEY');
   }
 
   static getMarkingSyncMode() {

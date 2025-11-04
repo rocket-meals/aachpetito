@@ -10,7 +10,7 @@ import { ItemsServiceCreator } from '../helpers/ItemsServiceCreator';
 import { ImageSafeGeneratorFood } from '../helpers/ai/image/ImageSafeGeneratorFood';
 import { ModerationCheckChatGpt } from '../helpers/ai/moderation/ModerationCheckChatGpt';
 import { ImageRawGeneratorChatGpt } from '../helpers/ai/image/ImageRawGeneratorChatGpt';
-import { FilesServiceHelper, MyFileTypes } from '../helpers/FilesServiceHelper';
+import { MyFileTypes } from '../helpers/FilesServiceHelper';
 
 const WORKFLOW_ID = 'food-image-ai-generation';
 
@@ -87,8 +87,9 @@ class FoodImageAiGenerationWorkflow extends SingleWorkflowRun {
       let processedCount = 0;
       const processedIds = new Set<string>();
       const batchSize = 100;
+      let foodsWithoutImagesFound = true;
 
-      while (true) {
+      while (foodsWithoutImagesFound) {
         const batchFilter = {
           _and: [...missingImageFilter._and],
         } as any;
@@ -104,6 +105,8 @@ class FoodImageAiGenerationWorkflow extends SingleWorkflowRun {
         });
 
         if (!foodsBatch || foodsBatch.length === 0) {
+          // No more foods to process -> stop the while loop
+          foodsWithoutImagesFound = false;
           break;
         }
 

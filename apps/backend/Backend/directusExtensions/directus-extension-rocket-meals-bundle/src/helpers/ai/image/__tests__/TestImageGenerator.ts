@@ -14,12 +14,12 @@ const SECONDS = 1000;
 describe('dev', () => {
   // should find atleast one meal offer
   it('Food Image Generation', async () => {
-    let apiKey = null
+    let apiKey = ""
 
     let moderationCheck: ModerationCheckInterface = new ModerationCheckMock();
     let imageRawGenerator: ImageRawGeneratorInterface = new ImageRawGeneratorMock();
 
-    if(apiKey){
+    if(apiKey && apiKey.length > 0) {
       let baseProps = {
         apiKey: apiKey,
       }
@@ -36,14 +36,15 @@ describe('dev', () => {
     let testOutputFilePath = "/Users/nilsbaumgartner/Desktop/test_food_image_generation.png";
     let testPrompt = "Hähnchenkeule, Schaschliksauce, Bio-Maisgemüse, Bunte Bio-Spirelli, Banane";
 
-    console.log("Starting food image generation test...");
+    //console.log("Starting food image generation test...");
     let startTime = Date.now();
     let image_bytes = await safeImageGenerator.generateImage(testPrompt);
 
     expect(image_bytes.length).toBeGreaterThan(0);
     let endTime = Date.now();
     let durationSeconds = (endTime - startTime) / 1000;
-    console.log(`Food image generation test completed in ${durationSeconds.toFixed(2)} seconds. Image saved to ${testOutputFilePath}`);
+    
+    //console.log(`Food image generation test completed in ${durationSeconds.toFixed(2)} seconds. Image saved to ${testOutputFilePath}`);
 
     //await fs.writeFile(testOutputFilePath, image_bytes);
 
