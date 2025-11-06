@@ -1,8 +1,9 @@
 import crypto from 'crypto';
+import jwt from "jsonwebtoken";
 
 export const APPLE_AUDIENCE = 'https://appleid.apple.com';
-const days = 180;
-export const MAX_TOKEN_LIFETIME_SECONDS = 60 * 60 * 24 * days; // 180 days (align with genSSO_Apple.sh)
+const days = 90;
+export const MAX_TOKEN_LIFETIME_SECONDS = 60 * 60 * 24 * days; // 90 days
 
 export type AppleClientSecretConfig = {
   teamId: string;
@@ -36,11 +37,6 @@ function normalisePrivateKey(privateKey: string): string {
   }
 
   return normalisedLineEndings;
-}
-
-function base64UrlEncode(input: Buffer | string): string {
-  const buf = typeof input === 'string' ? Buffer.from(input, 'utf8') : input;
-  return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
 
 function base64UrlDecodeToString(input: string): string {
@@ -81,66 +77,30 @@ export function generateAppleClientSecret(config: AppleClientSecretConfig): Appl
   const nowInSeconds = Math.floor(Date.now() / 1000);
   const requestedLifetime = config.lifetimeSeconds ?? MAX_TOKEN_LIFETIME_SECONDS;
   const lifetimeSeconds = Math.min(requestedLifetime, MAX_TOKEN_LIFETIME_SECONDS);
-  const privateKey = normalisePrivateKey(config.privateKey);
+  const privateKeyNormalized = normalisePrivateKey(config.privateKey);
 
-  // Header and claims
-  const header = { kid: keyId, alg: 'ES256' };
-  const iat = nowInSeconds;
-  const exp = nowInSeconds + lifetimeSeconds;
-  const claims: Record<string, any> = {
+  const privateKey = privateKeyNormalized
+      .replace(/ /g, "\n")
+      .replace(/-----BEGIN\nPRIVATE\nKEY-----/, "-----BEGIN PRIVATE KEY-----")
+      .replace(/-----END\nPRIVATE\nKEY-----/, "-----END PRIVATE KEY-----");
+
+  const exp = Math.floor(Date.now() / 1000) + 3600 * 24 * days; // Token expiry (max 6 months, set as needed)
+
+  const payload = {
     iss: teamId,
-    iat,
-    exp,
-    aud: APPLE_AUDIENCE,
+    iat: Math.floor(Date.now() / 1000),
+    exp: exp,
+    aud: "https://appleid.apple.com",
     sub: clientId,
   };
 
-  const headerB64 = base64UrlEncode(JSON.stringify(header));
-  const claimsB64 = base64UrlEncode(JSON.stringify(claims));
-  const signingInput = `${headerB64}.${claimsB64}`;
-
-  // Sign with ECDSA P-256 / SHA-256
-  // Use DER signature from OpenSSL/Node, then convert DER -> raw R||S bytes the same way the shell script's convert_ec does.
-  const signatureDer = crypto.sign('sha256', Buffer.from(signingInput, 'utf8'), {
-    key: privateKey,
-    // Do NOT request ieee-p1363 here; we need the DER to mimic openssl asn1parse conversion
-  }) as Buffer;
-
-  // Parse DER-encoded ECDSA signature and extract R and S (ASN.1 INTEGERs)
-  function derToRawRS(der: Buffer): Buffer {
-    let pos = 0;
-    if (der[pos++] !== 0x30) throw new Error('Invalid DER signature (expected sequence)');
-
-    // read length
-    let len = der[pos++];
-    if (len & 0x80) {
-      const n = len & 0x7f;
-      len = 0;
-      for (let i = 0; i < n; i++) {
-        len = (len << 8) + der[pos++];
-      }
-    }
-
-    if (der[pos++] !== 0x02) throw new Error('Invalid DER signature (expected integer for r)');
-    const rLen = der[pos++];
-    const r = der.slice(pos, pos + rLen);
-    pos += rLen;
-
-    if (der[pos++] !== 0x02) throw new Error('Invalid DER signature (expected integer for s)');
-    const sLen = der[pos++];
-    const s = der.slice(pos, pos + sLen);
-    // Note: do not strip or pad bytes — mimic openssl asn1parse + xxd behavior which outputs the raw hex for R and S
-
-    return Buffer.concat([r, s]);
-  }
-
-  const rawRs = derToRawRS(signatureDer);
-  const signatureB64 = base64UrlEncode(rawRs);
-
-  const token = `${signingInput}.${signatureB64}`;
+  const clientSecret = jwt.sign(payload, privateKey, {
+    algorithm: "ES256",
+    keyid: keyId, // Key ID for .p8 file
+  });
 
   return {
-    token,
+    token: clientSecret,
     expiresAt: exp,
   };
 }
