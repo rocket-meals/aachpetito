@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import {generateAppleJWTClaude} from "./generateAppleClientSecretClaude";
 
 export const APPLE_AUDIENCE = 'https://appleid.apple.com';
 const days = 90;
@@ -38,17 +39,6 @@ function normalisePrivateKey(privateKey: string): string {
   return normalisedLineEndings;
 }
 
-function base64UrlDecodeToString(input: string): string {
-  // Replace url-safe characters
-  let str = input.replace(/-/g, '+').replace(/_/g, '/');
-  // Pad with '=' to make length a multiple of 4
-  const pad = str.length % 4;
-  if (pad === 2) str += '==';
-  else if (pad === 3) str += '=';
-  else if (pad === 1) str += '==='; // unlikely
-  return Buffer.from(str, 'base64').toString('utf8');
-}
-
 // Decode the payload part of a JWT without verifying signature
 export function decodeAppleClientSecret(token: string): AppleJwtPayload | null {
   if (!token) return null;
@@ -58,6 +48,17 @@ export function decodeAppleClientSecret(token: string): AppleJwtPayload | null {
 
   const payloadPart = parts[1];
   if (!payloadPart) return null;
+
+  function base64UrlDecodeToString(input: string): string {
+    // Replace url-safe characters
+    let str = input.replace(/-/g, '+').replace(/_/g, '/');
+    // Pad with '=' to make length a multiple of 4
+    const pad = str.length % 4;
+    if (pad === 2) str += '==';
+    else if (pad === 3) str += '=';
+    else if (pad === 1) str += '==='; // unlikely
+    return Buffer.from(str, 'base64').toString('utf8');
+  }
 
   try {
     const json = base64UrlDecodeToString(payloadPart);
@@ -72,6 +73,19 @@ export function generateAppleClientSecret(config: AppleClientSecretConfig): Appl
   if (!teamId || !clientId || !keyId || !config.privateKey) {
     throw new Error('Missing configuration for Apple client secret generation.');
   }
+
+  let result = generateAppleJWTClaude({
+    teamId: config.teamId,
+    clientId: config.clientId,
+    keyId: config.keyId,
+    keyFileContent: config.privateKey,
+    keyFilePath: undefined,
+  })
+
+  return {
+    token: result.token,
+    expiresAt: result.exp
+  };
 
   // Normalise private key formatting (handle escaped newlines)
   const privateKey = normalisePrivateKey(config.privateKey);
