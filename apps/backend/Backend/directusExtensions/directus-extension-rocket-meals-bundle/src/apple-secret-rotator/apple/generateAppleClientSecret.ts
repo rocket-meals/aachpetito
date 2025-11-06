@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 
 export const APPLE_AUDIENCE = 'https://appleid.apple.com';
-const days = 90;
-export const MAX_TOKEN_LIFETIME_SECONDS = 60 * 60 * 24 * days; // 90 days
+const days = 180;
+export const MAX_TOKEN_LIFETIME_SECONDS = 60 * 60 * 24 * days; // 180 days (align with genSSO_Apple.sh)
 
 export type AppleClientSecretConfig = {
   teamId: string;
@@ -99,14 +99,43 @@ export function generateAppleClientSecret(config: AppleClientSecretConfig): Appl
   const claimsB64 = base64UrlEncode(JSON.stringify(claims));
   const signingInput = `${headerB64}.${claimsB64}`;
 
-  // Sign with ECDSA P-256 / SHA-256 and request IEEE-P1363 (raw R||S) encoding
-  // Node's crypto supports the `dsaEncoding: 'ieee-p1363'` option which returns a 64-byte buffer for P-256
-  const signatureBuffer = crypto.sign('sha256', Buffer.from(signingInput, 'utf8'), {
+  // Sign with ECDSA P-256 / SHA-256
+  // Use DER signature from OpenSSL/Node, then convert DER -> raw R||S bytes the same way the shell script's convert_ec does.
+  const signatureDer = crypto.sign('sha256', Buffer.from(signingInput, 'utf8'), {
     key: privateKey,
-    dsaEncoding: 'ieee-p1363',
+    // Do NOT request ieee-p1363 here; we need the DER to mimic openssl asn1parse conversion
   }) as Buffer;
 
-  const signatureB64 = base64UrlEncode(signatureBuffer);
+  // Parse DER-encoded ECDSA signature and extract R and S (ASN.1 INTEGERs)
+  function derToRawRS(der: Buffer): Buffer {
+    let pos = 0;
+    if (der[pos++] !== 0x30) throw new Error('Invalid DER signature (expected sequence)');
+
+    // read length
+    let len = der[pos++];
+    if (len & 0x80) {
+      const n = len & 0x7f;
+      len = 0;
+      for (let i = 0; i < n; i++) {
+        len = (len << 8) + der[pos++];
+      }
+    }
+
+    if (der[pos++] !== 0x02) throw new Error('Invalid DER signature (expected integer for r)');
+    const rLen = der[pos++];
+    const r = der.slice(pos, pos + rLen);
+    pos += rLen;
+
+    if (der[pos++] !== 0x02) throw new Error('Invalid DER signature (expected integer for s)');
+    const sLen = der[pos++];
+    const s = der.slice(pos, pos + sLen);
+    // Note: do not strip or pad bytes — mimic openssl asn1parse + xxd behavior which outputs the raw hex for R and S
+
+    return Buffer.concat([r, s]);
+  }
+
+  const rawRs = derToRawRS(signatureDer);
+  const signatureB64 = base64UrlEncode(rawRs);
 
   const token = `${signingInput}.${signatureB64}`;
 
