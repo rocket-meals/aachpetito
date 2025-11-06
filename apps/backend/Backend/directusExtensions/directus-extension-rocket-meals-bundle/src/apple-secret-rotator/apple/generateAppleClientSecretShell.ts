@@ -2,6 +2,8 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
+// import child_process for execSync
+import { execSync } from 'child_process';
 
 interface AppleJWTParams {
   teamId: string;
@@ -171,7 +173,6 @@ export function generateAppleJWTShell(params: AppleJWTParams) {
     fs.writeFileSync(scriptPath, shellScript, { mode: 0o755 });
 
     // Execute the shell script with parameters
-    const execSync = require('child_process').execSync;
     let command = `"${scriptPath}" --team_id "${teamId}" --client_id "${clientId}" --key_id "${keyId}" --key_file_content '${keyFileContent}'`;
 
     let token: string;
