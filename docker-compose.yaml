@@ -2,7 +2,7 @@ services:
   prepare-data:
     image: debian:bookworm-slim
     volumes:
-      - preparePermission.sh:/preparePermission.sh
+      - ./preparePermission.sh:/preparePermission.sh
       - ./data:/data
       - .env:/.env
     working_dir: /
