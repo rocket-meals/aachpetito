@@ -139,6 +139,38 @@ export default defineHook(async ({ init, schedule }) => {
     }
   };
 
+  function readSecretFromHostEnvAndSetToRuntime(event: string) {
+    console.log("["+HOOK_NAME+" - Event: "+event+"] Reading Apple client secret from host env file...");
+
+    console.log("CURRENT AUTH_APPLE_CLIENT_SECRET:", process.env.AUTH_APPLE_CLIENT_SECRET ? process.env.AUTH_APPLE_CLIENT_SECRET.substring(0,10) + "..." : "not set");
+
+    const hostEnvFilePath = process.env.HOST_ENV_FILE_PATH;
+    if (!hostEnvFilePath) {
+      console.warn('['+HOOK_NAME+'] HOST_ENV_FILE_PATH is not set. Cannot read Apple client secret.');
+      return;
+    }
+
+    const envContent = fs.readFileSync(hostEnvFilePath, 'utf8');
+    const lines = envContent.split('\n');
+    for (const line of lines) {
+      if (line.startsWith('AUTH_APPLE_CLIENT_SECRET=')) {
+        const [, value] = line.split('=');
+        process.env.AUTH_APPLE_CLIENT_SECRET = value;
+        console.log('['+HOOK_NAME+'] Loaded AUTH_APPLE_CLIENT_SECRET from host env file into runtime environment.');
+        return;
+      }
+    }
+    console.warn('['+HOOK_NAME+'] AUTH_APPLE_CLIENT_SECRET not found in host env file.');
+  }
+
+  init(ActionInitFilterEventHelper.INIT_APP_BEFORE, async () => {
+    await readSecretFromHostEnvAndSetToRuntime(ActionInitFilterEventHelper.INIT_APP_BEFORE);
+  });
+
+  init(ActionInitFilterEventHelper.CLI_INIT_BEFORE, async () => {
+    await readSecretFromHostEnvAndSetToRuntime(ActionInitFilterEventHelper.CLI_INIT_BEFORE);
+  });
+
   init(ActionInitFilterEventHelper.INIT_APP_STARTED, async () => {
     await checkForRefresh('startup');
   });
