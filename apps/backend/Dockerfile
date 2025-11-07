@@ -19,13 +19,19 @@ RUN apk update && apk add --no-cache \
     ttf-freefont \
     udev \
     dbus \
-    curl
+    curl \
+    openssl \
+    bash \
+    xxd \
+    vim \
+    nano
+
+# openssl # Apple Token generation# Apple Token generation
+# xxd # Apple Token generation
+
 # Set environment variables for Puppeteer
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-
-# Install vim for openssl and xxd
-RUN apk add vim
 
 # Switch back to the 'node' user for safety
 USER node
