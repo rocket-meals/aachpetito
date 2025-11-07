@@ -37,13 +37,20 @@ export function generateAppleJWTShell(params: AppleJWTParams) {
   const expirationTime = currentTime + (86400 * 180); // 180 days
 
   try {
-    let commandResult = execSync("cd /directus && pwd", { encoding: 'utf-8' }).trim();
+    let commandResult = execSync("ls", { encoding: 'utf-8' }).trim();
     console.log(commandResult);
   } catch (error) {
     throw new Error(`Failed: ${error}`);
   }
 
-  let scriptPath = path.resolve("/directus/genSSO_Apple.sh")
+  try {
+    let commandResult = execSync("pwd", { encoding: 'utf-8' }).trim();
+    console.log(commandResult);
+  } catch (error) {
+    throw new Error(`Failed: ${error}`);
+  }
+
+  let scriptPath = path.resolve("./genSSO_Apple.sh")
 
     // Execute the shell script with parameters
     let command = `"${scriptPath}" --team_id "${teamId}" --client_id "${clientId}" --key_id "${keyId}" --key_file_content '${keyFileContent}'`;
