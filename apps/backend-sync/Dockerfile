@@ -45,4 +45,4 @@ COPY data/directus-sync-data ./data/directus-sync-data
 WORKDIR /rocket-meals/apps/backend-sync
 
 # Start the application directly with tsx
-CMD ["yarn", "start"]
+CMD ["yarn", "start:docker-manage"]
