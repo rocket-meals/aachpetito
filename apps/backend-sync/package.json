@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start:docker-push": "tsx src/index.ts --docker-push",
-    "start:pull-from-test-system": "yarn start --pull-from-test-system",
-    "start:push-to-test-system": "yarn start --push-to-test-system",
-    "start:push": "yarn start --push",
-    "start:pull": "yarn start --pull",
-    "start": "tsx src/index.ts"
+    "start:docker-manage": "tsx src/index.ts",
+    "sync:pull-from-test-system": "yarn start --pull-from-test-system",
+    "sync:push-to-test-system": "yarn start --push-to-test-system",
+    "sync:push": "yarn start --push",
+    "sync:pull": "yarn start --pull",
+    "sync": "tsx src/SyncDatabaseSchema.ts"
   },
   "author": "",
   "license": "ISC",
