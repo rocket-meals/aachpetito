@@ -1,7 +1,7 @@
 import {defineHook} from '@directus/extensions-sdk';
 import {
   AppleClientSecretConfig,
-  decodeAppleClientSecret,
+  decodeAppleClientSecret, decodeAppleClientSecretExpiry,
   generateAppleClientSecret,
   MAX_TOKEN_LIFETIME_SECONDS
 } from './apple/generateAppleClientSecret';
@@ -44,11 +44,6 @@ function buildConfigFromEnv(): AppleClientSecretConfig | null {
     privateKey: privateKeyPem!,
     lifetimeSeconds: MAX_TOKEN_LIFETIME_SECONDS,
   };
-}
-
-function decodeExpiry(token: string): number | null {
-  const decoded = decodeAppleClientSecret(token);
-  return decoded?.exp ?? null;
 }
 
 function setEnvValue(key: string, value: string) {
@@ -110,7 +105,8 @@ export default defineHook(async ({ init, schedule }) => {
       const appleClientSecret = process.env.AUTH_APPLE_CLIENT_SECRET;
 
       if (appleClientSecret) {
-        const expiresAt = decodeExpiry(appleClientSecret);
+        const expiresAt = decodeAppleClientSecretExpiry(appleClientSecret);
+        console.log('['+HOOK_NAME+'] Decoded Apple client secret expiration raw value:', expiresAt);
         if (expiresAt) {
           const secondsRemaining = expiresAt - now;
           let isNearingExpiry = secondsRemaining < REFRESH_THRESHOLD_SECONDS;
@@ -124,7 +120,7 @@ export default defineHook(async ({ init, schedule }) => {
             return;
           }
         } else {
-          console.log('['+HOOK_NAME+'] Apple client secret found in Redis, but expiration could not be determined. Triggering refresh.');
+          console.log('['+HOOK_NAME+'] Apple client secret found, but expiration could not be determined. Triggering refresh.');
           await refreshSecret(config);
           return;
         }

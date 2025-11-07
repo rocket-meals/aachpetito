@@ -56,6 +56,13 @@ export function decodeAppleClientSecret(token: string): AppleJwtPayload | null {
   }
 }
 
+export function decodeAppleClientSecretExpiry(token: string): number | null {
+    const decoded = decodeAppleClientSecret(token);
+    let exp = decoded?.exp;
+    if(!exp) return null;
+    return parseInt(exp.toString());
+}
+
 export function generateAppleClientSecret(config: AppleClientSecretConfig): AppleClientSecretResult {
   const { teamId, clientId, keyId } = config;
   if (!teamId || !clientId || !keyId || !config.privateKey) {
