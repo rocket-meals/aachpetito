@@ -52,6 +52,8 @@ services:
       - ${HOUSING_CONTRACT_SYNC_TL1FILE_EXPORT_CSV_FILE_PATH:-/dev/null}:/directus/tl1/housingContracts.csv
       # Generate Apple SSO client secret
       - ./genSSO_Apple.sh:/directus/sso/genSSO_Apple.sh
+      # Host .env file
+      - ./../../.env:/directus/host.env:rw # Read and write access to be able to update the file if needed
     environment:
       # Traefik configuration
       PUBLIC_URL: "https://${MYHOST}/${ROCKET_MEALS_PATH}/${ROCKET_MEALS_BACKEND_PATH}"
@@ -94,6 +96,9 @@ services:
       MARKING_SYNC_TL1FILE_EXPORT_CSV_FILE_ENCODING: "${MARKING_SYNC_TL1FILE_EXPORT_CSV_FILE_ENCODING}"
 
       HOUSING_CONTRACT_SYNC_TL1FILE_EXPORT_CSV_FILE_PATH: "${HOUSING_CONTRACT_SYNC_TL1FILE_EXPORT_CSV_FILE_PATH}" # So in directus we know if the host system has a file to sync, but we will use the directus internal file path: /directus/tl1/housingContracts.csv
+
+      # Env File
+      HOST_ENV_FILE_PATH: "/directus/host.env" # Path to the host .env file - so that we can read variables from there
 
       # OpenAI configuration
       OPENAI_API_KEY: "${OPENAI_API_KEY}"

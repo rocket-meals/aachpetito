@@ -4,7 +4,8 @@ import {generateAppleJWTShell} from "./generateAppleClientSecretShell";
 
 export const APPLE_AUDIENCE = 'https://appleid.apple.com';
 const days = 90;
-export const MAX_TOKEN_LIFETIME_SECONDS = 60 * 60 * 24 * days; // 90 days
+//export const MAX_TOKEN_LIFETIME_SECONDS = 60 * 60 * 24 * days; // 90 days
+export const MAX_TOKEN_LIFETIME_SECONDS = 90; // 90 seconds for testing
 
 export type AppleClientSecretConfig = {
   teamId: string;
