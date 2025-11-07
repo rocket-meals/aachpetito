@@ -1,7 +1,7 @@
 import {defineHook} from '@directus/extensions-sdk';
 import {
   AppleClientSecretConfig,
-  decodeAppleClientSecret, decodeAppleClientSecretExpiry,
+  decodeAppleClientSecretExpiry,
   generateAppleClientSecret,
   MAX_TOKEN_LIFETIME_SECONDS
 } from './apple/generateAppleClientSecret';
@@ -73,10 +73,14 @@ function setEnvValue(key: string, value: string) {
 async function refreshSecret(config: AppleClientSecretConfig) {
   try {
     const result = generateAppleClientSecret(config);
+    let token = result.token;
     console.log('['+HOOK_NAME+'] Generated new Apple client secret. Expires at', new Date(result.expiresAt * 1000).toISOString());
-    // Store the new token
-    await setEnvValue('AUTH_APPLE_CLIENT_SECRET', result.token);
-    // Restart the server/container
+    // Store the new token into the .env file when the server completly restarts from outside
+    await setEnvValue('AUTH_APPLE_CLIENT_SECRET', token);
+
+    // since docker containers cache environment variables on start we need to save it into the runtime env as well
+    process.env.AUTH_APPLE_CLIENT_SECRET = token;
+
 
     //needed to refresh environment variables. server will respawn by pm2
     setTimeout(() => {
