@@ -1,11 +1,8 @@
-import jwt from "jsonwebtoken";
-import {generateAppleJWTClaude} from "./generateAppleClientSecretClaude";
 import {generateAppleJWTShell} from "./generateAppleClientSecretShell";
 
 export const APPLE_AUDIENCE = 'https://appleid.apple.com';
-const days = 90;
-//export const MAX_TOKEN_LIFETIME_SECONDS = 60 * 60 * 24 * days; // 90 days
-export const MAX_TOKEN_LIFETIME_SECONDS = 90; // 90 seconds for testing
+const days = 90; // could be to the max of 180 days which Apple allows
+export const MAX_TOKEN_LIFETIME_SECONDS = 60 * 60 * 24 * days;
 
 export type AppleClientSecretConfig = {
   teamId: string;
@@ -29,17 +26,6 @@ export type AppleJwtPayload = {
   exp?: number;
   [k: string]: any;
 };
-
-function normalisePrivateKey(privateKey: string): string {
-  const trimmed = privateKey.trim();
-  const normalisedLineEndings = trimmed.replace(/\r\n/g, '\n');
-
-  if (normalisedLineEndings.includes('\\n')) {
-    return normalisedLineEndings.replace(/\\n/g, '\n');
-  }
-
-  return normalisedLineEndings;
-}
 
 // Decode the payload part of a JWT without verifying signature
 export function decodeAppleClientSecret(token: string): AppleJwtPayload | null {
@@ -86,36 +72,5 @@ export function generateAppleClientSecret(config: AppleClientSecretConfig): Appl
   return {
     token: result.token,
     expiresAt: result.exp
-  };
-
-  // Normalise private key formatting (handle escaped newlines)
-  const privateKey = normalisePrivateKey(config.privateKey);
-
-  const lifetime = Math.min(config.lifetimeSeconds ?? 60 * 60, MAX_TOKEN_LIFETIME_SECONDS);
-
-  const payload: AppleJwtPayload = {
-    iss: config.teamId,
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + lifetime, // expiration in seconds
-    aud: APPLE_AUDIENCE,
-    sub: config.clientId,
-  };
-
-  const options = {
-    algorithm: 'ES256' as const,
-    header: {
-      kid: config.keyId,
-      typ: 'JWT',
-    },
-  };
-
-  // Pass the private key as a Buffer to satisfy the typings for jwt.sign
-  const clientSecret = jwt.sign(payload as object, Buffer.from(privateKey), options as any);
-
-  const expiresAt = payload.exp ?? (Math.floor(Date.now() / 1000) + lifetime);
-
-  return {
-    token: clientSecret,
-    expiresAt,
   };
 }
