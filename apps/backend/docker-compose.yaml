@@ -203,7 +203,7 @@ services:
       # Docker Socket für Container-Management
       - /var/run/docker.sock:/var/run/docker.sock
       # Generate Apple SSO client secret
-      - ./genSSO_Apple.sh:/directus/sso/genSSO_Apple.sh
+      - ./genSSO_Apple.sh:/sso/genSSO_Apple.sh
 
   rocket-meals-database-backup:
     build:

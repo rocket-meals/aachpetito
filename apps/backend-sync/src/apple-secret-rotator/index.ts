@@ -1,5 +1,10 @@
 import fs from 'fs';
-import { AppleClientSecretConfig, decodeAppleClientSecretExpiry, generateAppleClientSecret, MAX_TOKEN_LIFETIME_SECONDS } from './apple/generateAppleClientSecret';
+import {
+  AppleClientSecretConfig,
+  decodeAppleClientSecretExpiry,
+  generateAppleClientSecret,
+  MAX_TOKEN_LIFETIME_SECONDS
+} from './apple/generateAppleClientSecret';
 
 const refreshIfExpiringWithinDays = 7; // Refresh if expiring within 7 days
 const REFRESH_THRESHOLD_SECONDS = 60 * 60 * 24 * refreshIfExpiringWithinDays;

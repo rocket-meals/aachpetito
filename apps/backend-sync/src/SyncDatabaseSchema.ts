@@ -2,38 +2,14 @@ import {DirectusDatabaseSync} from './DirectusDatabaseSync';
 import {DockerDirectusHelper} from './DockerDirectusHelper';
 import {ServerHelper} from 'repo-depkit-common';
 import * as path from 'path';
-import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 import {DockerContainerManager} from './DockerContainerManager';
+import {findEnvFile} from "./EnvFileFinder";
 
 enum SyncOperation {
   NONE = 'none',
   PUSH = 'push',
   PULL = 'pull',
-}
-
-async function findFileUpwards(startDir: string, filename: string): Promise<string | null> {
-  let currentDir = startDir;
-
-  while (true) {
-    const potentialPath = path.join(currentDir, filename);
-    if (fs.existsSync(potentialPath)) {
-      return potentialPath;
-    }
-
-    const parentDir = path.dirname(currentDir);
-    if (parentDir === currentDir) {
-      break; // Reached the root directory
-    }
-    currentDir = parentDir;
-  }
-
-  return null;
-}
-
-async function findEnvFile(): Promise<string | null> {
-  const startDir = process.cwd();
-  return findFileUpwards(startDir, '.env');
 }
 
 export type SyncDatabaseOptions = {
