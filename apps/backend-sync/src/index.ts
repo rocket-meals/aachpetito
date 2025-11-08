@@ -47,10 +47,13 @@ async function main() {
 
   registerShutdownJobs(); // Registriere sauberes Shutdown-Verhalten
 
-  await registerAppleClientSecretChecker();
+  let debugTesting = false;
 
+  if(debugTesting){
+    await registerAppleClientSecretChecker();
+  }
 
-  let runSyncDatabase = false;
+  let runSyncDatabase = !debugTesting
   if (runSyncDatabase){
     console.log("Syncing database schema with Docker Push option...");
     let errors = await syncDatabase(SyncDataBaseOptionDockerPush);
