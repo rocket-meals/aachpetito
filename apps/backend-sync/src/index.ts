@@ -53,7 +53,7 @@ async function main() {
     await registerAppleClientSecretChecker();
   }
 
-  let runSyncDatabase = !debugTesting
+  let runSyncDatabase = true
   if (runSyncDatabase){
     console.log("Syncing database schema with Docker Push option...");
     let errors = await syncDatabase(SyncDataBaseOptionDockerPush);
