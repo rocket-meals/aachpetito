@@ -1,163 +1,71 @@
-import { Command } from 'commander';
-import { DirectusDatabaseSync } from './DirectusDatabaseSync';
-import { DockerDirectusHelper } from './DockerDirectusHelper';
-import { ServerHelper } from 'repo-depkit-common';
+import {syncDatabase, SyncDataBaseOptionDockerPush} from "./SyncDatabaseSchema";
+import {registerCronJob, registerShutdownJobs} from "./CronHelperManager";
 import * as path from 'path';
 import * as fs from 'fs';
-import * as dotenv from 'dotenv';
-import { DockerContainerManager } from './DockerContainerManager';
+import {buildConfigFromEnv, ensureAppleClientSecret} from "./apple-secret-rotator";
+import {HOST_ENV_FILE_PATH} from "./apple-secret-rotator/DirectusEnvFileHelper";
+import {DockerContainerManager} from "./DockerContainerManager";
+import {DockerDirectusHelper} from "./DockerDirectusHelper";
+import {DockerDirectusPingHelper} from "./DockerDirectusPingHelper";
 
-const program = new Command();
+async function registerAppleClientSecretChecker(){
+  console.log("registerAppleClientSecretChecker");
+  // Beispiel-Registrierung: Ein Job, der alle 10 Sekunden läuft
+  registerCronJob({
+    id: 'sync-database-every-10-seconds',
+    schedule: '*/10 * * * * *', // alle 10 Sekunden
+    task: async () => {
+        let hostEnvFilePath = HOST_ENV_FILE_PATH;
+        const config = buildConfigFromEnv(hostEnvFilePath);
+        if(config){
+          console.log("[AppleClientSecretChecker] Loaded config:");
+          console.log(JSON.stringify(config, null, 2));
+          let result = await ensureAppleClientSecret(config, hostEnvFilePath);
+          if(result.changed){
+            console.log("[AppleClientSecretChecker] Apple client secret was refreshed. Reason:", result.reason);
+            // Restart Docker container to apply new secret
+            let lokalDockerDirectusServerUrl = DockerDirectusHelper.getDirectusServerUrl();
 
-// Programm-Konfiguration
-program.name('backend-sync').description('Directus Backend Synchronization Tool').version('1.0.0');
-
-// Push Command
-program.option('--push', 'Push local schema to Directus').option('--pull', 'Pull schema from Directus to local').option('--pull-from-test-system', 'Pull schema from remote test system').option('--push-to-test-system', 'Push to remote test system').option('--docker-push', 'Push inside Docker container').option('--docker-directus-restart', 'Restart Directus Docker containers after push').option('--directus-url <url>', 'Directus instance URL').option('--admin-email <email>', 'Admin email').option('--admin-password <password>', 'Admin password').option('--path-to-data-directus-sync <path>', 'Path to sync data');
-
-enum SyncOperation {
-  NONE = 'none',
-  PUSH = 'push',
-  PULL = 'pull',
-}
-
-async function findFileUpwards(startDir: string, filename: string): Promise<string | null> {
-  let currentDir = startDir;
-
-  while (true) {
-    const potentialPath = path.join(currentDir, filename);
-    if (fs.existsSync(potentialPath)) {
-      return potentialPath;
+            await DockerDirectusPingHelper.waitForDirectusHealthy(lokalDockerDirectusServerUrl);
+            const restartSuccess = await DockerContainerManager.restartDirectusContainers(lokalDockerDirectusServerUrl as string);
+            if(restartSuccess){
+                console.log("[AppleClientSecretChecker] Successfully restarted Directus Docker containers to apply new Apple client secret.");
+            } else {
+                console.error("[AppleClientSecretChecker] Failed to restart Directus Docker containers after Apple client secret refresh.");
+            }
+          }
+        } else {
+            console.warn('[AppleClientSecretChecker] Rotator disabled due to missing configuration.');
+        }
     }
-
-    const parentDir = path.dirname(currentDir);
-    if (parentDir === currentDir) {
-      break; // Reached the root directory
-    }
-    currentDir = parentDir;
-  }
-
-  return null;
+  });
 }
 
-async function findEnvFile(): Promise<string | null> {
-  const startDir = process.cwd();
-  return findFileUpwards(startDir, '.env');
-}
-
-// Main function
 async function main() {
-  program.parse();
-  const options = program.opts();
+  // start sync-database schema service
+  console.log("Starting Backend-Sync Service...");
 
-  let adminEmail = options.adminEmail || process.env.ADMIN_EMAIL;
-  let adminPassword = options.adminPassword || process.env.ADMIN_PASSWORD;
-  let directusInstanceUrl = options.directusUrl;
-  let pathToDataDirectusSync = options.pathToDataDirectusSync;
-  let dockerDirectusRestart = options.dockerDirectusRestart || false;
+  registerShutdownJobs(); // Registriere sauberes Shutdown-Verhalten
 
-  let syncOperation = SyncOperation.NONE;
-  if (options.push || options.dockerPush || options.pushToTestSystem) {
-    syncOperation = SyncOperation.PUSH;
+  let debugTesting = false;
+
+  if(debugTesting){
+    await registerAppleClientSecretChecker();
   }
 
-  if (options.dockerPush) {
-    dockerDirectusRestart = true;
-  }
-
-  if (options.pull || options.pullFromTestSystem) {
-    syncOperation = SyncOperation.PULL;
-  }
-
-  if (options.dockerPush) {
-    directusInstanceUrl = DockerDirectusHelper.getDirectusServerUrl();
-    pathToDataDirectusSync = DockerDirectusHelper.getDataPathToDirectusSyncData();
-  }
-
-  if (options.pullFromTestSystem || options.pushToTestSystem) {
-    directusInstanceUrl = ServerHelper.TEST_SERVER_CONFIG.server_url;
-    let envFilePath = await findEnvFile();
-    if (envFilePath) {
-      console.log(`🔍 Gefundene .env Datei für Pull vom Testsystem: ${envFilePath}`);
-      dotenv.config({ path: envFilePath });
-      adminEmail = process.env.ADMIN_EMAIL;
-      adminPassword = process.env.ADMIN_PASSWORD;
-
-      if (!pathToDataDirectusSync) {
-        let folderOfEnvFile = path.dirname(envFilePath || '');
-        pathToDataDirectusSync = path.join(folderOfEnvFile, DockerDirectusHelper.getRelativePathToDirectusSyncFromProjectRoot());
-      }
+  let runSyncDatabase = true
+  if (runSyncDatabase){
+    console.log("Syncing database schema with Docker Push option...");
+    let errors = await syncDatabase(SyncDataBaseOptionDockerPush);
+    if (errors) {
+      console.error('❌ Fehler beim Synchronisieren des Datenbankschemas mit Docker Push Option.');
+      process.exit(1);
     }
   }
 
-  let errors = false;
-  if (!directusInstanceUrl) {
-    console.error('❌ Fehler: Directus URL muss angegeben werden (--directus-url) oder Docker Push muss aktiviert sein (--docker-push)');
-    errors = true;
-  }
-  if (!pathToDataDirectusSync) {
-    console.error('❌ Fehler: Pfad zu den Sync-Daten muss angegeben werden (--path-to-data-directus-sync)');
-    errors = true;
-  }
-  if (!adminEmail) {
-    console.error('❌ Fehler: Admin Email muss angegeben werden (--admin-email) oder über Umgebungsvariablen ADMIN_EMAIL gesetzt sein');
-    errors = true;
-  }
-  if (!adminPassword) {
-    console.error('❌ Fehler: Admin Password muss angegeben werden (--admin-password) oder über Umgebungsvariablen ADMIN_PASSWORD gesetzt sein');
-    errors = true;
-  }
-  if (syncOperation === SyncOperation.NONE) {
-    console.error('❌ Fehler: Ungültige Operation. Wählen Sie entweder --push, --pull oder --docker-push');
-    errors = true;
-  }
-
-  if (errors) {
-    program.help();
-    process.exit(1);
-  }
-
-  try {
-    console.log('🚀 Starte Backend Sync Service...');
-    console.log(`📡 Directus URL: ${directusInstanceUrl}`);
-
-    const syncHelper = new DirectusDatabaseSync({
-      directusInstanceUrl: directusInstanceUrl,
-      adminEmail: adminEmail,
-      adminPassword: adminPassword,
-      pathToDataDirectusSyncData: pathToDataDirectusSync,
-    });
-
-    switch (syncOperation) {
-      case SyncOperation.PUSH:
-        console.log('🔄 Führe initiale Push-Operation durch...');
-        await syncHelper.push();
-        console.log('✅ Initiale Push-Operation erfolgreich abgeschlossen!');
-        break;
-      case SyncOperation.PULL:
-        console.log('🔄 Führe initiale Pull-Operation durch...');
-        await syncHelper.pull();
-        console.log('✅ Initiale Pull-Operation erfolgreich abgeschlossen!');
-        break;
-      case SyncOperation.NONE:
-        // Sollte nie erreicht werden, da oben validiert
-        break;
-    }
-
-    if (dockerDirectusRestart) {
-      console.log('🔄 Starte Directus Docker Container neu...');
-      const restartSuccess = await DockerContainerManager.restartDirectusContainers(directusInstanceUrl);
-      if (restartSuccess) {
-        console.log('✅ Directus Docker Container erfolgreich neu gestartet!');
-      } else {
-        console.error('❌ Fehler: Directus Docker Container Neustart fehlgeschlagen!');
-        process.exit(1);
-      }
-    }
-  } catch (error) {
-    console.error('💥 Fehler im Backend Sync Service:', error);
-    process.exit(1);
-  }
+  console.log('Backend-Sync Service läuft. Cron-Jobs sind aktiv.');
+  // keep process alive: never-resolving promise ist besser als while(true) für TS
+  await new Promise<never>(() => {});
 }
 
 // Starte den Service
