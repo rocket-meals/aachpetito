@@ -1,6 +1,8 @@
 // import child_process for execSync
 import {execSync} from 'child_process';
 
+const genFile = '/sso/genSSO_Apple.sh';
+
 interface AppleJWTParams {
   teamId: string;
   clientId: string;
@@ -39,20 +41,10 @@ export function generateAppleJWTShell(params: AppleJWTParams) {
     throw new Error(`Failed: ${error}`);
   }
 
-  const source = '/directus/sso/genSSO_Apple.sh';
-  const target = '/directus/sso_runtime/genSSO_Apple.sh';
 
-  // Stelle sicher, dass der Zielordner existiert
-  execSync('mkdir -p /directus/sso_runtime');
-
-  // Kopiere die Datei ins beschreibbare Verzeichnis
-  execSync(`cp ${source} ${target}`);
-
-  // Mache sie ausführbar
-  execSync(`chmod +x ${target}`);
 
     // Execute the shell script with parameters
-    let command = `${target} --team_id "${teamId}" --client_id "${clientId}" --key_id "${keyId}" --key_file_content '${keyFileContent}'`;
+    let command = `${genFile} --team_id "${teamId}" --client_id "${clientId}" --key_id "${keyId}" --key_file_content '${keyFileContent}'`;
 
     let token: string;
     try {

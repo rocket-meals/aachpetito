@@ -2,21 +2,25 @@ import {syncDatabase, SyncDataBaseOptionDockerPush} from "./SyncDatabaseSchema";
 import {registerCronJob, registerShutdownJobs} from "./CronHelperManager";
 import * as path from 'path';
 import * as fs from 'fs';
+import {buildConfigFromEnv, ensureAppleClientSecret} from "./apple-secret-rotator";
+import {HOST_ENV_FILE_PATH} from "./apple-secret-rotator/DirectusEnvFileHelper";
 
 async function registerAppleClientSecretChecker(){
   console.log("registerAppleClientSecretChecker");
   // Beispiel-Registrierung: Ein Job, der alle 10 Sekunden läuft
-  let envFilePathOfHost = "/directus/host.env"
-  let fileContent = await fs.promises.readFile(envFilePathOfHost, 'utf-8');
-  let envFile = fileContent.toString();
-  console.log("Env file content:\n");
-  console.log(envFile);
-
   registerCronJob({
     id: 'sync-database-every-10-seconds',
     schedule: '*/10 * * * * *', // alle 10 Sekunden
     task: async () => {
-
+        let hostEnvFilePath = HOST_ENV_FILE_PATH;
+        const config = buildConfigFromEnv(hostEnvFilePath);
+        if(config){
+          console.log("[AppleClientSecretChecker] Loaded config:");
+          console.log(JSON.stringify(config, null, 2));
+          let result = await ensureAppleClientSecret(config, hostEnvFilePath);
+        } else {
+            console.warn('[AppleClientSecretChecker] Rotator disabled due to missing configuration.');
+        }
     }
   });
 }

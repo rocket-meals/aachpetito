@@ -11,12 +11,11 @@ const REFRESH_THRESHOLD_SECONDS = 60 * 60 * 24 * refreshIfExpiringWithinDays;
 
 const HOOK_NAME = 'apple-secret-rotator';
 
-function buildConfigFromEnv(): AppleClientSecretConfig | null {
-  const teamId = process.env.AUTH_APPLE_HOOK_APPLE_TEAM_ID;
-  const clientId = process.env.AUTH_APPLE_CLIENT_ID;
-  const keyId = process.env.AUTH_APPLE_HOOK_APPLE_KEY_ID;
-  const privateKeyEscaped = process.env.AUTH_APPLE_HOOK_APPLE_PRIVATE_KEY;
-  const hostEnvFilePath = process.env.HOST_ENV_FILE_PATH;
+export function buildConfigFromEnv(hostEnvFilePath: string): AppleClientSecretConfig | null {
+  const teamId = getEnvValue(hostEnvFilePath, 'AUTH_APPLE_HOOK_APPLE_TEAM_ID');
+  const clientId = getEnvValue(hostEnvFilePath, 'AUTH_APPLE_CLIENT_ID');
+  const keyId = getEnvValue(hostEnvFilePath, 'AUTH_APPLE_HOOK_APPLE_KEY_ID');
+  const privateKeyEscaped = getEnvValue(hostEnvFilePath, 'AUTH_APPLE_HOOK_APPLE_PRIVATE_KEY');
 
   const missing = [
     !clientId && 'AUTH_APPLE_CLIENT_ID',
@@ -43,13 +42,29 @@ function buildConfigFromEnv(): AppleClientSecretConfig | null {
   };
 }
 
-function setEnvValue(key: string, value: string) {
-  let configPath = process.env.HOST_ENV_FILE_PATH as string;
-  console.log("["+HOOK_NAME+"] Writing new value to " + configPath);
+function getEnvValue(hostEnvFilePath: string, key: string): string | null {
+  console.log("["+HOOK_NAME+"] Reading value from " + hostEnvFilePath);
+
+  const ENV_VARS = fs.readFileSync(hostEnvFilePath, "utf8").split('\n');
+  console.log("["+HOOK_NAME+"] Read " + ENV_VARS.length + " lines from " + hostEnvFilePath);
+
+  const targetLine = ENV_VARS.find((line) => line.match(new RegExp(`^${key}=`)));
+  if (targetLine) {
+    const value = targetLine.split('=')[1] || '';
+    console.log("["+HOOK_NAME+"] Found value for " + key + ": " + value.substring(0, 10) + "....");
+    return value;
+  } else {
+    console.log("["+HOOK_NAME+"] No value found for " + key);
+    return null;
+  }
+}
+
+function setEnvValue(hostEnvFilePath: string, key: string, value: string) {
+  console.log("["+HOOK_NAME+"] Writing new value to " + hostEnvFilePath);
   console.log("Setting " + key + " to " + value.substring(0, 10) + "....");
 
-  const ENV_VARS = fs.readFileSync(configPath, "utf8").split('\n');
-  console.log("["+HOOK_NAME+"] Read " + ENV_VARS.length + " lines from " + configPath);
+  const ENV_VARS = fs.readFileSync(hostEnvFilePath, "utf8").split('\n');
+  console.log("["+HOOK_NAME+"] Read " + ENV_VARS.length + " lines from " + hostEnvFilePath);
 
   const targetIndex = ENV_VARS.findIndex((line) => line.match(new RegExp(`^${key}=`)));
   if (targetIndex >= 0) {
@@ -58,27 +73,23 @@ function setEnvValue(key: string, value: string) {
     ENV_VARS.push(`${key}=${value}`);
   }
 
-  fs.writeFileSync(configPath, ENV_VARS.join('\n'));
+  fs.writeFileSync(hostEnvFilePath, ENV_VARS.join('\n'));
 
-  console.log("["+HOOK_NAME+"] Updated " + key + " in " + configPath);
+  console.log("["+HOOK_NAME+"] Updated " + key + " in " + hostEnvFilePath);
 }
 
-async function refreshSecret(config: AppleClientSecretConfig) {
+async function refreshSecret(config: AppleClientSecretConfig, hostEnvFilePath: string) {
   try {
     const result = generateAppleClientSecret(config);
     let token = result.token;
     console.log('['+HOOK_NAME+'] Generated new Apple client secret. Expires at', new Date(result.expiresAt * 1000).toISOString());
-    await setEnvValue('AUTH_APPLE_CLIENT_SECRET', token);
-
-    process.env.AUTH_APPLE_CLIENT_SECRET = token;
-
+    await setEnvValue(hostEnvFilePath, 'AUTH_APPLE_CLIENT_SECRET', token);
   } catch (error) {
     console.error('['+HOOK_NAME+'] Failed to generate Apple client secret:', error);
   }
 }
 
-export async function ensureAppleClientSecret(): Promise<{changed: boolean, reason?: string}> {
-  const config = buildConfigFromEnv();
+export async function ensureAppleClientSecret(config: AppleClientSecretConfig, hostEnvFilePath: string): Promise<{changed: boolean, reason?: string}> {
   if (!config) {
     console.warn('['+HOOK_NAME+'] Rotator disabled due to missing configuration.');
     return { changed: false, reason: 'missing_config' };
@@ -86,15 +97,14 @@ export async function ensureAppleClientSecret(): Promise<{changed: boolean, reas
 
   try {
     const now = Math.floor(Date.now() / 1000);
-    const hostEnvFilePath = process.env.HOST_ENV_FILE_PATH;
 
     if (!hostEnvFilePath) {
       console.warn('['+HOOK_NAME+'] HOST_ENV_FILE_PATH not set.');
       return { changed: false, reason: 'missing_host_env' };
     }
 
-    let envContent = fs.readFileSync(hostEnvFilePath, 'utf8');
-    let tokenLine = envContent.split('\n').find(line => line.startsWith('AUTH_APPLE_CLIENT_SECRET='));
+    let tokenLine = getEnvValue(hostEnvFilePath, 'AUTH_APPLE_CLIENT_SECRET');
+
     if (tokenLine) {
       const token = tokenLine.split('=')[1] || '';
       if (token) {
@@ -103,7 +113,7 @@ export async function ensureAppleClientSecret(): Promise<{changed: boolean, reas
           const secondsRemaining = expiresAt - now;
           if (secondsRemaining < REFRESH_THRESHOLD_SECONDS) {
             console.log('['+HOOK_NAME+'] Token is nearing expiry. Refreshing...');
-            await refreshSecret(config);
+            await refreshSecret(config, hostEnvFilePath);
             return { changed: true, reason: 'refreshed_near_expiry' };
           } else {
             console.log('['+HOOK_NAME+'] Token is valid. No action.');
@@ -111,14 +121,14 @@ export async function ensureAppleClientSecret(): Promise<{changed: boolean, reas
           }
         } else {
           console.log('['+HOOK_NAME+'] Token found but expiry not parseable. Refreshing...');
-          await refreshSecret(config);
+          await refreshSecret(config, hostEnvFilePath);
           return { changed: true, reason: 'no_expiry' };
         }
       }
     }
 
     console.log('['+HOOK_NAME+'] No token found. Generating new token...');
-    await refreshSecret(config);
+    await refreshSecret(config, hostEnvFilePath);
     return { changed: true, reason: 'created_new' };
   } catch (error) {
     console.error('['+HOOK_NAME+'] Failed to ensure Apple client secret:', error);
