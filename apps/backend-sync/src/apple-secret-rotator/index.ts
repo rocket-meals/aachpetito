@@ -83,6 +83,12 @@ async function refreshSecret(config: AppleClientSecretConfig, hostEnvFilePath: s
     const result = generateAppleClientSecret(config);
     let token = result.token;
     console.log('['+HOOK_NAME+'] Generated new Apple client secret. Expires at', new Date(result.expiresAt * 1000).toISOString());
+
+    console.log("###############")
+    console.log("NEW TOKEN:")
+    console.log(token);
+    console.log("###############")
+
     await setEnvValue(hostEnvFilePath, 'AUTH_APPLE_CLIENT_SECRET', token);
   } catch (error) {
     console.error('['+HOOK_NAME+'] Failed to generate Apple client secret:', error);
